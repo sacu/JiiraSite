@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<title>test1</title>
+	<link rel="stylesheet" href="style/test1.css"/>
+	<script src="javascript/test1_1.js" language="javascript" type="text/javascript"></script>
+	<script src="javascript/test1_2.js" language="javascript" type="text/javascript"></script>
+</head>
+
+<body>
+	
+	<!--通常被放置在页面或者页面中某个区块元素的顶部，包含整个页面或者区块的标题、简介等信息，起到引导与导航的作用。-->
+	<header>
+		<nav><!--表示页面的导航，可以通过导航连接到网站的其他页面，或者当前页面的其它部分。-->
+			<li class="li1"><a href="#1">1</a></li>
+			<li class="li1"><a href="#2">2</a></li>
+			<li class="li1"><a href="#3">3</a></li>
+			<li class="li1"><a href="#4">4</a></li>
+			<li class="li1"><a href="">5</a></li>
+			<li class="li1"><a href="">6</a></li>
+			<li class="li1"><a href="">7</a></li>
+		</nav>
+	</header><!--用来定义主体中的头-->
+	<!--表示包含于一个文档、页面、应用程序或网站中的一段独立的内容，可以被独立的发布或者重新使用文章标记标签。-->
+	<article>
+		<div style="height: 48px;"></div>
+		<h1>asd</h1>
+		<div>111</div>
+		<div>222</div>
+		<h2>asd</h2>
+		<div>333</div>
+		<div>444</div>
+		<h1>
+			<div>555</div>
+			<div>555</div>
+		</h1>
+		<div>111</div>
+		<h1>
+			<div>111</div>
+			<div>111</div>
+		</h1>
+		<a href="#">测试链接</a>
+		<!--所包含的内容不是页面的主要内容、具有独立性，是对页面的补充。-->
+		<aside>
+			<ul>
+				<li class="li2"><a style="text-align: left" href="">我是侧边1</a></li>
+				<li class="li2"><a href="">我是侧边2</a></li>
+				<li class="li2"><a href="">我是侧边3</a></li>
+				<li class="li2"><a href="">我是侧边4</a></li>
+				<li class="li2"><a href="">我是侧边5</a></li>
+				<li class="li2"><a href="">我是侧边6</a></li>
+				<li class="li2"><a href="">我是侧边7</a></li>
+			</ul>
+		</aside>
+		<!--是一个主题性的内容分组，通常用于对页面进行分块或者对文章等进行分段-->
+		<section>
+			<!-- Canvas 例子 -->
+			<input type="button" value="默认" onClick="drawLine();"><br>
+			<input type="text" id="item"><br>
+			<input type="button" value="添加" onclick="addItem(item.value)"><br>
+			<div id="show"></div><br>
+			<input type="button" value="查看" onclick="showCircle()"><br>
+			<canvas id="cavs" width="800" height="600">
+				您的浏览器不支持
+			</canvas><br/>
+			<!-- RGB&HSL 转换-->
+			R<input type="text" id="r"/>
+			G<input type="text" id="g"/>
+			B<input type="text" id="b"/>
+			<input type="button" value="转换" onClick="RGB2HSL();"/>
+			HSL<input type="text" id="hsl"/><p/>
+			H<input type="text" id="h"/>
+			S<input type="text" id="s"/>(%)
+			L<input type="text" id="l"/>(%)
+			<input type="button" value="转换" onClick="HSL2RGB();"/>
+			RGB<input type="text" id="rgb"/>
+			<!--用于对网页或区段（section）的标题进行组合。-->
+			<hgroup>
+				<h1>我是主标题</h1>
+				<h3>我是副标题</h3>
+			</hgroup>
+			<p>
+				我是正文
+			</p>
+			<a name="1">
+				<!--规定独立的流内容（图像、图表、照片、代码等等）。-->
+				<figure>
+					<!--标签定义 figure 元素的标题（caption）。-->
+					<figcaption>黄浦江上的的卢浦大桥</figcaption>
+					<img src="http://www.w3school.com.cn/i/shanghai_lupu_bridge.jpg" width="350" height="234">
+				</figure>
+				<!--标签定义文档或文章的作者/拥有者的联系信息。(一般指网络通讯地址，网站)-->
+				<address>
+					<p>文章作者：<a title="文章作者：张三" href="http://blog.csdn.net/lqslm">张三</a></p>
+					<!--便于搜索引擎和爬虫抓取时间-->
+					<time datetime="2000-08-10" pubdate="pubdate">2018/12/12</time>
+				</address>
+			</a>
+			
+			<a name="2">
+				<!--规定独立的流内容（图像、图表、照片、代码等等）。-->
+				<figure>
+					<!--标签定义 figure 元素的标题（caption）。-->
+					<figcaption>黄浦江上的的卢浦大桥</figcaption>
+					<img src="http://www.w3school.com.cn/i/shanghai_lupu_bridge.jpg" width="350" height="234">
+				</figure>
+				<!--标签定义文档或文章的作者/拥有者的联系信息。(一般指网络通讯地址，网站)-->
+				<address>
+					<p>文章作者：<a title="文章作者：张三" href="http://blog.csdn.net/lqslm">张三</a></p>
+					<!--便于搜索引擎和爬虫抓取时间-->
+					<time datetime="2000-08-10" pubdate="pubdate">2018/12/12</time>
+				</address>
+			</a>
+			
+			<a name="3">
+				<!--规定独立的流内容（图像、图表、照片、代码等等）。-->
+				<figure>
+					<!--标签定义 figure 元素的标题（caption）。-->
+					<figcaption>黄浦江上的的卢浦大桥</figcaption>
+					<img src="http://www.w3school.com.cn/i/shanghai_lupu_bridge.jpg" width="350" height="234">
+				</figure>
+				<!--标签定义文档或文章的作者/拥有者的联系信息。(一般指网络通讯地址，网站)-->
+				<address>
+					<p>文章作者：<a title="文章作者：张三" href="http://blog.csdn.net/lqslm">张三</a></p>
+					<!--便于搜索引擎和爬虫抓取时间-->
+					<time datetime="2000-08-10" pubdate="pubdate">2018/12/12</time>
+				</address>
+			</a>
+			
+			<a name="4">
+				<!--规定独立的流内容（图像、图表、照片、代码等等）。-->
+				<figure>
+					<!--标签定义 figure 元素的标题（caption）。-->
+					<figcaption>黄浦江上的的卢浦大桥</figcaption>
+					<img src="http://www.w3school.com.cn/i/shanghai_lupu_bridge.jpg" width="350" height="234">
+				</figure>
+				<!--标签定义文档或文章的作者/拥有者的联系信息。(一般指网络通讯地址，网站)-->
+				<address>
+					<p>文章作者：<a title="文章作者：张三" href="http://blog.csdn.net/lqslm">张三</a></p>
+					<!--便于搜索引擎和爬虫抓取时间-->
+					<time datetime="2000-08-10" pubdate="pubdate">2018/12/12</time>
+				</address>
+			</a>
+			<div style="height: 58px;"></div>
+		</section>
+	</article>
+	
+	<!--一般被放置在页面或者页面中某个区块的底部，包含版权信息、联系方式等信息。-->
+	<footer>我是底部</footer>
+
+
+</body>
+</html>
