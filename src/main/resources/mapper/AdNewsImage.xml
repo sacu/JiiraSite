@@ -6,12 +6,40 @@
 		<id column="newsimage" property="newsImage" />
 		<id column="url" property="url" />
 	</resultMap>
-	<!-- 获取管理员信息 -->
+	<!-- 检测是否重复 -->
 	<select id="checkNewsImage" resultMap="adNewsImage">
 		select * from sa_dt_news_image where
-		<foreach item="file" index="index" collection="newsImages"
-			open="(" separator=" or " close=")">
+		<foreach item="file" index="index" collection="list" open="("
+			separator="or" close=")">
 			newsimage=#{file}
 		</foreach>
 	</select>
+	<!-- 获取全部 -->
+	<select id="selectNewsImages" resultMap="adNewsImage">
+		select * from
+		sa_dt_news_image
+	</select>
+	<!-- 获取全部 -->
+	<select id="selectNewsImage" resultMap="adNewsImage">
+		select * from
+		sa_dt_news_image where newsimage=#{newsImage}
+	</select>
+
+	<!-- 插入不重复值 -->
+	<insert id="ignoreNewsImage">
+		replace into sa_dt_news_image(newsimage, url) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item}, "")
+		</foreach>
+	</insert>
+	<!-- 更新newsImage -->
+	<update id="updateNewsImage">
+		update sa_dt_news_image set url=#{url} where
+		newsimage=#{newsImage}
+	</update>
+	<!-- 删除图片 -->
+	<delete id="deleteNewsImage">
+		delete from sa_dt_news_image where newsimage=#{newsImage}
+	</delete>
 </mapper>

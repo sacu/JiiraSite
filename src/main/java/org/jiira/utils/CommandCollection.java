@@ -25,13 +25,18 @@ public class CommandCollection {
 
 	public static String HCODE;// 网页获取密钥的代码
 	public static WeHAT HAT;// 网页密钥
-	//本地或服务器本地路径
-//	public static final String ACCESS_TOKEN_PATH = "/home/resource/accesstoken.sa";// ACCESS TOKEN路径
+///###################### 本地或服务器本地路径 ############################################
+	//测试路径
 	public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS TOKEN路径
+	public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
+	//服务器路径
+//	public static final String ACCESS_TOKEN_PATH = "/home/resource/accesstoken.sa";// ACCESS TOKEN路径
 	public static final String NEWS_PATH = "/home/resource/news/";//图文路径，可能用不到
-	public static final String NEWS_IMAGE_PATH = "/home/resource/news_image/";//图文内图形路径
-	public static final String NEWS_IMAGE = "/home/resource/image/";//图形路径
+//	public static final String NEWS_IMAGE_PATH = "/home/resource/news_image/";//图文内图形路径
+	public static final String IMAGE_PATH = "/home/resource/image/";//图形路径
 	
+	
+///##################################################################
 	// 各种消息类型,除了扫带二维码事件
 	public static final String MESSAGE_TEXT = "text";// 文本消息
 	public static final String MESSAtGE_IMAGE = "image";// 图片消息

@@ -24,4 +24,34 @@ public class AdNewsImageServiceImpl implements AdNewsImageService {
 		return adNewsImageDao.checkNewsImage(newsImages);
 	}
 
+	@Override
+	public int ignoreNewsImage(List<String> newsImages) {
+		// TODO Auto-generated method stub
+		return adNewsImageDao.ignoreNewsImage(newsImages);
+	}
+
+	@Override
+	public List<AdNewsImage> selectNewsImages() {
+		// TODO Auto-generated method stub
+		return adNewsImageDao.selectNewsImages();
+	}
+
+	@Override
+	public AdNewsImage selectNewsImage(String newsImage) {
+		// TODO Auto-generated method stub
+		return adNewsImageDao.selectNewsImage(newsImage);
+	}
+
+	@Override
+	public int updateNewsImage(String newsImage, String url) {
+		// TODO Auto-generated method stub
+		return adNewsImageDao.updateNewsImage(newsImage, url);
+	}
+
+	@Override
+	public int deleteNewsImage(String newsImage) {
+		// TODO Auto-generated method stub
+		return adNewsImageDao.deleteNewsImage(newsImage);
+	}
+
 }

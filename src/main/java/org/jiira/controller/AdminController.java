@@ -2,7 +2,6 @@ package org.jiira.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.jiira.pojo.Login;
@@ -80,6 +79,12 @@ public class AdminController {
 	    mv.setViewName("/ad/setting_" + page);
 	    return mv;
 	}
+	/**
+	 * 用来测试的~随后可以删掉
+	 * @param page
+	 * @param mv
+	 * @return
+	 */
 	@RequestMapping("/setting_news_image")
 	public ModelAndView dotest(String page, ModelAndView mv) {
 	    mv.setViewName("/ad/setting_news_image");

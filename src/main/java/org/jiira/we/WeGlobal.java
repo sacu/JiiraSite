@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
@@ -270,20 +271,33 @@ public class WeGlobal {
 	/**
 	 * 以下为素材
 	 */
-	public void upload(MultipartFile[] files) {
-		if (files != null && files.length > 0) {
-			for (int i = 0; i < files.length; i++) {
+	public boolean upload(List<MultipartFile> newsImagesFiles) {// 上传文件
+		int len = newsImagesFiles.size();
+		if (len > 0) {
+			MultipartFile file;
+			for (int i = 0; i < len; i++) {
+				file = newsImagesFiles.get(i);
 				try {
-					String filePath = CommandCollection.NEWS_IMAGE_PATH + files[i].getOriginalFilename();
+					String filePath = CommandCollection.NEWS_IMAGE_PATH + file.getOriginalFilename();
 					// 转存文件
-					files[i].transferTo(new File(filePath));
+					file.transferTo(new File(filePath));
 				} catch (Exception e) {
 					logger.error(e.getMessage());
+					return false;
 				}
 			}
+			return true;
 		} else {
-			System.out.println("失败");
+			logger.error("没有可上传的数据");
+			return false;
 		}
+	}
+	public boolean unload(String newsImage) {// 删除文件
+		File file = new File(CommandCollection.NEWS_IMAGE_PATH + newsImage);
+		if (file.exists() && file.isFile()) {
+			return file.delete();
+		}
+		return false;
 	}
 
 	public String addNews(String title, String thumb_media_id, String author, String digest, int show_cover_pic,
@@ -302,7 +316,7 @@ public class WeGlobal {
 		return test.getString("media_id");// 返回并将mediaid保存到数据库
 	}
 
-	public SAHTML addNewsImage(String filePath) {// 添加图文内部图片资源
+	public JSONObject addNewsImage(String filePath) {// 添加图文内部图片资源
 		File file = new File(filePath);
 		if (!file.exists() || !file.isFile()) {
 			logger.error("上传的文件不存在");
@@ -312,7 +326,19 @@ public class WeGlobal {
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
 		table.setURL(CommandCollection.MATE_NEWS_IMAGE + CommandCollection.AccessToken);
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table, file);
-		return html;
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if (code == 0) {
+			return json;
+		} else {
+			if (code == 42001) {
+				createAccessToken();
+				return addNewsImage(filePath);
+			} else {
+				return null;
+			}
+		}
+
 	}
 
 	public void addIVV() {// 添加其他素材

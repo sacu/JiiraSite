@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+.div_list, .div_list_check, .div_list_key, .div_list_value, .div_list_submit, .div_list_clear, .div_list_delete {
+	width: 100%;
+	float: left;
+	border:1px dashed #000;
+}
+
+.div_list_check {
+	width: 5%;
+	background-color:#00ff00;
+}
+
+.div_list_key {
+	width: 10%;
+}
+
+.div_list_value {
+	width: 65%;
+}
+
+.div_list_submit {
+	width: 5%;
+}
+
+.div_list_clear {
+	width: 5%;
+}
+
+.div_list_delete {
+	width: 5%;
+}
