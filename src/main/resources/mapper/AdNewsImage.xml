@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdNewsImageDao">
+	<resultMap id="adNewsImage" type="org.jiira.pojo.ad.AdNewsImage">
+		<id column="newsimage" property="newsImage" />
+		<id column="url" property="url" />
+	</resultMap>
+	<!-- 获取管理员信息 -->
+	<select id="checkNewsImage" resultMap="adNewsImage">
+		select * from sa_dt_news_image where
+		<foreach item="file" index="index" collection="newsImages"
+			open="(" separator=" or " close=")">
+			newsimage=#{file}
+		</foreach>
+	</select>
+</mapper>

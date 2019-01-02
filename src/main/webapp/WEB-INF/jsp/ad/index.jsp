@@ -10,14 +10,7 @@
 <title>极光互娱</title>
 <link rel="stylesheet" href="style/test1.css" />
 <script src="https://code.jquery.com/jquery-3.2.0.js"></script>
-
-</head>
-
-<body>
-	<!--通常被放置在页面或者页面中某个区块元素的顶部，包含整个页面或者区块的标题、简介等信息，起到引导与导航的作用。-->
-	<header> 极光互娱后台管理系统 </header>
-	<!--用来定义主体中的头-->
-	<script type="text/javascript">
+<script type="text/javascript">
 	$(document).ready(function() {
 		$("#welcome").click(flip);
 		$("#setting").click(flip);
@@ -40,16 +33,24 @@
 		});
 	}
 	</script>
+</head>
+
+<body>
+	<!--通常被放置在页面或者页面中某个区块元素的顶部，包含整个页面或者区块的标题、简介等信息，起到引导与导航的作用。-->
+	<header id="header1"> 极光互娱后台管理系统 </header>
+	<!--用来定义主体中的头-->
 	<article>
 		<div style="height: 48px;"></div>
+		${msg}
 		<div id="content">
 			<%@ include file="login.jsp"%>
 		</div>
+		<div style="height: 58px;"></div>
 	</article>
 	<!--一般被放置在页面或者页面中某个区块的底部，包含版权信息、联系方式等信息。-->
 	<%if (null != session.getAttribute("adUser")) { %>
 	<footer>
-		<nav>
+		<nav id="nav1">
 			<!--表示页面的导航，可以通过导航连接到网站的其他页面，或者当前页面的其它部分。-->
 			<li class="li1"><a id="welcome" href="">首页</a></li>
 			<li class="li1"><a id="setting" href="">设置</a></li>

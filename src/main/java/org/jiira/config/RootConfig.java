@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -132,6 +133,15 @@ public class RootConfig implements TransactionManagementConfigurer {
 		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
 		transactionManager.setDataSource(initDataSource());
 		return transactionManager;
+	}
+	
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setDefaultEncoding("utf-8");
+		multipartResolver.setMaxUploadSize(10485760000L);
+		multipartResolver.setMaxInMemorySize(40960);
+		return multipartResolver;
 	}
 
 	/**

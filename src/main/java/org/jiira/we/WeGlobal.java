@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.ivv.WeIVV;
+import org.jiira.pojo.we.mate.news.MateNews;
 import org.jiira.pojo.we.robot.WeRobot;
 import org.jiira.utils.CommandCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -90,11 +92,9 @@ public class WeGlobal {
 	public SAHTML createMenu() {
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
-		table.setURL("https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + CommandCollection.AccessToken);
-		
+		table.setURL(CommandCollection.CREATE_MENU + CommandCollection.AccessToken);
 		CMenu menu = CommandCollection.GetMenu();
 		String menuStr = JSONObject.fromObject(menu).toString();
-		logger.error("生成的 : " + menuStr);
 		table.setUseJson(true);
 		table.setJson(menuStr);
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
@@ -106,7 +106,7 @@ public class WeGlobal {
 		switch (errcode) {
 		case 0:
 			return html;
-		case 42001://accesstoken过期
+		case 42001:// accesstoken过期
 		case 40001:// 没有accesstoken
 			createAccessToken();// 创建
 			return createMenu();// 重新调用返回
@@ -138,11 +138,12 @@ public class WeGlobal {
 
 	/**
 	 * access token
+	 * 
 	 * @return
 	 */
 	public SAHTML createAccessToken() {
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
-		table.setURL("https://api.weixin.qq.com/cgi-bin/token");
+		table.setURL(CommandCollection.ACCESS_TOKEN);
 		table.addParams("grant_type", "client_credential");
 		table.addParams("appid", CommandCollection.AppID);
 		table.addParams("secret", CommandCollection.Appsecret);
@@ -158,7 +159,7 @@ public class WeGlobal {
 			File file = null;
 			FileOutputStream out = null;
 			try {
-				file = new File("/home/resource/accesstoken.sa");
+				file = new File(CommandCollection.ACCESS_TOKEN_PATH);
 				if (file.exists()) {
 					file.delete();
 					file.createNewFile();
@@ -191,7 +192,7 @@ public class WeGlobal {
 		if (null != CommandCollection.AccessToken) {// 如果有~则直接返回
 			return;
 		}
-		File file = new File("/home/resource/accesstoken.sa");
+		File file = new File(CommandCollection.ACCESS_TOKEN_PATH);
 		if (!file.exists() || file.isDirectory()) {// 如果不存在，则创建并返回（从创建中获取）
 			createAccessToken();// 读取accesstoken
 		}
@@ -214,14 +215,14 @@ public class WeGlobal {
 			}
 		}
 	}
-	
+
 	/**
 	 * authorization
 	 */
 	public SAHTML getCode(String redirect) {
 		String redirect_uri = "http://" + CommandCollection.HOST_NAME + "/" + redirect;
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
-		table.setURL("https://open.weixin.qq.com/connect/oauth2/authorize");
+		table.setURL(CommandCollection.AUTH_CODE);
 		table.addParams("appid", CommandCollection.AI_AppID);
 		table.addParams("redirect_uri", redirect_uri);
 		table.addParams("response_type", "code");
@@ -233,7 +234,7 @@ public class WeGlobal {
 
 	public WeHAT getHAT(String code) {// 获取html 的 access token
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
-		table.setURL("https://api.weixin.qq.com/sns/oauth2/access_token");
+		table.setURL(CommandCollection.HTML_ACCESS_TOKEN);
 		table.addParams("appid", CommandCollection.AppID);
 		table.addParams("secret", CommandCollection.Appsecret);
 		table.addParams("code", code);
@@ -249,9 +250,9 @@ public class WeGlobal {
 		}
 	}
 
-	public WeHAT refHAT(String refresh_token) {
+	public WeHAT refHAT(String refresh_token) {// 刷新授权码
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
-		table.setURL("https://api.weixin.qq.com/sns/oauth2/refresh_token");
+		table.setURL(CommandCollection.REF_ACCESS_TOKEN);
 		table.addParams("appid", CommandCollection.AppID);
 		table.addParams("grant_type", "refresh_token");
 		table.addParams("refresh_token", refresh_token);
@@ -265,5 +266,56 @@ public class WeGlobal {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * 以下为素材
+	 */
+	public void upload(MultipartFile[] files) {
+		if (files != null && files.length > 0) {
+			for (int i = 0; i < files.length; i++) {
+				try {
+					String filePath = CommandCollection.NEWS_IMAGE_PATH + files[i].getOriginalFilename();
+					// 转存文件
+					files[i].transferTo(new File(filePath));
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+				}
+			}
+		} else {
+			System.out.println("失败");
+		}
+	}
+
+	public String addNews(String title, String thumb_media_id, String author, String digest, int show_cover_pic,
+			String content, String content_source_url, int need_open_comment, int only_fans_can_comment) {// 图文消息
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.MATE_NEWS + CommandCollection.AccessToken);
+		MateNews news = CommandCollection.GetMateNews(title, thumb_media_id, author, digest, show_cover_pic, content,
+				content_source_url, need_open_comment, only_fans_can_comment);
+		String newStr = JSONObject.fromObject(news).toString();
+		table.setUseJson(true);
+		table.setJson(newStr);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
+		JSONObject test = JSONObject.fromObject(html.getBody());
+		// 这里以后要做errcode检查
+		return test.getString("media_id");// 返回并将mediaid保存到数据库
+	}
+
+	public SAHTML addNewsImage(String filePath) {// 添加图文内部图片资源
+		File file = new File(filePath);
+		if (!file.exists() || !file.isFile()) {
+			logger.error("上传的文件不存在");
+			return null;
+		}
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.MATE_NEWS_IMAGE + CommandCollection.AccessToken);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table, file);
+		return html;
+	}
+
+	public void addIVV() {// 添加其他素材
+
+	}
 }

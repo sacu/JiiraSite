@@ -1,8 +1,5 @@
 package org.jiira.config;
 
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletRegistration.Dynamic;
-
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
@@ -27,21 +24,5 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 	protected String[] getServletMappings() {
 		return new String[] {"/"};
 //		return new String[] { "*.sa" };
-	}
-
-	/**
-	 * @param dynamic
-	 *            Servlet上传文件配置.
-	 */
-	@Override
-	protected void customizeRegistration(Dynamic dynamic) {
-		// 配置上传文件路径
-		String filepath = "uploads";
-		// 5MB
-		Long singleMax = (long) (5 * Math.pow(2, 20));
-		// 10MB
-		Long totalMax = (long) (10 * Math.pow(2, 20));
-		// 设置上传文件配置
-		dynamic.setMultipartConfig(new MultipartConfigElement(filepath, singleMax, totalMax, 0));
 	}
 }

@@ -26,8 +26,9 @@ public class AdInterceptor extends Interceptor{
 		if(check(request) && null == request.getSession().getAttribute("adUser")) {
 			modelAndView.setViewName("redirect:/ad");
 			logger.error("拦截");
+		} else {
+			logger.error("放行");
 		}
-		logger.error("放行");
 	}
 	@Override
 	protected String[] exclude() {//拦截
@@ -35,6 +36,6 @@ public class AdInterceptor extends Interceptor{
 	}
 	@Override
 	protected String[] excep() {//例外
-		return new String[] {"/ad/index"};
+		return new String[] {"/ad/index", "/ad/login"};
 	}
 }

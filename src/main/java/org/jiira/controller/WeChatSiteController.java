@@ -23,6 +23,9 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/we")
 public class WeChatSiteController {
+	/**
+	 * 获取用户信息
+	 */
 	private static final Logger logger = LoggerFactory.getLogger(WeChatSiteController.class);
 	@RequestMapping(value = "/userInfo")
 	public void getUserInfo(HttpServletResponse response, @RequestParam(value = "", required = false) String code) {

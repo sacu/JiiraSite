@@ -70,6 +70,22 @@ public class AdminController {
 	    return mv;
 	}
 	/**
+	 * 
+	 * @param page
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping("/setting_flip")
+	public ModelAndView doSettingFlip(String page, ModelAndView mv) {
+	    mv.setViewName("/ad/setting_" + page);
+	    return mv;
+	}
+	@RequestMapping("/setting_news_image")
+	public ModelAndView dotest(String page, ModelAndView mv) {
+	    mv.setViewName("/ad/setting_news_image");
+	    return mv;
+	}
+	/**
 	 * 退出
 	 * @param mv
 	 * @return
