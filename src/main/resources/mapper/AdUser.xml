@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdUserDao">
+	<resultMap id="adUser" type="org.jiira.pojo.ad.AdUser">
+		<id column="id" property="id" />
+		<id column="username" property="userName" />
+		<id column="password" property="passWord" />
+		<id column="nickname" property="nickName" />
+	</resultMap>
+	<!-- 获取管理员信息 -->
+	<select id="getAdUser" resultMap="adUser">
+		select * from sa_dt_aduser where username=#{userName} and password=#{passWord};
+	</select>
+</mapper>

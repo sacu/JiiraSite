@@ -1,13 +1,16 @@
-package org.jiira.pojo;
+package org.jiira.pojo.ad;
 
-/**
- * 登陆对象
- * @author time
- *
- */
-public class Login {
+public class AdUser {
+	private int id;
 	private String userName;
 	private String passWord;
+	private String nickName;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getUserName() {
 		return userName;
 	}
@@ -20,8 +23,11 @@ public class Login {
 	public void setPassWord(String passWord) {
 		this.passWord = passWord;
 	}
-	public void clear() {
-		userName = null;
-		passWord = null;
+	public String getNickName() {
+		return nickName;
 	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+	
 }

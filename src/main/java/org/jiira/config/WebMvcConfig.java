@@ -2,6 +2,7 @@ package org.jiira.config;
 
 import java.util.List;
 
+import org.jiira.interceptor.AdInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -90,10 +91,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		
 	}
 
+	/**
+	 * 添加拦截器
+	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
-		
+		registry.addInterceptor(new AdInterceptor()).addPathPatterns("/ad/*");
 	}
 
 	@Override
@@ -132,6 +136,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addViewControllers(ViewControllerRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addViewController("/").setViewName("login");
+		registry.addViewController("/ad").setViewName("ad/index");
 		registry.addViewController("/login").setViewName("login");
 		registry.addViewController("/register").setViewName("register");
 	}
