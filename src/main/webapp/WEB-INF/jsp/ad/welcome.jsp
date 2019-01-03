@@ -16,7 +16,7 @@ $(document).ready(function() {
 		alert($(this).attr("id"))
 		//提交表单
 		$.post({
-			url : "ad/"$(this).attr("id"),
+			url : "ad/" + $(this).attr("id"),
 			//成功后的方法
 			success : function(result) {
 				alert(result)

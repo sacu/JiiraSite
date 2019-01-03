@@ -16,23 +16,23 @@
 		$("#welcome").click(flip);
 		$("#setting").click(flip);
 		$("#about").click(flip);
+		function flip(event) {
+			flipForPage($(this).attr("id"));
+			event.preventDefault();  // 阻止链接跳转
+		}
+		function flipForPage(page){
+			//提交表单
+			$.post({
+				url : "ad/flip",
+				data : {page:page},
+				//成功后的方法
+				success : function(result) {
+					$('#content').empty()
+					$('#content').html(result)
+				}
+			});
+		}
 	});
-	function flip(event) {
-		flipForPage($(this).attr("id"));
-		event.preventDefault();  // 阻止链接跳转
-	}
-	function flipForPage(page){
-		//提交表单
-		$.post({
-			url : "ad/flip",
-			data : {page:page},
-			//成功后的方法
-			success : function(result) {
-				$('#content').empty();
-				$('#content').html(result);
-			}
-		});
-	}
 	</script>
 </head>
 

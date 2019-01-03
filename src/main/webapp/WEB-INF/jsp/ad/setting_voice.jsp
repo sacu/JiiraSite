@@ -7,11 +7,6 @@
 <meta name="viewport"
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>voice</title>
-
-<link rel="stylesheet" href="../style/test1.css" />
-<link rel="stylesheet" href="../style/ad.css" />
-<script src="https://code.jquery.com/jquery-3.2.0.js"></script>
-
 <script type="text/javascript">
 	var ad = "ad/";//提交服务器后是 ad/
 	$(document).ready(function() {
