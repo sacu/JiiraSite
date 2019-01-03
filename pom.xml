@@ -155,8 +155,8 @@
 				<version>2.2</version>
 				<configuration>
 					<!--tomcat7部署管理路径 -->
-					<!-- <url>http://188.131.228.192:8080/manager/text</url> -->
-					<url>http://127.0.0.1:8080/manager/text</url>
+					<url>http://188.131.228.192:8080/manager/text</url>
+<!-- 					<url>http://127.0.0.1:8080/manager/text</url> -->
 					<username>admin</username>                                <!-- tomcat的管理员账号 -->
 					<password>adminadmin</password>
 					<port>8080</port>

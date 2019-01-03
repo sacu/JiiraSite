@@ -33,10 +33,38 @@ DROP TABLE IF EXISTS `sa_dt_news_image`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_news_image` (
 	`newsimage` varchar(100) not null COMMENT '本地图片名称',
-	`url` varchar(255) not null COMMENT 'url'
+	`url` varchar(255) COMMENT 'url'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图文内部图形表表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `sa_dt_iv`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sa_dt_iv` (
+	`iv` varchar(100) not null COMMENT 'iv名称',
+	`media_id` varchar(100) COMMENT '公众号ID',
+	`url` varchar(255) COMMENT 'url',
+	`type` varchar(30) not null COMMENT '类型image'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图片&缩略图表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sa_dt_voice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sa_dt_voice` (
+	`voice` varchar(100) not null COMMENT 'iv名称',
+	`media_id` varchar(100) COMMENT '公众号ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='语音表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sa_dt_video`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sa_dt_video` (
+	`video` varchar(100) not null COMMENT '视频名称',
+	`media_id` varchar(100) COMMENT '公众号ID',
+	`title` varchar(100) not null COMMENT '视频标题',
+	`introduction` varchar(255) not null COMMENT '视频介绍200字'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='视频表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 -- 以下为网站表
 DROP TABLE IF EXISTS `sa_dt_user`;

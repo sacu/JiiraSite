@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdVideoDao">
+	<resultMap id="adVideo" type="org.jiira.pojo.ad.AdVideo">
+		<id column="video" property="video" />
+		<id column="media_id" property="media_id" />
+		<id column="title" property="title" />
+		<id column="introduction" property="introduction" />
+	</resultMap>
+	<!-- 检测是否重复 -->
+	<select id="checkVideo" resultMap="adVideo">
+		select * from sa_dt_video where
+			video=#{video}
+	</select>
+	<!-- 获取全部 -->
+	<select id="selectVideos" resultMap="adVideo">
+		select * from
+		sa_dt_video
+	</select>
+	<!-- 获取单一 -->
+	<select id="selectVideo" resultMap="adVideo">
+		select * from
+		sa_dt_video
+		where video=#{video}
+	</select>
+
+	<!-- 插入不重复值 这里需要map -->
+	<insert id="ignoreVideo">
+		replace into sa_dt_video(video, title, introduction) values
+			(#{item}, #{title}, #{introduction})
+	</insert>
+	<!-- 更新Video -->
+	<update id="updateVideo">
+		update sa_dt_video set media_id=#{media_id} where
+		video=#{video}
+	</update>
+	<!-- 删除 -->
+	<delete id="deleteVideo">
+		delete from sa_dt_video where video=#{video}
+	</delete>
+</mapper>

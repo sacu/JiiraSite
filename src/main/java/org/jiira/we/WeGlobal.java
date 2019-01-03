@@ -136,7 +136,23 @@ public class WeGlobal {
 		}
 		return null;
 	}
-
+	public JSONObject clearQuota() {
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.CLEAR_QUOTA + CommandCollection.AccessToken);
+		String quotaStr = JSONObject.fromObject(CommandCollection.GetWeClearQuota()).toString();
+		table.setJson(quotaStr);
+		table.setUseJson(true);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if (code == 42001) {
+			createAccessToken();
+			return clearQuota();
+		} else {
+			return json;
+		}
+	}
 	/**
 	 * access token
 	 * 
@@ -271,20 +287,11 @@ public class WeGlobal {
 	/**
 	 * 以下为素材
 	 */
-	public boolean upload(List<MultipartFile> newsImagesFiles) {// 上传文件
-		int len = newsImagesFiles.size();
+	public boolean upload(String path, List<MultipartFile> files) {// 上传文件
+		int len = files.size();
 		if (len > 0) {
-			MultipartFile file;
 			for (int i = 0; i < len; i++) {
-				file = newsImagesFiles.get(i);
-				try {
-					String filePath = CommandCollection.NEWS_IMAGE_PATH + file.getOriginalFilename();
-					// 转存文件
-					file.transferTo(new File(filePath));
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-					return false;
-				}
+				upload(path, files.get(i));
 			}
 			return true;
 		} else {
@@ -292,8 +299,19 @@ public class WeGlobal {
 			return false;
 		}
 	}
-	public boolean unload(String newsImage) {// 删除文件
-		File file = new File(CommandCollection.NEWS_IMAGE_PATH + newsImage);
+	public boolean upload(String path, MultipartFile file) {
+		try {
+			String filePath = path + file.getOriginalFilename();
+			// 转存文件
+			file.transferTo(new File(filePath));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+	public boolean unload(String path, String newsImage) {// 删除文件
+		File file = new File(path + newsImage);
 		if (file.exists() && file.isFile()) {
 			return file.delete();
 		}
@@ -315,17 +333,83 @@ public class WeGlobal {
 		// 这里以后要做errcode检查
 		return test.getString("media_id");// 返回并将mediaid保存到数据库
 	}
-
-	public JSONObject addNewsImage(String filePath) {// 添加图文内部图片资源
-		File file = new File(filePath);
-		if (!file.exists() || !file.isFile()) {
-			logger.error("上传的文件不存在");
-			return null;
+	public JSONObject addVideo(String filePath, String type, String title, String introduction) {//视频
+		checkAccessToken();
+		String vedioStr = JSONObject.fromObject(CommandCollection.GetMateVideo(title, introduction)).toString();
+		JSONObject json = addIVV(filePath, type, vedioStr);
+		int code = WeCode.getInstance().check(json);
+		if (code == 0) {
+			return json;
+		} else {
+			if (code == 42001) {
+				createAccessToken();
+				return addVideo(filePath, type, title, introduction);
+			} else {
+				return json;
+			}
 		}
+	}
+	public JSONObject addIV(String filePath, String type) {//图形和语音
+		checkAccessToken();
+		JSONObject json = addIVV(filePath, type, null);
+		int code = WeCode.getInstance().check(json);
+		if (code == 0) {
+			return json;
+		} else {
+			if (code == 42001) {
+				createAccessToken();
+				return addIV(filePath, type);
+			} else {
+				return json;
+			}
+		}
+	}
+	private JSONObject addIVV(String filePath, String type, String videoStr) {//视频
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.MATE_IVV + CommandCollection.AccessToken + "&type=" + type);
+		if(null != videoStr) {
+			table.setJson(videoStr);
+			table.setUseJson(true);
+		}
+		return addNIVV(filePath, table);
+	}
+	public JSONObject addNewsImage(String filePath) {// 添加图文内部图片资源
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
 		table.setURL(CommandCollection.MATE_NEWS_IMAGE + CommandCollection.AccessToken);
+		JSONObject json = addNIVV(filePath, table);
+		int code = WeCode.getInstance().check(json);
+		if (code == 0) {
+			return json;
+		} else {
+			if (code == 42001) {
+				createAccessToken();
+				return addNIVV(filePath, table);
+			} else {
+				return json;
+			}
+		}
+	}
+	private JSONObject addNIVV(String filePath, SAHttpTable table) {// 添加图文内部图片资源
+		File file = new File(filePath);
+		if (!file.exists() || !file.isFile()) {
+			logger.error("上传的文件不存在:"+filePath);
+			return null;
+		}
+		checkAccessToken();
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table, file);
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		return json;
+	}
+	public JSONObject deleteNIVV(String media_id) {// 添加图文内部图片资源
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.MATE_DELETE + CommandCollection.AccessToken);
+		String deleteStr = JSONObject.fromObject(CommandCollection.GetMateDelete(media_id)).toString();
+		table.setJson(deleteStr);
+		table.setUseJson(true);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		int code = WeCode.getInstance().check(json);
 		if (code == 0) {
@@ -333,15 +417,10 @@ public class WeGlobal {
 		} else {
 			if (code == 42001) {
 				createAccessToken();
-				return addNewsImage(filePath);
+				return deleteNIVV(media_id);
 			} else {
-				return null;
+				return json;
 			}
 		}
-
-	}
-
-	public void addIVV() {// 添加其他素材
-
 	}
 }

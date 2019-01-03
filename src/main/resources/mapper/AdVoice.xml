@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdVoiceDao">
+	<resultMap id="adVoice" type="org.jiira.pojo.ad.AdVoice">
+		<id column="voice" property="voice" />
+		<id column="media_id" property="media_id" />
+	</resultMap>
+	<!-- 检测是否重复 -->
+	<select id="checkVoice" resultMap="adVoice">
+		select * from sa_dt_voice where
+		<foreach item="file" index="index" collection="list" open="("
+			separator="or" close=")">
+			voice=#{file}
+		</foreach>
+	</select>
+	<!-- 获取全部 -->
+	<select id="selectVoices" resultMap="adVoice">
+		select * from
+		sa_dt_voice
+	</select>
+	<!-- 获取全部 -->
+	<select id="selectVoice" resultMap="adVoice">
+		select * from
+		sa_dt_voice where voice=#{voice}
+	</select>
+
+	<!-- 插入不重复值 -->
+	<insert id="ignoreVoice">
+		replace into sa_dt_voice(voice) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item})
+		</foreach>
+	</insert>
+	<!-- 更新Voice -->
+	<update id="updateVoice">
+		update sa_dt_voice set media_id=#{media_id} where
+		voice=#{voice}
+	</update>
+	<!-- 删除图片 -->
+	<delete id="deleteVoice">
+		delete from sa_dt_voice where voice=#{voice}
+	</delete>
+</mapper>

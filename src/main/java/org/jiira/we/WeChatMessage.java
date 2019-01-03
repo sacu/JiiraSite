@@ -14,7 +14,6 @@ public class WeChatMessage {
 	
 	//普通消息类通用
 	private String MediaId;//图片消息媒体id，可以调用多媒体文件下载接口拉取数据。
-	private String Title;//各种的标题
 	//文字消息
 	private String Content;//内容
 	//图像
@@ -22,11 +21,8 @@ public class WeChatMessage {
 	//语音消息
 	private String Format;//语音格式amr,speex
 	//音乐
-	private String MusicURL;//音乐链接
-	private String HQMusicUrl;//高质量音乐链接 WIFI会优先选择
-	
+	private WeChatMusicMessage Music;
 	//视频消息和小视频消息
-	private String ThumbMediaId;//视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
 	
 	//地理位置消息
 	private String Location_X;//double 地理位置维度
@@ -35,7 +31,6 @@ public class WeChatMessage {
 	private String Label;//地理位置信息
 	
 	//链接消息
-	private String Description;//消息描述
 	private String Url;//消息链接
 	
 	
@@ -107,6 +102,14 @@ public class WeChatMessage {
 		Event = event;
 	}
 
+	public WeChatMusicMessage getMusic() {
+		return Music;
+	}
+
+	public void setMusic(WeChatMusicMessage music) {
+		Music = music;
+	}
+
 	public boolean getUseRobot() {
 		return useRobot;
 	}
@@ -123,14 +126,6 @@ public class WeChatMessage {
 		MediaId = mediaId;
 	}
 
-	public String getTitle() {
-		return Title;
-	}
-
-	public void setTitle(String title) {
-		Title = title;
-	}
-
 	public String getPicUrl() {
 		return PicUrl;
 	}
@@ -145,30 +140,6 @@ public class WeChatMessage {
 
 	public void setFormat(String format) {
 		Format = format;
-	}
-
-	public String getMusicURL() {
-		return MusicURL;
-	}
-
-	public void setMusicURL(String musicURL) {
-		MusicURL = musicURL;
-	}
-
-	public String getHQMusicUrl() {
-		return HQMusicUrl;
-	}
-
-	public void setHQMusicUrl(String hQMusicUrl) {
-		HQMusicUrl = hQMusicUrl;
-	}
-
-	public String getThumbMediaId() {
-		return ThumbMediaId;
-	}
-
-	public void setThumbMediaId(String thumbMediaId) {
-		ThumbMediaId = thumbMediaId;
 	}
 
 	public String getLocation_X() {
@@ -201,14 +172,6 @@ public class WeChatMessage {
 
 	public void setLabel(String label) {
 		Label = label;
-	}
-
-	public String getDescription() {
-		return Description;
-	}
-
-	public void setDescription(String description) {
-		Description = description;
 	}
 
 	public String getUrl() {
@@ -281,11 +244,8 @@ public class WeChatMessage {
 		logger.error("Content : " + Content);//文字消息
 		logger.error("##############################################");
 		logger.error("MediaId : " + MediaId);//通用MediaId
-		logger.error("MusicURL" + MusicURL);//音乐链接
-		logger.error("HQMusicUrl" + HQMusicUrl);//高质量音乐链接 WIFI会优先选择
 		logger.error("PicUrl : " + PicUrl);//图像
 		logger.error("Format : " + Format);//语音消息
-		logger.error("ThumbMediaId : " + ThumbMediaId);//视频消息和小视频消息
 		logger.error("##############################################");
 		//地理位置消息
 		logger.error("Location_X : " + Location_X);//double 地理位置维度
@@ -294,8 +254,6 @@ public class WeChatMessage {
 		logger.error("Label : " + Label);//地理位置信息
 		logger.error("##############################################");
 		//链接消息
-		logger.error("Title : " + Title);//消息标题
-		logger.error("Description : " + Description);//消息描述
 		logger.error("Url : " + Url);//消息链接
 		logger.error("##############################################");
 		logger.error("Event : " + Event);//事件类型返回的内容，subscribe(订阅)、unsubscribe(取消订阅)

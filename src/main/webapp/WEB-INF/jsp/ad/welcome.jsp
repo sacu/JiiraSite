@@ -11,6 +11,7 @@
 $(document).ready(function() {
 	$("#createAccessToken").click(create);
 	$("#createMenu").click(create);
+	$("#clearQuota").click(create);
 	function create(event) {
 		alert($(this).attr("id"))
 		//提交表单
@@ -40,6 +41,8 @@ $(document).ready(function() {
 	<a id="createAccessToken" href="">生成Access Token</a>
 	<br>
 	<a id="createMenu" href="">生成Menu</a>
+	<br>
+	<a id="clearQuota" href="">清除使用次数</a>
 	<div stype="word-wrap:break-word" id="msg">
 	这里是信息
 	</div>

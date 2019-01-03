@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdIVDao">
+	<resultMap id="adIV" type="org.jiira.pojo.ad.AdIV">
+		<id column="iv" property="iv" />
+		<id column="media_id" property="media_id" />
+		<id column="url" property="url" />
+		<id column="type" property="type" />
+	</resultMap>
+	<!-- 检测是否重复 -->
+	<select id="checkIV" resultMap="adIV">
+		select * from sa_dt_iv where
+		<foreach item="file" index="index" collection="list" open="("
+			separator="or" close=")">
+			iv=#{file}
+		</foreach>
+	</select>
+	<!-- 获取全部 -->
+	<select id="selectIVs" resultMap="adIV">
+		select * from
+		sa_dt_iv where type=#{type}
+	</select>
+	<!-- 获取全部 -->
+	<select id="selectIV" resultMap="adIV">
+		select * from
+		sa_dt_iv where iv=#{iv}
+	</select>
+
+	<!-- 插入不重复值 -->
+	<insert id="ignoreIV">
+		replace into sa_dt_iv(iv, type) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item}, #{type})
+		</foreach>
+	</insert>
+	<!-- 更新IV -->
+	<update id="updateIV">
+		update sa_dt_iv set url=#{url}, media_id=#{media_id} where
+		iv=#{iv}
+	</update>
+	<!-- 删除图片 -->
+	<delete id="deleteIV">
+		delete from sa_dt_iv where iv=#{iv}
+	</delete>
+</mapper>

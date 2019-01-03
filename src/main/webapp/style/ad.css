@@ -1,6 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
-.div_list, .div_list_check, .div_list_key, .div_list_value, .div_list_submit, .div_list_clear, .div_list_delete {
+.div_list, .div_list_check, .div_list_key, .div_list_value, .div_list_submit, .div_list_clear, .div_list_delete, .div_list_media_id, .div_list_type {
 	width: 100%;
 	float: left;
 	border:1px dashed #000;
@@ -16,7 +16,7 @@
 }
 
 .div_list_value {
-	width: 65%;
+	width: 50%;
 }
 
 .div_list_submit {
@@ -28,5 +28,13 @@
 }
 
 .div_list_delete {
+	width: 5%;
+}
+
+.div_list_media_id{
+	width: 10%;
+}
+
+.div_list_type{
 	width: 5%;
 }

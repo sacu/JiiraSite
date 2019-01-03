@@ -44,8 +44,8 @@
 						ni_list_html += "<div class='div_list_key'>" + ni + "</div>";
 						ni_list_html += "<div class='div_list_value' id='" + ni + "'>" + i['url'] + "</div>";
 						ni_list_html += "<div class='div_list_submit'><a id='gni' v='" + ni + "' href=''>获取URL</a></div>";
-						ni_list_html += "<div class='div_list_submit'><a id='cni' v='" + ni + "' href=''>清除URL</a></div>";
-						ni_list_html += "<div class='div_list_submit'><a id='dni' v='" + ni + "' href=''>删除</a></div>";
+						ni_list_html += "<div class='div_list_clear'><a id='cni' v='" + ni + "' href=''>清除URL</a></div>";
+						ni_list_html += "<div class='div_list_delete'><a id='dni' v='" + ni + "' href=''>删除</a></div>";
 						ni_list_html += "</div>";
 					});
 					$('#ni_list').empty();
@@ -71,7 +71,7 @@
 					nis_command(url, data)
 					break;
 				case "dni":
-					url = ad + "deleteNewsImage";
+					url = ad + "deleteNewsImageToWe";
 					data={newsImages:[target.attr("v")]}
 					nis_command(url, data)
 					break;
@@ -110,7 +110,7 @@
 			event.preventDefault();  // 阻止链接跳转
 		})
 		$("#batch_dni").click(function(event) {
-			var url = ad + "deleteNewsImage";
+			var url = ad + "deleteNewsImageToWe";
 			var data = {newsImages:[]};
 			$.each($('input:checkbox:checked'),function(){
 				data['newsImages'].push($(this).val())
@@ -123,7 +123,6 @@
 </script>
 </head>
 <body>
-	<a href="javascript:getNIList()">获取</a>
 	<h1>图文内图片</h1>
 	<form id="ulni_form">
 		<input type="file" name="files" value="请选择上传的文件" /><br>

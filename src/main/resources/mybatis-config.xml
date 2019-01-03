@@ -6,5 +6,8 @@
     <mappers>
         <mapper resource="mapper/AdUser.xml"/>
         <mapper resource="mapper/AdNewsImage.xml"/>
+        <mapper resource="mapper/AdIV.xml"/>
+        <mapper resource="mapper/AdVoice.xml"/>
+        <mapper resource="mapper/AdVideo.xml"/>
     </mappers>
 </configuration>

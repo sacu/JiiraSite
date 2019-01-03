@@ -85,9 +85,19 @@ public class AdminController {
 	 * @param mv
 	 * @return
 	 */
-	@RequestMapping("/setting_news_image")
+	@RequestMapping("/setting_voice")
 	public ModelAndView dotest(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_news_image");
+	    mv.setViewName("/ad/setting_voice");
+	    return mv;
+	}
+	@RequestMapping("/setting_image")
+	public ModelAndView dotest2(String page, ModelAndView mv) {
+	    mv.setViewName("/ad/setting_image");
+	    return mv;
+	}
+	@RequestMapping("/setting_thumb")
+	public ModelAndView dotest3(String page, ModelAndView mv) {
+	    mv.setViewName("/ad/setting_thumb");
 	    return mv;
 	}
 	/**

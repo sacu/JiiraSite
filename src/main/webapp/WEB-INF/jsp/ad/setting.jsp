@@ -12,6 +12,7 @@
 		$("#image").click(setting_flip);
 		$("#voice").click(setting_flip);
 		$("#video").click(setting_flip);
+		$("#thumb").click(setting_flip);
 		$("#news_image").click(setting_flip);
 		$("#news").click(setting_flip);
 	});
@@ -36,7 +37,8 @@
 			<!--表示页面的导航，可以通过导航连接到网站的其他页面，或者当前页面的其它部分。-->
 			<li class="li1"><a id="image" href="">图片</a></li>
 			<li class="li1"><a id="voice" href="">语音</a></li>
-			<li class="li1"><a id="video" href="">缩略图</a></li>
+			<li class="li1"><a id="video" href="">视频</a></li>
+			<li class="li1"><a id="thumb" href="">缩略图</a></li>
 			<li class="li1"><a id="news_image" href="">图文内图片</a></li>
 			<li class="li1"><a id="news" href="">图文</a></li>
 		</nav>

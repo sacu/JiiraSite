@@ -27,10 +27,10 @@
 
 	<!-- 插入不重复值 -->
 	<insert id="ignoreNewsImage">
-		replace into sa_dt_news_image(newsimage, url) values
+		replace into sa_dt_news_image(newsimage) values
 		<foreach collection="list" item="item" index="index"
 			separator=",">
-			(#{item}, "")
+			(#{item})
 		</foreach>
 	</insert>
 	<!-- 更新newsImage -->

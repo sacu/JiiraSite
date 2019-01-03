@@ -8,6 +8,7 @@ import org.jiira.pojo.we.ivv.WeIVV;
 import org.jiira.pojo.we.ivv.WeIVVItem;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.WeChatMessage;
+import org.jiira.we.WeChatMusicMessage;
 import org.jiira.we.WeGlobal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,23 +35,27 @@ public class HandleText {
 			break;
 		}
 		case "音乐":{
-			msg.setMsgType(CommandCollection.MESSAGE_TEXT);//改变回复消息类型
-			msg.setContent("暂时没有音乐哦");
-			//这里等做了后台管理再优化吧……需要把公众号的列表存到服务器
-//			WeIVV music = WeGlobal.getInstance().getWeIVV(CommandCollection.MESSAGE_VOICE);
-//			logger.error("music : " + music.getItem_count());
-//			logger.error("music : " + music.getItem().length);
-//			if(music.getItem_count() > 0) {
-//				WeIVVItem item = music.getItem()[(int) Math.floor(Math.random() * music.getItem_count())];//随机一个
-//				msg.setMsgType(CommandCollection.MESSAGE_MUSIC);//改变回复消息类型
-//				msg.setTitle("喵贼克~");
-//				msg.setDescription("动次大次~动次大次~~切克闹");
-//				msg.setThumbMediaId(item.media_id);
-//			} else {
-//				msg.setMsgType(CommandCollection.MESSAGE_TEXT);//改变回复消息类型
-//				msg.setContent("诶呀~我没有音乐可播……");
-//			}
-			
+			msg.setContent("测试音乐");
+			msg.setMsgType(CommandCollection.MESSAGE_MUSIC);//改变回复消息类型
+			WeChatMusicMessage music = new WeChatMusicMessage();
+			music.setTitle("喵贼克~");
+			music.setDescription("动次大次~动次大次~~切克闹");
+			music.setMusicUrl("http://188.131.228.192/manager/dream.mp3");
+			music.setHQMusicUrl("http://188.131.228.192/manager/dream.mp3");
+			music.setThumbMediaId("IkKppKVsdtT8T0V05gBYvtSEt0ZbjhcC0dW1Ix7DUhY");
+			msg.setMusic(music);
+			break;
+		}
+		case "音乐2":{
+			msg.setContent("听吧听吧");
+			msg.setMsgType(CommandCollection.MESSAGE_MUSIC);//改变回复消息类型
+			WeChatMusicMessage music = new WeChatMusicMessage();
+			music.setTitle("喵贼克~");
+			music.setDescription("动次大次~动次大次~~切克闹");
+			music.setMusicUrl("");
+			music.setHQMusicUrl("");
+			music.setThumbMediaId("IkKppKVsdtT8T0V05gBYvtSEt0ZbjhcC0dW1Ix7DUhY");
+			msg.setMusic(music);
 			break;
 		}
 		case "荆轲刺秦王":{

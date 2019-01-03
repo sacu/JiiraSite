@@ -1,10 +1,13 @@
 package org.jiira.utils;
 
+import org.jiira.pojo.we.WeClearQuota;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.cmenu.CMenuButton;
 import org.jiira.pojo.we.cmenu.CMenuClickButton;
 import org.jiira.pojo.we.cmenu.CMenuViewButton;
+import org.jiira.pojo.we.mate.MateDelete;
+import org.jiira.pojo.we.mate.ivv.MateVideo;
 import org.jiira.pojo.we.mate.news.MateNews;
 import org.jiira.pojo.we.mate.news.MateNewsElement;
 import org.jiira.we.SAHttpTable;
@@ -12,11 +15,11 @@ import org.jiira.we.SAHttpTable;
 public class CommandCollection {
 	public static final String Token = "sacu";
 	//正式
-//	 public static final String AppID = "wxbe33419389062baf";
-//	 public static final String Appsecret = "0e0096f240db6cabe012295de3ba1dbc";
+	 public static final String AppID = "wxbe33419389062baf";
+	 public static final String Appsecret = "9825b2ee097c860161004a6f12bc38a7";
 	// 测试
-	public static final String AppID = "wxeb5a9c34e7d8e1d4";
-	public static final String Appsecret = "3916d9c38526662c982212051a73de9d";
+//	public static final String AppID = "wxeb5a9c34e7d8e1d4";
+//	public static final String Appsecret = "3916d9c38526662c982212051a73de9d";
 
 	public static final String AI_AppID = "2110982891";
 	public static final String AI_AppKey = "cWIPxtEqyc8mMQSW";
@@ -27,23 +30,33 @@ public class CommandCollection {
 	public static WeHAT HAT;// 网页密钥
 ///###################### 本地或服务器本地路径 ############################################
 	//测试路径
-	public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS TOKEN路径
-	public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
+//	public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS TOKEN路径
+//	public static final String NEWS_PATH = "F:\\\\upload\\\\";//图文路径，可能用不到
+//	public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
+//	public static final String IMAGE_PATH = "F:\\upload\\";//图文内图形路径
+//	public static final String VOICE_PATH = "F:\\upload\\";//图文内图形路径
+//	public static final String VIDEO_PATH = "F:\\upload\\";//图文内图形路径
+//	public static final String THUMB_PATH = "F:\\upload\\";//图文内图形路径
 	//服务器路径
-//	public static final String ACCESS_TOKEN_PATH = "/home/resource/accesstoken.sa";// ACCESS TOKEN路径
+	public static final String ACCESS_TOKEN_PATH = "/home/resource/accesstoken.sa";// ACCESS TOKEN路径
 	public static final String NEWS_PATH = "/home/resource/news/";//图文路径，可能用不到
-//	public static final String NEWS_IMAGE_PATH = "/home/resource/news_image/";//图文内图形路径
+	public static final String NEWS_IMAGE_PATH = "/home/resource/news_image/";//图文内图形路径
 	public static final String IMAGE_PATH = "/home/resource/image/";//图形路径
+	public static final String VOICE_PATH = "/home/resource/voice/";//语音路径
+	public static final String VIDEO_PATH = "/home/resource/video/";//视频路径
+	public static final String THUMB_PATH = "/home/resource/thumb/";//缩略图路径
+	
 	
 	
 ///##################################################################
 	// 各种消息类型,除了扫带二维码事件
 	public static final String MESSAGE_TEXT = "text";// 文本消息
-	public static final String MESSAtGE_IMAGE = "image";// 图片消息
+	public static final String MESSAGE_IMAGE = "image";// 图片消息
 	public static final String MESSAGE_NEWS = "news";// 图文消息
 	public static final String MESSAGE_VOICE = "voice";// 语音
 	public static final String MESSAGE_MUSIC = "music";// 音乐
 	public static final String MESSAGE_VIDEO = "video";// 视频消息
+	public static final String MESSAGE_THUMB = "thumb";// 缩略图
 	public static final String MESSAGE_SHORTVIDEO = "shortvideo";// 小视频消息
 	public static final String MESSAGE_LOCATION = "location";// 地理位置消息
 	public static final String MESSAGE_LINK = "link";// 链接消息
@@ -60,6 +73,7 @@ public class CommandCollection {
 	//
 	public static final String HOST_NAME = "188.131.228.192";// 以后换成域名
 	// 各种请求地址
+	public static final String CLEAR_QUOTA = "https://api.weixin.qq.com/cgi-bin/clear_quota?access_token=";//清除访问次数限制，一个月只能用10次
 	public static final String CREATE_MENU = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";// 创建菜单
 	public static final String ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token";// 生成 ACCESS TOKEN
 	
@@ -69,6 +83,8 @@ public class CommandCollection {
 	public static final String REF_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/refresh_token";// 更新授权码
 	public static final String MATE_NEWS = "https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=";// 上传图文消息
 	public static final String MATE_NEWS_IMAGE = "https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=";//上传图文消息内部图形资源
+	public static final String MATE_IVV = "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=";//上传IVV资源
+	public static final String MATE_DELETE = "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=";//删除NIVV
 	
 	// 页面
 	public static final String WELCOME = "welcome";
@@ -127,7 +143,24 @@ public class CommandCollection {
 		news.setArticles(new MateNewsElement[] {element});
 		return news;
 	}
-
+	public static MateVideo GetMateVideo(String title, String introduction) {
+		MateVideo video = new MateVideo();//因为比较少
+		video.setTitle(title);
+		video.setIntroduction(introduction);
+		return video;
+	}
+	public static MateDelete GetMateDelete(String media_id) {
+		MateDelete delete = new MateDelete();//因为比较少
+		delete.setMedia_id(media_id);
+		return delete;
+	}
+	
+	public static WeClearQuota GetWeClearQuota() {
+		WeClearQuota quota = new WeClearQuota();
+		quota.setAppid(AppID);
+		return quota;
+	}
+	
 	public static SAHttpTable GetHttpTable(String method) {
 		SAHttpTable table = new SAHttpTable();
 		table.setMethod(method);
@@ -135,5 +168,19 @@ public class CommandCollection {
 		table.addPropertys("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
 		table.addPropertys("Content-Type", "application/x-www-form-urlencoded");
 		return table;
+	}
+	
+	public static String GetLocalPath(String type) {
+		if (type.equals(CommandCollection.MESSAGE_IMAGE)) {
+			return CommandCollection.IMAGE_PATH;
+		} else if (type.equals(CommandCollection.MESSAGE_VOICE)) {
+			return CommandCollection.VOICE_PATH;
+		} else if (type.equals(CommandCollection.MESSAGE_THUMB)) {
+			return CommandCollection.THUMB_PATH;
+		} else if(type.equals(CommandCollection.MESSAGE_VIDEO)){
+			return CommandCollection.VIDEO_PATH;
+		} else {
+			return "";
+		}
 	}
 }

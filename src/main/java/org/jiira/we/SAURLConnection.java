@@ -14,15 +14,12 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.sf.json.JSONObject;
 
 /**
  *
@@ -182,7 +179,6 @@ public class SAURLConnection {
 			}
 			System.setProperty("https.protocols", "TLSv1");
 			pconn.connect();
-
 			if (options.isUseJson()) {
 				OutputStreamWriter out = new OutputStreamWriter(pconn.getOutputStream(), "UTF-8"); // utf-8编码
 				out.append(options.getJson());
@@ -295,6 +291,11 @@ public class SAURLConnection {
 			// 结尾部分
 			byte[] foot = ("\r\n--" + BOUNDARY + "--\r\n").getBytes("utf-8");// 定义最后数据分隔线
 			out.write(foot);
+			if (options.isUseJson()) {
+				out.write(options.getJson().getBytes("utf-8"));
+				out.flush();
+				out.close();
+			}
 			out.flush();
 			StringBuffer buffer = new StringBuffer();
 			// 定义BufferedReader输入流来读取URL的响应
