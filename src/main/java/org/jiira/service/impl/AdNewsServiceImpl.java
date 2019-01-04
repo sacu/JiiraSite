@@ -2,55 +2,67 @@ package org.jiira.service.impl;
 
 import java.util.List;
 
-import org.jiira.dao.AdVoiceDao;
-import org.jiira.pojo.ad.AdVoice;
+import org.jiira.dao.AdNewsDao;
+import org.jiira.pojo.ad.AdNews;
 import org.jiira.service.AdMateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdVoiceServiceImpl implements AdMateService<AdVoice> {
+public class AdNewsServiceImpl implements AdMateService<AdNews> {
 
 	@Autowired
-	private AdVoiceDao adVoiceDao = null;
+	private AdNewsDao adNewsDao;
 	@Override
-	public List<AdVoice> check(List<String> voices) {
+	public List<AdNews> select() {
 		// TODO Auto-generated method stub
-		return adVoiceDao.checkVoice(voices);
+		return adNewsDao.selectNews();
 	}
 
 	@Override
-	public List<AdVoice> select() {
+	public AdNews selectById(int id) {
 		// TODO Auto-generated method stub
-		return adVoiceDao.selectVoices();
+		return adNewsDao.selectNewsById(id);
 	}
 
 	@Override
-	public AdVoice selectById(String voice) {
+	public int insert(AdNews adNews) {
 		// TODO Auto-generated method stub
-		return adVoiceDao.selectVoice(voice);
+		return adNewsDao.insertNews(adNews);
 	}
 
 	@Override
-	public int ignore(List<String> voices) {
+	public int update(int id, String media_id) {
 		// TODO Auto-generated method stub
-		return adVoiceDao.ignoreVoice(voices);
+		return adNewsDao.updateNews(id, media_id);
 	}
 
 	@Override
-	public int update(String voice, String media_id) {
+	public int delete(int id) {
 		// TODO Auto-generated method stub
-		return adVoiceDao.updateVoice(voice, media_id);
+		return adNewsDao.deleteNews(id);
 	}
 
 	@Override
-	public int delete(String voice) {
+	public List<AdNews> check(String id) {
 		// TODO Auto-generated method stub
-		return adVoiceDao.deleteVoice(voice);
+		return null;
 	}
 
 	@Override
-	public List<AdVoice> check(String id) {
+	public List<AdNews> check(List<String> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<AdNews> selectByType(String type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AdNews selectById(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -62,45 +74,33 @@ public class AdVoiceServiceImpl implements AdMateService<AdVoice> {
 	}
 
 	@Override
-	public int update(String id, String media_id, String url) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public List<AdVoice> selectByType(String type) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public int ignore(List<String> ids, String type) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public AdVoice selectById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int insert(AdVoice ad) {
+	public int ignore(List<String> voices) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int update(int id, String media_id) {
+	public int update(String id, String media_id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int delete(int id) {
+	public int update(String id, String media_id, String url) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
+	@Override
+	public int delete(String id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

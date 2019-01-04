@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.ivv.WeIVV;
@@ -136,6 +137,7 @@ public class WeGlobal {
 		}
 		return null;
 	}
+
 	public JSONObject clearQuota() {
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
@@ -153,6 +155,7 @@ public class WeGlobal {
 			return json;
 		}
 	}
+
 	/**
 	 * access token
 	 * 
@@ -299,6 +302,7 @@ public class WeGlobal {
 			return false;
 		}
 	}
+
 	public boolean upload(String path, MultipartFile file) {
 		try {
 			String filePath = path + file.getOriginalFilename();
@@ -310,6 +314,7 @@ public class WeGlobal {
 		}
 		return true;
 	}
+
 	public boolean unload(String path, String newsImage) {// 删除文件
 		File file = new File(path + newsImage);
 		if (file.exists() && file.isFile()) {
@@ -318,22 +323,36 @@ public class WeGlobal {
 		return false;
 	}
 
-	public String addNews(String title, String thumb_media_id, String author, String digest, int show_cover_pic,
-			String content, String content_source_url, int need_open_comment, int only_fans_can_comment) {// 图文消息
+	public JSONObject addNews(AdNews adNew) {
+		// String title, String thumb_media_id, String author, String digest, int
+		// show_cover_pic,
+		// String content, String content_source_url, int need_open_comment, int
+		// only_fans_can_comment) {// 图文消息
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
 		table.setURL(CommandCollection.MATE_NEWS + CommandCollection.AccessToken);
-		MateNews news = CommandCollection.GetMateNews(title, thumb_media_id, author, digest, show_cover_pic, content,
-				content_source_url, need_open_comment, only_fans_can_comment);
+		MateNews news = CommandCollection.GetMateNews(adNew.getTitle(), adNew.getThumb_media_id(), adNew.getAuthor(), adNew.getDigest(),
+				adNew.getShow_cover_pic(), adNew.getContent(), adNew.getContent_source_url(), adNew.getNeed_open_comment(),
+				adNew.getOnly_fans_can_comment());
 		String newStr = JSONObject.fromObject(news).toString();
 		table.setUseJson(true);
 		table.setJson(newStr);
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
-		JSONObject test = JSONObject.fromObject(html.getBody());
-		// 这里以后要做errcode检查
-		return test.getString("media_id");// 返回并将mediaid保存到数据库
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if (code == 0) {
+			return json;
+		} else {
+			if (code == 42001) {//42001
+				createAccessToken();
+				return addNews(adNew);
+			} else {
+				return json;
+			}
+		}
 	}
-	public JSONObject addVideo(String filePath, String type, String title, String introduction) {//视频
+
+	public JSONObject addVideo(String filePath, String type, String title, String introduction) {// 视频
 		checkAccessToken();
 		String vedioStr = JSONObject.fromObject(CommandCollection.GetMateVideo(title, introduction)).toString();
 		JSONObject json = addIVV(filePath, type, vedioStr);
@@ -349,14 +368,15 @@ public class WeGlobal {
 			}
 		}
 	}
-	public JSONObject addIV(String filePath, String type) {//图形和语音
+
+	public JSONObject addIV(String filePath, String type) {// 图形和语音
 		checkAccessToken();
 		JSONObject json = addIVV(filePath, type, null);
 		int code = WeCode.getInstance().check(json);
 		if (code == 0) {
 			return json;
 		} else {
-			if (code == 42001) {
+			if (code == 42001 || code == 40001) {
 				createAccessToken();
 				return addIV(filePath, type);
 			} else {
@@ -364,44 +384,49 @@ public class WeGlobal {
 			}
 		}
 	}
-	private JSONObject addIVV(String filePath, String type, String videoStr) {//视频
+
+	private JSONObject addIVV(String filePath, String type, String videoStr) {// IVV
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
 		table.setURL(CommandCollection.MATE_IVV + CommandCollection.AccessToken + "&type=" + type);
-		if(null != videoStr) {
+		if (null != videoStr) {
 			table.setJson(videoStr);
 			table.setUseJson(true);
 		}
-		return addNIVV(filePath, table);
+		return addNIVV(filePath, table, type);
 	}
+
 	public JSONObject addNewsImage(String filePath) {// 添加图文内部图片资源
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
 		table.setURL(CommandCollection.MATE_NEWS_IMAGE + CommandCollection.AccessToken);
-		JSONObject json = addNIVV(filePath, table);
+		JSONObject json = addNIVV(filePath, table, CommandCollection.MESSAGE_NEWS_IMAGE);
 		int code = WeCode.getInstance().check(json);
 		if (code == 0) {
 			return json;
 		} else {
-			if (code == 42001) {
+			if (code == 42001 || code == 40001) {
 				createAccessToken();
-				return addNIVV(filePath, table);
+				return addNIVV(filePath, table, CommandCollection.MESSAGE_NEWS_IMAGE);
 			} else {
 				return json;
 			}
 		}
 	}
-	private JSONObject addNIVV(String filePath, SAHttpTable table) {// 添加图文内部图片资源
+
+	private JSONObject addNIVV(String filePath, SAHttpTable table, String type) {// 添加图文内部图片资源
 		File file = new File(filePath);
 		if (!file.exists() || !file.isFile()) {
-			logger.error("上传的文件不存在:"+filePath);
+			logger.error("上传的文件不存在:" + filePath);
 			return null;
 		}
 		checkAccessToken();
-		SAHTML html = SAURLConnection.getInstance().PostRequest(table, file);
+		boolean isVideo = type.equals(CommandCollection.MESSAGE_VIDEO);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table, file, isVideo);
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		return json;
 	}
+
 	public JSONObject deleteNIVV(String media_id) {// 添加图文内部图片资源
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");

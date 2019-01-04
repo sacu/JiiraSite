@@ -9,5 +9,6 @@
         <mapper resource="mapper/AdIV.xml"/>
         <mapper resource="mapper/AdVoice.xml"/>
         <mapper resource="mapper/AdVideo.xml"/>
+        <mapper resource="mapper/AdNews.xml"/>
     </mappers>
 </configuration>

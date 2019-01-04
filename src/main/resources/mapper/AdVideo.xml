@@ -28,7 +28,7 @@
 	<!-- 插入不重复值 这里需要map -->
 	<insert id="ignoreVideo">
 		replace into sa_dt_video(video, title, introduction) values
-			(#{item}, #{title}, #{introduction})
+			(#{video}, #{title}, #{introduction})
 	</insert>
 	<!-- 更新Video -->
 	<update id="updateVideo">

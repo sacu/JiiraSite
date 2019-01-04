@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdNewsDao">
+	<resultMap id="adNews" type="org.jiira.pojo.ad.AdNews">
+		<id column="id" property="id" />
+		<id column="title" property="title" />
+		<id column="media_id" property="media_id" />
+		<id column="thumb_media_id" property="thumb_media_id" />
+		<id column="author" property="author" />
+		<id column="digest" property="digest" />
+		<id column="show_cover_pic" property="show_cover_pic" />
+		<id column="content" property="content" />
+		<id column="content_source_url" property="content_source_url" />
+		<id column="need_open_comment" property="need_open_comment" />
+		<id column="only_fans_can_comment" property="only_fans_can_comment" />
+	</resultMap>
+	
+	<select id="selectNews" resultMap="adNews">
+		select * from
+		sa_dt_news
+	</select>
+	<!-- 获取全部 -->
+	<select id="selectNewsById" parameterType="Integer" resultMap="adNews">
+		select * from
+		sa_dt_news where id=#{id}
+	</select>
+	<insert id="insertNews">
+		insert into sa_dt_news(title, thumb_media_id, author, digest, show_cover_pic, content, content_source_url, need_open_comment, only_fans_can_comment) 
+			values(#{title}, #{thumb_media_id}, #{author}, #{digest}, #{show_cover_pic}, #{content}, #{content_source_url}, #{need_open_comment}, #{only_fans_can_comment})
+	</insert>
+	<!-- 更新IV -->
+	<update id="updateNews">
+		update sa_dt_news set media_id=#{media_id} where id=#{id}
+	</update>
+	<!-- 删除图片 -->
+	<delete id="deleteNews">
+		delete from sa_dt_news where id=#{id}
+	</delete>
+</mapper>

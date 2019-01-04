@@ -259,7 +259,6 @@ public class WeCode {
 			return code;
 		}
 		case 42001: {
-
 			logger.error("access_token 超时，请检查 access_token 的有效期，请参考基础支持 - 获取 access_token 中，对 access_token 的详细机制说明");
 			return code;
 		}
@@ -644,6 +643,6 @@ public class WeCode {
 			return code;
 		}
 		}
-		return 0;
+		return code;
 	}
 }

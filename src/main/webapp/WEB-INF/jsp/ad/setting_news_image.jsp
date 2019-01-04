@@ -7,10 +7,10 @@
 <meta name="viewport"
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>setting_news_image</title>
-
 <script type="text/javascript">
-	var ad = "ad/";//提交服务器后是 ad/
+	var ad = " ad/";//提交服务器后是 ad/
 	$(document).ready(function() {
+		var adVLD;
 		$("#ulni_btn").click(function(event) {
 			var formData = new FormData($("#ulni_form")[0]);//[0]必须的
 			$.ajax({//必须使用ajax
@@ -34,18 +34,16 @@
 				url : ad + "getNewsImageList",
 				//成功后的方法
 				success : function(result) {
-					var ni_list = result['adNewsImageList'];
+					adVLD = result['adNewsImageList'];
 					var ni_list_html = "";
-					var ni;
-					$.each(ni_list, function(idx, i) {
-						ni = i['newsImage'];
+					$.each(adVLD, function(idx, i) {
 						ni_list_html += "<div class='div_list'><div class='div_list_check'>";
-						ni_list_html += "<input type='checkbox' name='ni_check' value='" + ni + "'/></div>";
-						ni_list_html += "<div class='div_list_key'>" + ni + "</div>";
-						ni_list_html += "<div class='div_list_value' id='" + ni + "'>" + i['url'] + "</div>";
-						ni_list_html += "<div class='div_list_submit'><a id='gni' v='" + ni + "' href=''>获取URL</a></div>";
-						ni_list_html += "<div class='div_list_clear'><a id='cni' v='" + ni + "' href=''>清除URL</a></div>";
-						ni_list_html += "<div class='div_list_delete'><a id='dni' v='" + ni + "' href=''>删除</a></div>";
+						ni_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
+						ni_list_html += "<div class='div_list_key'>" + i['newsImage'] + "</div>";
+						ni_list_html += "<div class='div_list_value'>" + i['url'] + "</div>";
+						ni_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取URL</a></div>";
+						ni_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除URL</a></div>";
+						ni_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
 						ni_list_html += "</div>";
 					});
 					$('#ni_list').empty();
@@ -62,17 +60,20 @@
 				switch(id){
 				case "gni":
 					url = ad + "getNewsImageToWe";
-					data={newsImages:[target.attr("v")]}
+					var adV = adVLD[target.attr("v")];
+					data={newsImages:[adV['newsImage']]}
 					nis_command(url, data)
 					break;
 				case "cni":
 					url = ad + "clearNewsImageToWe";
-					data={newsImages:[target.attr("v")]}
+					var adV = adVLD[target.attr("v")];
+					data={newsImages:[adV['newsImage']]}
 					nis_command(url, data)
 					break;
 				case "dni":
 					url = ad + "deleteNewsImageToWe";
-					data={newsImages:[target.attr("v")]}
+					var adV = adVLD[target.attr("v")];
+					data={newsImages:[adV['newsImage']]}
 					nis_command(url, data)
 					break;
 				}
@@ -95,7 +96,8 @@
 			var url = ad + "getNewsImageToWe";
 			var data = {newsImages:[]};
 			$.each($('input:checkbox:checked'),function(){
-				data['newsImages'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['newsImages'].push(adV['newsImage'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
@@ -104,7 +106,8 @@
 			var url = ad + "clearNewsImageToWe";
 			var data = {newsImages:[]};
 			$.each($('input:checkbox:checked'),function(){
-				data['newsImages'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['newsImages'].push(adV['newsImage'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
@@ -113,7 +116,8 @@
 			var url = ad + "deleteNewsImageToWe";
 			var data = {newsImages:[]};
 			$.each($('input:checkbox:checked'),function(){
-				data['newsImages'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['newsImages'].push(adV['newsImage'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
@@ -125,10 +129,11 @@
 <body>
 	<h1>图文内图片</h1>
 	<form id="ulni_form">
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
+	bmp/png/jpeg/jpg/gif
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
 		<input type="button" id="ulni_btn" value="提交" />
 	</form>
 

@@ -36,7 +36,6 @@ CREATE TABLE `sa_dt_news_image` (
 	`url` varchar(255) COMMENT 'url'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图文内部图形表表';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 DROP TABLE IF EXISTS `sa_dt_iv`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -65,6 +64,24 @@ CREATE TABLE `sa_dt_video` (
 	`introduction` varchar(255) not null COMMENT '视频介绍200字'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='视频表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sa_dt_news`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sa_dt_news` (
+	`id` int(4) primary key not null auto_increment COMMENT '主键',
+	`media_id` varchar(100) COMMENT '公众号ID',
+	`title` varchar(100) not null COMMENT '图文标题',
+	`thumb_media_id` varchar(100) COMMENT '图文消息的封面图片素材id',
+	`author` varchar(50) not null COMMENT '图文作者',
+	`digest` varchar(50) not null COMMENT '图文消息的摘要，不填写会自动抓取',
+	`show_cover_pic` TINYINT(1) not null COMMENT '是否显示封面，1显示 0不显示',
+	`content` text not null COMMENT '文章内容，支持HTML',
+	`content_source_url` text not null COMMENT '图文消息的原文地址',
+	`need_open_comment` TINYINT(1) not null COMMENT '是否打开评论 1打开 0关闭',
+	`only_fans_can_comment` TINYINT(1) not null COMMENT '是否限制评论 1限制 0不限制'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图文表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 -- 以下为网站表
 DROP TABLE IF EXISTS `sa_dt_user`;

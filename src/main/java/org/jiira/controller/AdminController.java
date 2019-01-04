@@ -100,6 +100,21 @@ public class AdminController {
 	    mv.setViewName("/ad/setting_thumb");
 	    return mv;
 	}
+	@RequestMapping("/setting_video")
+	public ModelAndView dotest4(String page, ModelAndView mv) {
+	    mv.setViewName("/ad/setting_video");
+	    return mv;
+	}
+	@RequestMapping("/setting_news")
+	public ModelAndView dotest5(String page, ModelAndView mv) {
+	    mv.setViewName("/ad/setting_news");
+	    return mv;
+	}
+	@RequestMapping("/setting_news_image")
+	public ModelAndView dotest6(String page, ModelAndView mv) {
+	    mv.setViewName("/ad/setting_news_image");
+	    return mv;
+	}
 	/**
 	 * 退出
 	 * @param mv

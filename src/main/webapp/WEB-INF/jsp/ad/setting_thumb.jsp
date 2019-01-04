@@ -8,8 +8,9 @@
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>thumb</title>
 <script type="text/javascript">
-	var ad = "ad/";//提交服务器后是 ad/
+	var ad = " ad/";//提交服务器后是 ad/
 	$(document).ready(function() {
+		var adVLD;
 		$("#ult_btn").click(function(event) {
 			var formData = new FormData($("#uli_form")[0]);//[0]必须的
 			$.ajax({//必须使用ajax
@@ -34,21 +35,18 @@
 				data:{type:"thumb"},
 				//成功后的方法
 				success : function(result) {
-					var t_list = result['adIVList'];
+					adVLD = result['adIVList'];
 					var t_list_html = "";
-					var ni, nm;
-					$.each(t_list, function(idx, i) {
-						ni = i['iv'];
-						nm = i['media_id']
+					$.each(adVLD, function(idx, i) {
 						t_list_html += "<div class='div_list'><div class='div_list_check'>";
-						t_list_html += "<input type='checkbox' name='ni_check' value='" + ni + "'/></div>";
-						t_list_html += "<div class='div_list_key'>" + ni + "</div>";
+						t_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
+						t_list_html += "<div class='div_list_key'>" + i['iv'] + "</div>";
 						t_list_html += "<div class='div_list_media_id'>" + i['media_id'] + "</div>";
-						t_list_html += "<div class='div_list_value' id='" + ni + "'>" + i['url'] + "</div>";
+						t_list_html += "<div class='div_list_value'>" + i['url'] + "</div>";
 						t_list_html += "<div class='div_list_type'>" + i['type'] + "</div>";
-						t_list_html += "<div class='div_list_submit'><a id='gni' v='" + ni + "' href=''>获取URL</a></div>";
-						t_list_html += "<div class='div_list_clear'><a id='cni' v='" + ni+"|"+nm + "' href=''>清除URL</a></div>";
-						t_list_html += "<div class='div_list_delete'><a id='dni' v='" + ni+"|"+nm + "' href=''>删除</a></div>";
+						t_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取URL</a></div>";
+						t_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除URL</a></div>";
+						t_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
 						t_list_html += "</div>";
 					});
 					$('#t_list').empty();
@@ -65,17 +63,20 @@
 				switch(id){
 				case "gni":
 					url = ad + "getIVVToWe";
-					data={ivvs:[target.attr("v")], type:"thumb"}
+					var adV = adVLD[target.attr("v")];
+					data={ivvs:[adV['iv']], type:"thumb"}
 					nis_command(url, data)
 					break;
 				case "cni":
 					url = ad + "clearIVVToWe";
-					data={ivvs:[target.attr("v")], type:"thumb"}
+					var adV = adVLD[target.attr("v")];
+					data={ivvs:[adV['iv']], type:"thumb", media_ids:[adV['media_id']]}
 					nis_command(url, data)
 					break;
 				case "dni":
 					url = ad + "deleteIVVToWe";
-					data={ivvs:[target.attr("v")], type:"thumb"}
+					var adV = adVLD[target.attr("v")];
+					data={ivvs:[adV['iv']], type:"thumb", media_ids:[adV['media_id']]}
 					nis_command(url, data)
 					break;
 				}
@@ -96,27 +97,32 @@
 		}
 		$("#batch_gt").click(function(event) {
 			var url = ad + "getIVVToWe";
-			var data = {ivvs:[]};
+			var data = {ivvs:[], type:"thumb"};
 			$.each($('input:checkbox:checked'),function(){
-				data['ivvs'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['ivvs'].push(adV['iv'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
 		})
 		$("#batch_ct").click(function(event) {
 			var url = ad + "clearIVVToWe";
-			var data = {ivvs:[]};
+			var data = {ivvs:[], type:"thumb", media_ids:[]};
 			$.each($('input:checkbox:checked'),function(){
-				data['ivvs'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['ivvs'].push(adV['iv'])
+				data['media_ids'].push(adV['media_id'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
 		})
 		$("#batch_dt").click(function(event) {
 			var url = ad + "deleteIVVToWe";
-			var data = {ivvs:[]};
+			var data = {ivvs:[], type:"thumb", media_ids:[]};
 			$.each($('input:checkbox:checked'),function(){
-				data['ivvs'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['ivvs'].push(adV['iv'])
+				data['media_ids'].push(adV['media_id'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
@@ -128,10 +134,11 @@
 <body>
 	<h1>缩略图</h1>
 	<form id="uli_form">
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
+	JPG
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
 		<input type="hidden" name="type" value="thumb"/>
 		<input type="button" id="ult_btn" value="提交" />
 	</form>

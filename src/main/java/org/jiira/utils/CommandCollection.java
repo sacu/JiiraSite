@@ -30,21 +30,21 @@ public class CommandCollection {
 	public static WeHAT HAT;// 网页密钥
 ///###################### 本地或服务器本地路径 ############################################
 	//测试路径
-//	public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS TOKEN路径
-//	public static final String NEWS_PATH = "F:\\\\upload\\\\";//图文路径，可能用不到
-//	public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
-//	public static final String IMAGE_PATH = "F:\\upload\\";//图文内图形路径
-//	public static final String VOICE_PATH = "F:\\upload\\";//图文内图形路径
-//	public static final String VIDEO_PATH = "F:\\upload\\";//图文内图形路径
-//	public static final String THUMB_PATH = "F:\\upload\\";//图文内图形路径
+	public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS TOKEN路径
+	public static final String NEWS_PATH = "F:\\\\upload\\\\";//图文路径，可能用不到
+	public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
+	public static final String IMAGE_PATH = "F:\\upload\\";//图形路径
+	public static final String VOICE_PATH = "F:\\upload\\";//语音路径
+	public static final String VIDEO_PATH = "F:\\upload\\";//视频路径
+	public static final String THUMB_PATH = "F:\\upload\\";//缩略图路径
 	//服务器路径
-	public static final String ACCESS_TOKEN_PATH = "/home/resource/accesstoken.sa";// ACCESS TOKEN路径
-	public static final String NEWS_PATH = "/home/resource/news/";//图文路径，可能用不到
-	public static final String NEWS_IMAGE_PATH = "/home/resource/news_image/";//图文内图形路径
-	public static final String IMAGE_PATH = "/home/resource/image/";//图形路径
-	public static final String VOICE_PATH = "/home/resource/voice/";//语音路径
-	public static final String VIDEO_PATH = "/home/resource/video/";//视频路径
-	public static final String THUMB_PATH = "/home/resource/thumb/";//缩略图路径
+//	public static final String ACCESS_TOKEN_PATH = "/home/resource/accesstoken.sa";// ACCESS TOKEN路径
+//	public static final String NEWS_PATH = "/home/resource/news/";//图文路径，可能用不到
+//	public static final String NEWS_IMAGE_PATH = "/home/resource/news_image/";//图文内图形路径
+//	public static final String IMAGE_PATH = "/home/resource/image/";//图形路径
+//	public static final String VOICE_PATH = "/home/resource/voice/";//语音路径
+//	public static final String VIDEO_PATH = "/home/resource/video/";//视频路径
+//	public static final String THUMB_PATH = "/home/resource/thumb/";//缩略图路径
 	
 	
 	
@@ -53,6 +53,7 @@ public class CommandCollection {
 	public static final String MESSAGE_TEXT = "text";// 文本消息
 	public static final String MESSAGE_IMAGE = "image";// 图片消息
 	public static final String MESSAGE_NEWS = "news";// 图文消息
+	public static final String MESSAGE_NEWS_IMAGE = "news_image";// 图文内图片
 	public static final String MESSAGE_VOICE = "voice";// 语音
 	public static final String MESSAGE_MUSIC = "music";// 音乐
 	public static final String MESSAGE_VIDEO = "video";// 视频消息
@@ -133,7 +134,7 @@ public class CommandCollection {
 		element.setTitle(title);
 		element.setThumb_media_id(thumb_media_id);
 		element.setAuthor(author);
-		element.setDigest(digest);
+//		element.setDigest(digest);
 		element.setShow_cover_pic(show_cover_pic);
 		element.setContent(content);
 		element.setContent_source_url(content_source_url);

@@ -10,8 +10,9 @@
 <script type="text/javascript">
 	var ad = "ad/";//提交服务器后是 ad/
 	$(document).ready(function() {
+		var adVLD;
 		$("#ulvo_btn").click(function(event) {
-			var formData = new FormData($("#uli_form")[0]);//[0]必须的
+			var formData = new FormData($("#ulvo_form")[0]);//[0]必须的
 			$.ajax({//必须使用ajax
 				url : ad + "addIVV",//地址是 ad/addNewsImage
 				type: "POST",
@@ -34,19 +35,16 @@
 				data:{type:"voice"},
 				//成功后的方法
 				success : function(result) {
-					var vo_list = result['adVoiceList'];
+					adVLD = result['adVoiceList'];
 					var vo_list_html = "";
-					var ni, nm;
-					$.each(vo_list, function(idx, i) {
-						ni = i['voice'];
-						nm = i['media_id']
+					$.each(adVLD, function(idx, i) {
 						vo_list_html += "<div class='div_list'><div class='div_list_check'>";
-						vo_list_html += "<input type='checkbox' name='ni_check' value='" + ni + "'/></div>";
-						vo_list_html += "<div class='div_list_key'>" + ni + "</div>";
+						vo_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
+						vo_list_html += "<div class='div_list_key'>" + i['voice'] + "</div>";
 						vo_list_html += "<div class='div_list_media_id'>" + i['media_id'] + "</div>";
-						vo_list_html += "<div class='div_list_submit'><a id='gni' v='" + ni + "' href=''>获取URL</a></div>";
-						vo_list_html += "<div class='div_list_clear'><a id='cni' v='" + ni+"|"+nm + "' href=''>清除URL</a></div>";
-						vo_list_html += "<div class='div_list_delete'><a id='dni' v='" + ni+"|"+nm + "' href=''>删除</a></div>";
+						vo_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取URL</a></div>";
+						vo_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除URL</a></div>";
+						vo_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
 						vo_list_html += "</div>";
 					});
 					$('#vo_list').empty();
@@ -63,17 +61,20 @@
 				switch(id){
 				case "gni":
 					url = ad + "getIVVToWe";
-					data={ivvs:[target.attr("v")], type:"voice"}
+					var adV = adVLD[target.attr("v")];
+					data={ivvs:[adV['voice']], type:"voice"}
 					nis_command(url, data)
 					break;
 				case "cni":
 					url = ad + "clearIVVToWe";
-					data={ivvs:[target.attr("v")], type:"voice"}
+					var adV = adVLD[target.attr("v")];
+					data={ivvs:[adV['voice']], type:"voice", media_ids:[adV['media_id']]}
 					nis_command(url, data)
 					break;
 				case "dni":
 					url = ad + "deleteIVVToWe";
-					data={ivvs:[target.attr("v")], type:"voice"}
+					var adV = adVLD[target.attr("v")];
+					data={ivvs:[adV['voice']], type:"voice", media_ids:[adV['media_id']]}
 					nis_command(url, data)
 					break;
 				}
@@ -94,27 +95,32 @@
 		}
 		$("#batch_gvo").click(function(event) {
 			var url = ad + "getIVVToWe";
-			var data = {ivvs:[]};
+			var data = {ivvs:[], type:"voice"};
 			$.each($('input:checkbox:checked'),function(){
-				data['ivvs'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['ivvs'].push(adV['voice'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
 		})
 		$("#batch_cvo").click(function(event) {
 			var url = ad + "clearIVVToWe";
-			var data = {ivvs:[]};
+			var data = {ivvs:[], type:"voice", media_ids:[]};
 			$.each($('input:checkbox:checked'),function(){
-				data['ivvs'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['ivvs'].push(adV['voice'])
+				data['media_ids'].push(adV['media_id'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
 		})
 		$("#batch_dvo").click(function(event) {
 			var url = ad + "deleteIVVToWe";
-			var data = {ivvs:[]};
+			var data = {ivvs:[], type:"voice", media_ids:[]};
 			$.each($('input:checkbox:checked'),function(){
-				data['ivvs'].push($(this).val())
+				var adV = adVLD[$(this).val()];
+				data['ivvs'].push(adV['voice'])
+				data['media_ids'].push(adV['media_id'])
             });
 			nis_command(url, data);
 			event.preventDefault();  // 阻止链接跳转
@@ -125,11 +131,12 @@
 </head>
 <body>
 	<h1>语音</h1>
-	<form id="uli_form">
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
-		<input type="file" name="files" value="请选择上传的文件" /><br>
+	<form id="ulvo_form">
+		mp3/wma/wav/amr
+		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
+		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
 		<input type="hidden" name="type" value="voice"/>
 		<input type="button" id="ulvo_btn" value="提交" />
 	</form>

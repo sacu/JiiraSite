@@ -245,7 +245,7 @@ public class SAURLConnection {
 	 * @param options
 	 * @return
 	 */
-	public SAHTML PostRequest(SAHttpTable options, File file) {
+	public SAHTML PostRequest(SAHttpTable options, File file, boolean isVideo) {
 		SAHTML h = new SAHTML();
 		HttpURLConnection conn = getConnection(options.getURL());
 		h.setMethod(options.getMethod());
@@ -256,29 +256,35 @@ public class SAURLConnection {
 			conn.setRequestMethod(options.getMethod());
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
-			conn.setUseCaches(true);
+			conn.setUseCaches(!isVideo);
 			conn.setConnectTimeout(timeout);
 			conn.setReadTimeout(timeout);
-
 			// 设置请求头信息
 			conn.setRequestProperty("Connection", "Keep-Alive");
 			conn.setRequestProperty("Charset", "UTF-8");
 			// 设置边界
-			String BOUNDARY = "----------" + System.currentTimeMillis();
+            String BOUNDARY;
+            if(isVideo) {
+                conn.setRequestProperty("Cache-Control", "no-cache");
+            	BOUNDARY = "-----------------------------" + System.currentTimeMillis();
+            } else {
+            	BOUNDARY = "----------" + System.currentTimeMillis();
+            }
 			conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
-			// 请求正文信息
-			// 第一部分：
-			StringBuilder sb = new StringBuilder();
-			sb.append("--"); // 必须多两道线
-			sb.append(BOUNDARY);
-			sb.append("\r\n");
-			sb.append("Content-Disposition: form-data;name=\"media\";filename=\"" + file.getName() + "\"\r\n");
-			sb.append("Content-Type:application/octet-stream\r\n\r\n");
-			byte[] head = sb.toString().getBytes("utf-8");
 			// 获得输出流
 			out = new DataOutputStream(conn.getOutputStream());
+			// 请求正文信息
+			// 第一部分：
+			out.write(("--" + BOUNDARY + "\r\n").getBytes("utf-8")); // 必须多两道线
+			
+			if(isVideo) {
+				out.write(("Content-Disposition: form-data;name=\"media\";filename=\"" + file.getName() + "\"\r\n").getBytes("utf-8"));
+				out.write("Content-Type:video/mp4\r\n\r\n".getBytes("utf-8"));//类型
+			} else {
+				out.write(("Content-Disposition: form-data;name=\"media\";filelength=\""+file.length()+"\";filename=\""+ file.getName() + "\"\r\n").getBytes("utf-8"));
+				out.write(("Content-Type:application/octet-stream\r\n\r\n").getBytes("utf-8"));//类型
+			}
 			// 输出表头
-			out.write(head);
 			// 文件正文部分
 			// 把文件已流文件的方式 推入到url中
 			DataInputStream in = new DataInputStream(new FileInputStream(file));
@@ -288,13 +294,15 @@ public class SAURLConnection {
 				out.write(bufferOut, 0, bytes);
 			}
 			in.close();
-			// 结尾部分
-			byte[] foot = ("\r\n--" + BOUNDARY + "--\r\n").getBytes("utf-8");// 定义最后数据分隔线
-			out.write(foot);
-			if (options.isUseJson()) {
+			if (options.isUseJson()) {//在结尾前写入媒体数据
+				out.write(("--" + BOUNDARY + "\r\n").getBytes("utf-8"));// 定义最后数据分隔线
+				//第二部分 写入附带值部分
+				out.write("Content-Disposition: form-data; name=\"description\";\r\n\r\n".getBytes("utf-8"));
 				out.write(options.getJson().getBytes("utf-8"));
-				out.flush();
-				out.close();
+//				out.write(String.format("{\"title\":\"%s\", \"introduction\":\"%s\"}","你好", "我是谁").getBytes("utf-8"));
+				out.write(("\r\n--" + BOUNDARY + "--\r\n\r\n").getBytes("utf-8"));
+			} else {
+				out.write(("\r\n--" + BOUNDARY + "--\r\n").getBytes("utf-8"));// 定义最后数据分隔线
 			}
 			out.flush();
 			StringBuffer buffer = new StringBuffer();
