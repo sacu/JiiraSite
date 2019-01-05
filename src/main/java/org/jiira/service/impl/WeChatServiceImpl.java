@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,27 +12,17 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.jiira.controller.RootController;
-import org.jiira.pojo.we.article.WeArticle;
 import org.jiira.pojo.we.robot.WeRobot;
 import org.jiira.service.WeChatService;
 import org.jiira.utils.CommandCollection;
-import org.jiira.we.DecriptUtil;
-import org.jiira.we.SAHTML;
-import org.jiira.we.SAHttpKVO;
-import org.jiira.we.SAHttpTable;
-import org.jiira.we.SAURLConnection;
-import org.jiira.we.WeChatMessage;
 import org.jiira.we.WeGlobal;
+import org.jiira.we.message.WeChatMessage;
 import org.jiira.we.process.HandleEvent;
 import org.jiira.we.process.HandleText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.xstream.XStream;
 
 @Service
@@ -88,7 +77,7 @@ public class WeChatServiceImpl implements WeChatService {
 		return xstream.toXML(msg);
 	}
 
-	public void handler(WeChatMessage msg) {
+	public String handler(WeChatMessage msg) {
 		switch (msg.getMsgType()) {
 			case CommandCollection.MESSAGE_TEXT: {//文本消息
 				HandleText.getInstance().process(msg);
@@ -139,14 +128,12 @@ public class WeChatServiceImpl implements WeChatService {
 			/**
 			 * 事件推送消息
 			 */
-			case CommandCollection.MESSAGE_EVENT: {
+			case CommandCollection.MESSAGE_EVENT: {//如果有个别需求 就个别处理
 				HandleEvent.getInstance().process(msg);
-				msg.setMsgType(CommandCollection.MESSAGE_TEXT);//修改类型为普通消息
-				if(msg.getUseRobot()) {
-					msg.setContent("Sorry~我没读懂您的意思……");
-				}
-				break;
+				String xml = formatMessage(msg);// 转成发送string
+				return HandleEvent.getInstance().format(msg, xml);
 			}
 		}
+		return formatMessage(msg);
 	}
 }

@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface AdNewsDao {
 	public List<AdNews> selectNews();
 	public AdNews selectNewsById(int id);
+	public List<AdNews> selectOderByDesc(int limit);
 	public int insertNews(AdNews adNews);
 	public int updateNews(@Param("id")int id, @Param("media_id")String media_id);
+	public int updateNewsAndUrl(@Param("id")int id, @Param("media_id")String media_id, @Param("url")String url);
 	public int deleteNews(int id);
 }

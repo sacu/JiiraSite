@@ -1,4 +1,4 @@
-package org.jiira.we;
+package org.jiira.we.message;
 
 import org.slf4j.Logger;
 
@@ -22,6 +22,9 @@ public class WeChatMessage {
 	private String Format;//语音格式amr,speex
 	//音乐
 	private WeChatMusicMessage Music;
+	//图文消息
+	private int ArticleCount;
+	private WeChatNewsMessage[] Articles;
 	//视频消息和小视频消息
 	
 	//地理位置消息
@@ -94,6 +97,23 @@ public class WeChatMessage {
 		Content = content;
 	}
 	
+	public int getArticleCount() {
+		return ArticleCount;
+	}
+
+	public void setArticleCount(int articleCount) {
+		ArticleCount = articleCount;
+	}
+	
+
+	public WeChatNewsMessage[] getArticles() {
+		return Articles;
+	}
+
+	public void setArticles(WeChatNewsMessage[] articles) {
+		Articles = articles;
+	}
+
 	public String getEvent() {
 		return Event;
 	}

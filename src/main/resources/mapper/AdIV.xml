@@ -16,15 +16,17 @@
 			iv=#{file}
 		</foreach>
 	</select>
-	<!-- 获取全部 -->
 	<select id="selectIVs" resultMap="adIV">
 		select * from
 		sa_dt_iv where type=#{type}
 	</select>
-	<!-- 获取全部 -->
 	<select id="selectIV" resultMap="adIV">
 		select * from
 		sa_dt_iv where iv=#{iv}
+	</select>
+	<select id="selectIVByMediaId" resultMap="adIV">
+		select * from
+		sa_dt_iv where media_id=#{media_id}
 	</select>
 
 	<!-- 插入不重复值 -->

@@ -25,6 +25,11 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import net.sf.json.JSONObject;
 
+/**
+ * 微信admin后台管理,通过 AdminController登入后调用
+ * @author time
+ *
+ */
 @Controller
 @RequestMapping("/ad")
 public class WeChatAdminController {
@@ -48,8 +53,8 @@ public class WeChatAdminController {
 	@RequestMapping(value = "/createMenu")
 	public ModelAndView createMenu() {
 		ModelAndView mv = new ModelAndView();
-		SAHTML html = WeGlobal.getInstance().createMenu();
-		mv.addObject(html.getBody());
+		JSONObject json = WeGlobal.getInstance().createMenu();
+		mv.addObject(json);
 		mv.setView(new MappingJackson2JsonView());
 		return mv;
 	}
@@ -115,7 +120,7 @@ public class WeChatAdminController {
 			if (null != json) {
 				media_id = json.getString("media_id");
 				if (null != media_id) {// 上传成功
-					row = adNewsService.update(adNew.getId(), media_id);
+					row = adNewsService.update(adNew.getId(), media_id, adNew.getContent_source_url());
 					if (row > 0) {// 更新成功
 						success.add(adNew.getId());
 					} else {

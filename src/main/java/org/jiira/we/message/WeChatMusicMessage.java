@@ -1,4 +1,4 @@
-package org.jiira.we;
+package org.jiira.we.message;
 
 public class WeChatMusicMessage {
 	private String Title;

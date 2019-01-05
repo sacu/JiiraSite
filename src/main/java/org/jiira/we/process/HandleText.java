@@ -7,9 +7,9 @@ import org.jiira.pojo.we.article.WeArticleItem;
 import org.jiira.pojo.we.ivv.WeIVV;
 import org.jiira.pojo.we.ivv.WeIVVItem;
 import org.jiira.utils.CommandCollection;
-import org.jiira.we.WeChatMessage;
-import org.jiira.we.WeChatMusicMessage;
 import org.jiira.we.WeGlobal;
+import org.jiira.we.message.WeChatMessage;
+import org.jiira.we.message.WeChatMusicMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

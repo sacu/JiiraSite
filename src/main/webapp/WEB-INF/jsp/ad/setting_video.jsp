@@ -70,13 +70,13 @@
 				case "cni":
 					url = ad + "clearIVVToWe";
 					var adV = adVLD[target.attr("v")];
-					data={ivvs:[target.attr("v")], type:"video", media_ids:[adV['media_id']]}
+					data={ivvs:[adV['video']], type:"video", media_ids:[adV['media_id']]}
 					nis_command(url, data)
 					break;
 				case "dni":
 					url = ad + "deleteIVVToWe";
 					var adV = adVLD[target.attr("v")];
-					data={ivvs:[target.attr("v")], type:"video", media_ids:[adV['media_id']]}
+					data={ivvs:[adV['video']], type:"video", media_ids:[adV['media_id']]}
 					nis_command(url, data)
 					break;
 				}
@@ -152,7 +152,7 @@
 		<div class="div_list_key">名称</div>
 		<div class="div_list_title">标题</div>
 		<div class="div_list_introduction">简介</div>
-		<div class="div_list_media_id">media_id</div>div_list_introduction
+		<div class="div_list_media_id">media_id</div>
 		<div class="div_list_submit">获取Media</div>
 		<div class="div_list_clear">清除Media</div>
 		<div class="div_list_delete">删除</div>

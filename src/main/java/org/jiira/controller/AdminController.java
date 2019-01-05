@@ -7,6 +7,9 @@ import javax.servlet.http.HttpSession;
 import org.jiira.pojo.Login;
 import org.jiira.pojo.ad.AdUser;
 import org.jiira.service.AdUserService;
+import org.jiira.utils.CommandCollection;
+import org.jiira.we.message.WeChatMessage;
+import org.jiira.we.process.HandleEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +116,19 @@ public class AdminController {
 	@RequestMapping("/setting_news_image")
 	public ModelAndView dotest6(String page, ModelAndView mv) {
 	    mv.setViewName("/ad/setting_news_image");
+	    return mv;
+	}
+	@RequestMapping("/test")
+	public ModelAndView test(String page, ModelAndView mv) {
+		WeChatMessage msg = new WeChatMessage();
+		msg.setToUserName("sa");
+		msg.setFromUserName("as");
+		msg.setCreateTime(123);
+		msg.setMsgType(CommandCollection.MESSAGE_EVENT);
+		msg.setEvent(CommandCollection.MESSAGE_EVENT_CLICK);
+		msg.setEventKey(CommandCollection.MENU_RECENT);
+		HandleEvent.getInstance().process(msg);
+	    mv.setViewName("/ad/test");
 	    return mv;
 	}
 	/**

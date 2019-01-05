@@ -38,9 +38,21 @@ public class AdNewsServiceImpl implements AdMateService<AdNews> {
 	}
 
 	@Override
+	public int update(int id, String media_id, String url) {
+		// TODO Auto-generated method stub
+		return adNewsDao.updateNewsAndUrl(id, media_id, url);
+	}
+	
+	
+	@Override
 	public int delete(int id) {
 		// TODO Auto-generated method stub
 		return adNewsDao.deleteNews(id);
+	}
+	@Override
+	public List<AdNews> selectOderByDesc(int limit) {
+		// TODO Auto-generated method stub
+		return adNewsDao.selectOderByDesc(limit);
 	}
 
 	@Override
@@ -92,15 +104,22 @@ public class AdNewsServiceImpl implements AdMateService<AdNews> {
 	}
 
 	@Override
-	public int update(String id, String media_id, String url) {
+	public int delete(String id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int delete(String id) {
+	public AdNews selectIVByMediaId(String media_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int update(String id, String media_id, String url) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 
 }

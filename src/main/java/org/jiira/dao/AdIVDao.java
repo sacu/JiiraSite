@@ -14,6 +14,7 @@ public interface AdIVDao {
 	public List<AdIV> checkIV(List<String> ivs);
 	public List<AdIV> selectIVs(@Param("type")String type);
 	public AdIV selectIV(@Param("iv")String iv);
+	public AdIV selectIVByMediaId(String media_id);
 	public int ignoreIV(@Param("list")List<String> ivs, @Param("type")String type);
 	public int updateIV(@Param("iv")String iv, @Param("media_id")String media_id, @Param("url")String url);
 	public int deleteIV(@Param("iv")String iv);

@@ -17,9 +17,13 @@
 	</resultMap>
 	
 	<select id="selectNews" resultMap="adNews">
-		select * from
-		sa_dt_news
+		select * from sa_dt_news
 	</select>
+	
+	<select id="selectOderByDesc" parameterType="Integer" resultMap="adNews">
+		select * from sa_dt_news where media_id!='' order by id desc limit 0,#{rows}
+	</select>
+	
 	<!-- 获取全部 -->
 	<select id="selectNewsById" parameterType="Integer" resultMap="adNews">
 		select * from
@@ -32,6 +36,9 @@
 	<!-- 更新IV -->
 	<update id="updateNews">
 		update sa_dt_news set media_id=#{media_id} where id=#{id}
+	</update>
+	<update id="updateNewsAndUrl">
+		update sa_dt_news set media_id=#{media_id}, content_source_url=#{url} where id=#{id}
 	</update>
 	<!-- 删除图片 -->
 	<delete id="deleteNews">

@@ -7,9 +7,6 @@ import org.jiira.pojo.ad.AdIV;
 import org.jiira.service.AdMateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdIVServiceImpl implements AdMateService<AdIV> {
@@ -18,7 +15,6 @@ public class AdIVServiceImpl implements AdMateService<AdIV> {
 	private AdIVDao adIVDao = null;
 	
 	@Override
-	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	public List<AdIV> check(List<String> ivs) {
 		// TODO Auto-generated method stub
 		return adIVDao.checkIV(ivs);
@@ -54,6 +50,12 @@ public class AdIVServiceImpl implements AdMateService<AdIV> {
 		return adIVDao.deleteIV(iv);
 	}
 
+	@Override
+	public AdIV selectIVByMediaId(String media_id) {
+		// TODO Auto-generated method stub
+		return adIVDao.selectIVByMediaId(media_id);
+	}
+	
 	@Override
 	public List<AdIV> check(String id) {
 		// TODO Auto-generated method stub
@@ -108,4 +110,15 @@ public class AdIVServiceImpl implements AdMateService<AdIV> {
 		return 0;
 	}
 
+	@Override
+	public List<AdIV> selectOderByDesc(int limit) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int update(int id, String media_id, String url) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

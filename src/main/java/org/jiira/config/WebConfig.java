@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -27,7 +30,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 //启动Spring MVC配置
 @EnableWebMvc
 @EnableAsync
-public class WebConfig extends AsyncConfigurerSupport { 
+public class WebConfig extends AsyncConfigurerSupport implements ApplicationContextAware { 
 	/***
 	 * 通过注解 @Bean 初始化视图解析器
 	 * @return ViewResolver 视图解析器
@@ -69,5 +72,11 @@ public class WebConfig extends AsyncConfigurerSupport {
 		taskExecutor.setQueueCapacity(200);
 		taskExecutor.initialize();
 		return taskExecutor;
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		// TODO Auto-generated method stub
+		Application.getInstance().setApplicationContext(applicationContext);
 	}
 }

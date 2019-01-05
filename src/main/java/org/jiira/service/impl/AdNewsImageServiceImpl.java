@@ -108,4 +108,22 @@ public class AdNewsImageServiceImpl implements AdMateService<AdNewsImage> {
 		return 0;
 	}
 
+	@Override
+	public List<AdNewsImage> selectOderByDesc(int limit) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AdNewsImage selectIVByMediaId(String media_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int update(int id, String media_id, String url) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

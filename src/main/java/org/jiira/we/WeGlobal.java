@@ -11,7 +11,6 @@ import java.util.List;
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
-import org.jiira.pojo.we.ivv.WeIVV;
 import org.jiira.pojo.we.mate.news.MateNews;
 import org.jiira.pojo.we.robot.WeRobot;
 import org.jiira.utils.CommandCollection;
@@ -42,32 +41,6 @@ public class WeGlobal {
 		mapper = new ObjectMapper();
 	}
 
-	// 这里请求有次数限制，好像20次？
-	public WeIVV getWeIVV(String type) {
-		checkAccessToken();
-		SAHttpTable table = CommandCollection.GetHttpTable("POST");
-		table.setURL("https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token="
-				+ CommandCollection.AccessToken);
-		String jstr = "{\r\n" + "    \"type\":\"" + type + "\",\r\n" + "    \"offset\":0,\r\n" + "    \"count\":20\r\n"
-				+ "}";
-		table.setUseJson(true);
-		table.setJson(jstr);
-		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
-		logger.error("我看看你到底是啥 : " + html.getBody());
-		JSONObject json = JSONObject.fromObject(html.getBody());
-		if (!json.containsKey("errcode")) {
-			return getClass(html.getBody(), WeIVV.class);
-		}
-		int errcode = json.getInt("errcode");
-		if (errcode == 40001) {
-			createAccessToken();
-			return getWeIVV(type);
-		} else {
-			logger.error("还有什么错：" + errcode);
-			return null;
-		}
-	}
-
 	/**
 	 * 获取机器人对话
 	 * 
@@ -91,7 +64,7 @@ public class WeGlobal {
 		return null;
 	}
 
-	public SAHTML createMenu() {
+	public JSONObject createMenu() {
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
 		table.setURL(CommandCollection.CREATE_MENU + CommandCollection.AccessToken);
@@ -100,21 +73,15 @@ public class WeGlobal {
 		table.setUseJson(true);
 		table.setJson(menuStr);
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
-		JSONObject test = JSONObject.fromObject(html.getBody());
-		if (!test.containsKey("errcode")) {
-			return html;
-		}
-		int errcode = test.getInt("errcode");
-		switch (errcode) {
-		case 0:
-			return html;
-		case 42001:// accesstoken过期
-		case 40001:// 没有accesstoken
-			createAccessToken();// 创建
-			return createMenu();// 重新调用返回
-		default:
-			logger.error("还有什么错：" + errcode);
-			return null;
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			return json;
+		} else {
+			if (code == 42001 || code == 40001) {
+				createAccessToken();
+			}
+			return createMenu();
 		}
 	}
 
@@ -148,11 +115,13 @@ public class WeGlobal {
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		int code = WeCode.getInstance().check(json);
-		if (code == 42001) {
-			createAccessToken();
-			return clearQuota();
-		} else {
+		if(code == 0) {
 			return json;
+		} else {
+			if (code == 42001 || code == 40001) {
+				createAccessToken();
+			}
+			return clearQuota();
 		}
 	}
 
@@ -324,31 +293,23 @@ public class WeGlobal {
 	}
 
 	public JSONObject addNews(AdNews adNew) {
-		// String title, String thumb_media_id, String author, String digest, int
-		// show_cover_pic,
-		// String content, String content_source_url, int need_open_comment, int
-		// only_fans_can_comment) {// 图文消息
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
 		table.setURL(CommandCollection.MATE_NEWS + CommandCollection.AccessToken);
-		MateNews news = CommandCollection.GetMateNews(adNew.getTitle(), adNew.getThumb_media_id(), adNew.getAuthor(), adNew.getDigest(),
-				adNew.getShow_cover_pic(), adNew.getContent(), adNew.getContent_source_url(), adNew.getNeed_open_comment(),
-				adNew.getOnly_fans_can_comment());
+		MateNews news = CommandCollection.GetMateNews(adNew);
 		String newStr = JSONObject.fromObject(news).toString();
 		table.setUseJson(true);
 		table.setJson(newStr);
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		int code = WeCode.getInstance().check(json);
-		if (code == 0) {
+		if(code == 0) {
 			return json;
 		} else {
-			if (code == 42001) {//42001
+			if (code == 42001 || code == 40001) {
 				createAccessToken();
-				return addNews(adNew);
-			} else {
-				return json;
 			}
+			return addNews(adNew);
 		}
 	}
 
@@ -357,15 +318,13 @@ public class WeGlobal {
 		String vedioStr = JSONObject.fromObject(CommandCollection.GetMateVideo(title, introduction)).toString();
 		JSONObject json = addIVV(filePath, type, vedioStr);
 		int code = WeCode.getInstance().check(json);
-		if (code == 0) {
+		if(code == 0) {
 			return json;
 		} else {
-			if (code == 42001) {
+			if (code == 42001 || code == 40001) {
 				createAccessToken();
-				return addVideo(filePath, type, title, introduction);
-			} else {
-				return json;
 			}
+			return addVideo(filePath, type, title, introduction);
 		}
 	}
 
@@ -373,15 +332,13 @@ public class WeGlobal {
 		checkAccessToken();
 		JSONObject json = addIVV(filePath, type, null);
 		int code = WeCode.getInstance().check(json);
-		if (code == 0) {
+		if(code == 0) {
 			return json;
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
-				return addIV(filePath, type);
-			} else {
-				return json;
 			}
+			return addIV(filePath, type);
 		}
 	}
 
@@ -402,15 +359,13 @@ public class WeGlobal {
 		table.setURL(CommandCollection.MATE_NEWS_IMAGE + CommandCollection.AccessToken);
 		JSONObject json = addNIVV(filePath, table, CommandCollection.MESSAGE_NEWS_IMAGE);
 		int code = WeCode.getInstance().check(json);
-		if (code == 0) {
+		if(code == 0) {
 			return json;
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
-				return addNIVV(filePath, table, CommandCollection.MESSAGE_NEWS_IMAGE);
-			} else {
-				return json;
 			}
+			return addNIVV(filePath, table, CommandCollection.MESSAGE_NEWS_IMAGE);
 		}
 	}
 
@@ -437,15 +392,13 @@ public class WeGlobal {
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		int code = WeCode.getInstance().check(json);
-		if (code == 0) {
+		if(code == 0) {
 			return json;
 		} else {
-			if (code == 42001) {
+			if (code == 42001 || code == 40001) {
 				createAccessToken();
-				return deleteNIVV(media_id);
-			} else {
-				return json;
 			}
+			return deleteNIVV(media_id);
 		}
 	}
 }

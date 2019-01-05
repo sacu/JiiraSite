@@ -1,5 +1,6 @@
 package org.jiira.utils;
 
+import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.we.WeClearQuota;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
@@ -28,27 +29,12 @@ public class CommandCollection {
 
 	public static String HCODE;// 网页获取密钥的代码
 	public static WeHAT HAT;// 网页密钥
-///###################### 本地或服务器本地路径 ############################################
-	//测试路径
-	public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS TOKEN路径
-	public static final String NEWS_PATH = "F:\\\\upload\\\\";//图文路径，可能用不到
-	public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
-	public static final String IMAGE_PATH = "F:\\upload\\";//图形路径
-	public static final String VOICE_PATH = "F:\\upload\\";//语音路径
-	public static final String VIDEO_PATH = "F:\\upload\\";//视频路径
-	public static final String THUMB_PATH = "F:\\upload\\";//缩略图路径
-	//服务器路径
-//	public static final String ACCESS_TOKEN_PATH = "/home/resource/accesstoken.sa";// ACCESS TOKEN路径
-//	public static final String NEWS_PATH = "/home/resource/news/";//图文路径，可能用不到
-//	public static final String NEWS_IMAGE_PATH = "/home/resource/news_image/";//图文内图形路径
-//	public static final String IMAGE_PATH = "/home/resource/image/";//图形路径
-//	public static final String VOICE_PATH = "/home/resource/voice/";//语音路径
-//	public static final String VIDEO_PATH = "/home/resource/video/";//视频路径
-//	public static final String THUMB_PATH = "/home/resource/thumb/";//缩略图路径
 	
-	
-	
-///##################################################################
+	//
+	public static final String HOST_NAME = "188.131.228.192";// 以后换成域名
+	public static final String WEB_NAME2 = "http://" + HOST_NAME + "/";// 以后换成域名
+	public static final String RES_NAME = WEB_NAME2 + "manager/resource/";
+	///##################################################################
 	// 各种消息类型,除了扫带二维码事件
 	public static final String MESSAGE_TEXT = "text";// 文本消息
 	public static final String MESSAGE_IMAGE = "image";// 图片消息
@@ -67,12 +53,30 @@ public class CommandCollection {
 	public static final String MESSAGE_EVENT_LOCATION_UP = "LOCATION";// 事件推送消息中,上报地理位置事件
 	public static final String MESSAGE_EVENT_CLICK = "CLICK";// 事件推送消息中,自定义菜单事件,点击菜单拉取消息时的事件推送
 	public static final String MESSAGE_EVENT_VIEW = "VIEW";// 事件推送消息中,自定义菜单事件,点击菜单跳转链接时的事件推送
+///###################### 本地或服务器本地路径 ############################################
+	//测试路径
+//	public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS TOKEN路径
+//	public static final String NEWS_PATH = "F:\\\\upload\\\\";//图文路径，可能用不到
+//	public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
+//	public static final String IMAGE_PATH = "F:\\upload\\";//图形路径
+//	public static final String VOICE_PATH = "F:\\upload\\";//语音路径
+//	public static final String VIDEO_PATH = "F:\\upload\\";//视频路径
+//	public static final String THUMB_PATH = "F:\\upload\\";//缩略图路径
+	//服务器路径
+	public static final String BASE_PATH = "/usr/share/tomcat/webapps/manager/resource/";
+	public static final String ACCESS_TOKEN_PATH = BASE_PATH + "accesstoken.sa";// ACCESS TOKEN路径
+	public static final String NEWS_PATH = BASE_PATH + MESSAGE_NEWS + "/";//图文路径，可能用不到
+	public static final String NEWS_IMAGE_PATH = BASE_PATH + MESSAGE_NEWS_IMAGE + "/";//图文内图形路径
+	public static final String IMAGE_PATH = BASE_PATH + MESSAGE_IMAGE+ "/";//图形路径
+	public static final String VOICE_PATH = BASE_PATH + MESSAGE_VOICE + "/";//语音路径
+	public static final String VIDEO_PATH = BASE_PATH + MESSAGE_VIDEO + "/";//视频路径
+	public static final String THUMB_PATH = BASE_PATH + MESSAGE_THUMB + "/";//缩略图路径
+	
 	// menu
+	public static final String MENU_RECENT = "recent";
 	public static final String MENU_SEARCH = "search";
 	public static final String MENU_DIVINATION = "divination";
 
-	//
-	public static final String HOST_NAME = "188.131.228.192";// 以后换成域名
 	// 各种请求地址
 	public static final String CLEAR_QUOTA = "https://api.weixin.qq.com/cgi-bin/clear_quota?access_token=";//清除访问次数限制，一个月只能用10次
 	public static final String CREATE_MENU = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";// 创建菜单
@@ -87,22 +91,16 @@ public class CommandCollection {
 	public static final String MATE_IVV = "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=";//上传IVV资源
 	public static final String MATE_DELETE = "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=";//删除NIVV
 	
-	// 页面
-	public static final String WELCOME = "welcome";
-	public static final String WELCOME_J = "welcome.jsp";
-	public static final String SETTING = "setting";
-	public static final String SETTING_J = "setting.jsp";
-	public static final String ABOUT = "about";
-	public static final String ABOUT_J = "about.jsp";
+	public static final String USER_INFO = "https://api.weixin.qq.com/sns/userinfo";//获取用户信息
 
 	public static CMenu GetMenu() {
 		CMenu menu = new CMenu();
 		// 倒叙创建
 		// 创建二级菜单
-		CMenuViewButton m221 = new CMenuViewButton();
+		CMenuClickButton m221 = new CMenuClickButton();
 		m221.setName("最新动态");
-		m221.setType("view");
-		m221.setUrl("http://www.soso.com");
+		m221.setType("click");
+		m221.setKey(MENU_RECENT);
 		CMenuViewButton m222 = new CMenuViewButton();
 		m222.setName("往期回顾");
 		m222.setType("view");
@@ -127,19 +125,25 @@ public class CommandCollection {
 		return menu;
 	}
 
-	public static MateNews GetMateNews(String title, String thumb_media_id, String author, String digest,
-			int show_cover_pic, String content, String content_source_url, int need_open_comment,
-			int only_fans_can_comment) {
+	public static MateNews GetMateNews(AdNews adNew) {
+//		adNew.getId(), adNew.getTitle(), adNew.getThumb_media_id(), adNew.getAuthor(), adNew.getDigest(),
+//		adNew.getShow_cover_pic(), adNew.getContent(), adNew.getContent_source_url(), adNew.getNeed_open_comment(),
+//		adNew.getOnly_fans_can_comment()
 		MateNewsElement element = new MateNewsElement();
-		element.setTitle(title);
-		element.setThumb_media_id(thumb_media_id);
-		element.setAuthor(author);
-//		element.setDigest(digest);
-		element.setShow_cover_pic(show_cover_pic);
-		element.setContent(content);
-		element.setContent_source_url(content_source_url);
-		element.setNeed_open_comment(need_open_comment);
-		element.setOnly_fans_can_comment(only_fans_can_comment);
+		element.setTitle(adNew.getTitle());
+		element.setThumb_media_id(adNew.getThumb_media_id());
+		element.setAuthor(adNew.getAuthor());
+		element.setDigest(adNew.getDigest());
+		element.setShow_cover_pic(adNew.getShow_cover_pic());
+		element.setContent(adNew.getContent());
+		if(adNew.getContent_source_url().length() > 0) {
+			element.setContent_source_url(adNew.getContent_source_url());
+		} else {
+			element.setContent_source_url(WEB_NAME2 + "we/news?id=" + adNew.getId());
+			adNew.setContent_source_url(element.getContent_source_url());
+		}
+		element.setNeed_open_comment(adNew.getNeed_open_comment());
+		element.setOnly_fans_can_comment(adNew.getOnly_fans_can_comment());
 		MateNews news = new MateNews();
 		news.setArticles(new MateNewsElement[] {element});
 		return news;

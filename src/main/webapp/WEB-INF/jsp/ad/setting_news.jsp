@@ -129,7 +129,7 @@
 	<h1>图文</h1>
 	<form id="uln_form" method="post">
 		标题:<input type="text" name="title" id="title" value="我是标题"/><br>
-		封面素材ID:<input type="text" name="thumb_media_id" value="IkKppKVsdtT8T0V05gBYvlBQcB4ivZz6hFO4cZWzwbk"/><br>
+		封面素材ID:<input type="text" name="thumb_media_id" value="IkKppKVsdtT8T0V05gBYvm5KRSwgj5w-PXEv05MKm-o"/><br>
 		作者:<input type="text" name="author" value="sa"/><br>
 		摘要:<textarea name="digest" maxlength="100">你好</textarea><br>
 		是否显示封面:
@@ -137,7 +137,7 @@
 		否<input type='radio' name='show_cover_pic' value="0"/>
 		<br>
 		内容:<textarea name="content" maxlength="2000">阿萨德撒</textarea><br>
-		原地址:<input type="text" name="content_source_url" value="http://www.baidu.com"/><br>
+		原地址:<input type="text" name="content_source_url" value=""/>(不填会自动生成)<br>
 		是否打开评论:
 		是<input type='radio' name='need_open_comment' value="1" checked/>
 		否<input type='radio' name='need_open_comment' value="0"/>
