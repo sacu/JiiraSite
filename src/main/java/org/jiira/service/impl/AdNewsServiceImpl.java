@@ -36,13 +36,6 @@ public class AdNewsServiceImpl implements AdMateService<AdNews> {
 		// TODO Auto-generated method stub
 		return adNewsDao.updateNews(id, media_id);
 	}
-
-	@Override
-	public int update(int id, String media_id, String url) {
-		// TODO Auto-generated method stub
-		return adNewsDao.updateNewsAndUrl(id, media_id, url);
-	}
-	
 	
 	@Override
 	public int delete(int id) {

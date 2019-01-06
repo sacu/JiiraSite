@@ -11,13 +11,10 @@ import org.jiira.service.impl.AdNewsServiceImpl;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.message.WeChatMessage;
 import org.jiira.we.message.WeChatNewsMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class HandleEvent {
-	private static final Logger logger = LoggerFactory.getLogger(HandleEvent.class);
 
 	private static HandleEvent instance;
 	public static HandleEvent getInstance() {
@@ -78,17 +75,12 @@ public class HandleEvent {
 					article.setDescription(adNew.getDigest());
 					adiv = adIVService.selectIVByMediaId(adNew.getThumb_media_id());
 					article.setPicUrl(adiv.getUrl());
-					article.setUrl(adNew.getContent_source_url());
-					logger.error(adNew.getContent_source_url());
+					article.setUrl(CommandCollection.GetNewsURL(adNew.getId()));
 					articles[i] = article;
 				}
 				msg.setArticles(articles);
 				break;
 			}
-			case CommandCollection.MENU_SEARCH://搜索
-				msg.setMsgType(CommandCollection.MESSAGE_TEXT);
-				msg.setContent("暂时还没有什么信息可搜取呦……");
-				break;
 			case CommandCollection.MENU_DIVINATION://每日一签
 				msg.setMsgType(CommandCollection.MESSAGE_TEXT);
 				msg.setContent("心情也算不错了吧!\r\n虽然有时会遇到失败,\r\n但切勿放弃啊!");

@@ -76,76 +76,69 @@ CREATE TABLE `sa_dt_news` (
 	`digest` varchar(50) not null COMMENT '图文消息的摘要，不填写会自动抓取',
 	`show_cover_pic` TINYINT(1) not null COMMENT '是否显示封面，1显示 0不显示',
 	`content` text not null COMMENT '文章内容，支持HTML',
-	`content_source_url` varchar(300) not null COMMENT '图文消息的原文地址',
+	-- `content_source_url` varchar(300) not null COMMENT '图文消息的原文地址',(弃用！直接用服务器地址+各种路径补足，详情 CommandCollection.GetMateNews)
 	`need_open_comment` TINYINT(1) not null COMMENT '是否打开评论 1打开 0关闭',
-	`only_fans_can_comment` TINYINT(1) not null COMMENT '是否限制评论 1限制 0不限制'
+	`only_fans_can_comment` TINYINT(1) not null COMMENT '是否限制评论 1限制 0不限制',
+
+	`type` int COMMENT '类别id',
+	`consume` int COMMENT '所需代金券',
+	`name_id` int COMMENT '书名ID',
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图文表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `sa_dt_news_name`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sa_dt_news_name` (
+	`id` int(4) primary key not null auto_increment COMMENT '书名ID',
+	`name` varchar(100) COMMENT '书名',
+	`digest` varchar(50) not null COMMENT '简介',
+	`author` varchar(50) not null COMMENT '作者'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='书名表';
+
+DROP TABLE IF EXISTS `sa_dt_news_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sa_dt_news_type` (
+	`id` int(4) primary key not null auto_increment COMMENT '类型ID',
+	`name` varchar(100) COMMENT '类型名称'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='类型表';
 
 -- 以下为网站表
 DROP TABLE IF EXISTS `sa_dt_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_user` (
-	`id` int(4) primary key not null auto_increment COMMENT '主键',
-	`username` varchar(32) not null COMMENT '帐号',
-	`password` varchar(32) not null COMMENT '密码',
+	`openid` varchar(32) not null COMMENT 'openid',
 	`nickname` varchar(32) not null COMMENT '昵称',
 	`sex` TINYINT(1) COMMENT '0女1男2保密',
+	`vouchers` varchar(32) not null COMMENT '代金券',
+	`country` varchar(32) not null COMMENT '国家',
+	`province` varchar(32) not null COMMENT '省',
+	`city` varchar(32) not null COMMENT '市',
+	`headimgurl` varchar(300) not null COMMENT '头像地址',
+	`privilege` varchar(300) not null COMMENT '特权(用,隔开)',
 	`jointime` timestamp default CURRENT_TIMESTAMP COMMENT '加入时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-DROP TABLE IF EXISTS `sa_dt_asset`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sa_dt_asset` (
-	`id` int(4) primary key not null auto_increment COMMENT '主键',
-	`userid` int(4) not null COMMENT '用户id',
-	`points` int(4) not null COMMENT '积分',
-	`money` int(4) not null COMMENT '人民币'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 DROP TABLE IF EXISTS `sa_dt_consume`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_consume` (
-	`consumeid` int(4) primary key not null auto_increment COMMENT '主键',
-	`userid` int(4) not null COMMENT '用户id',
-	`points` int(4) not null COMMENT '消费的积分',
-	`money` int(4) not null COMMENT '消费的人民币',
-	`time` timestamp default CURRENT_TIMESTAMP COMMENT '消费时间(负数为花费)',
+	`openid` varchar(32) not null COMMENT 'openid',
+	`vouchers` int(4) not null COMMENT '消费的积分(负数为花费正为充值)',
+	`time` timestamp default CURRENT_TIMESTAMP COMMENT '消费时间',
 	`describe` varchar(50) COMMENT '描述'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='消费记录表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
-DROP TABLE IF EXISTS `sa_st_book`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sa_st_book` (
-	`bookid` int(4) primary key not null auto_increment COMMENT '主键',
-	`type` TINYINT(1) not null COMMENT '0书1漫画',
-	`bookname` varchar(50) not null COMMENT '书名',
-	`about` varchar(256) not null COMMENT '简介',
-	`money` int(4) not null default 0 COMMENT '需要人民币',
-	`points` int(4) not null default 0 COMMENT '需要积分',
-	`freechapter` int(4) COMMENT '免费章节'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商城图书列表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 DROP TABLE IF EXISTS `sa_dt_bookcase`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_bookcase` (
-	`id` int(4) primary key not null auto_increment COMMENT '主键',
-	`userid` int(4) not null COMMENT '用户id',
-	`bookid` int(4) not null COMMENT '图书id',
-	`pay` TINYINT(1) not null COMMENT '0未付费·付费',
-	`redchapter` int(4) not null default 0 COMMENT '读取到章节',
-	`redchapterpage` int(4) not null default 0 COMMENT '读取到章节的页数'
+	`openid` varchar(32) not null COMMENT 'openid',
+	`newsid` int(4) not null COMMENT '图文id(已买到的)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户书架';
 /*!40101 SET character_set_client = @saved_cs_client */;
 

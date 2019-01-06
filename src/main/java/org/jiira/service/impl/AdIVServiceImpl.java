@@ -115,10 +115,4 @@ public class AdIVServiceImpl implements AdMateService<AdIV> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public int update(int id, String media_id, String url) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

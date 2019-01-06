@@ -120,7 +120,7 @@ public class WeChatAdminController {
 			if (null != json) {
 				media_id = json.getString("media_id");
 				if (null != media_id) {// 上传成功
-					row = adNewsService.update(adNew.getId(), media_id, adNew.getContent_source_url());
+					row = adNewsService.update(adNew.getId(), media_id);
 					if (row > 0) {// 更新成功
 						success.add(adNew.getId());
 					} else {

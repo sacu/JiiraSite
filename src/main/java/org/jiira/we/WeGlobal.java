@@ -70,19 +70,23 @@ public class WeGlobal {
 		table.setURL(CommandCollection.CREATE_MENU + CommandCollection.AccessToken);
 		CMenu menu = CommandCollection.GetMenu();
 		String menuStr = JSONObject.fromObject(menu).toString();
+		logger.error(menuStr);
 		table.setUseJson(true);
 		table.setJson(menuStr);
+		
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		int code = WeCode.getInstance().check(json);
+		logger.error(json.toString());
 		if(code == 0) {
 			return json;
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
+				return createMenu();
 			}
-			return createMenu();
 		}
+		return json;
 	}
 
 	public <T> T getClass(String body, Class<T> cls) {
@@ -120,9 +124,10 @@ public class WeGlobal {
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
+				return clearQuota();
 			}
-			return clearQuota();
 		}
+		return json;
 	}
 
 	/**
@@ -205,41 +210,49 @@ public class WeGlobal {
 		}
 	}
 
-	/**
-	 * authorization
-	 */
-	public SAHTML getCode(String redirect) {
-		String redirect_uri = "http://" + CommandCollection.HOST_NAME + "/" + redirect;
+	public JSONObject getUserInfo(String authCode) {
+		if(null == CommandCollection.HAT) {//需要获取HTML ACCESS TOKEN
+			getHAT(authCode);
+		}
+		WeHAT hat = CommandCollection.HAT;
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
-		table.setURL(CommandCollection.AUTH_CODE);
-		table.addParams("appid", CommandCollection.AI_AppID);
-		table.addParams("redirect_uri", redirect_uri);
-		table.addParams("response_type", "code");
-		table.addParams("scope", "snsapi_base");
-		table.addParams("state", redirect + "#wechat_redirect");
+		table.setURL(CommandCollection.USER_INFO);
+		table.addParams("access_token", hat.getAccess_token());
+		table.addParams("openid", hat.getOpenid());
+		table.addParams("lang", "zh_CN");
 		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
-		return html;
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			return json;
+		} else {
+			if (code == 42001 || code == 40001) {
+				refHAT(hat.getRefresh_token());//刷新HAT
+				return getUserInfo(authCode);//重新获取
+			}
+		}
+		return json;
 	}
 
-	public WeHAT getHAT(String code) {// 获取html 的 access token
+	public JSONObject getHAT(String authCode) {// 获取html 的 access token
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
 		table.setURL(CommandCollection.HTML_ACCESS_TOKEN);
 		table.addParams("appid", CommandCollection.AppID);
 		table.addParams("secret", CommandCollection.Appsecret);
-		table.addParams("code", code);
+		table.addParams("code", authCode);
 		table.addParams("grant_type", "authorization_code");
 		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
 		JSONObject json = JSONObject.fromObject(html.getBody());
-		if (!json.has("errcode")) {
-			CommandCollection.HAT = WeGlobal.getInstance().getClass(html.getBody(), WeHAT.class);
-			return CommandCollection.HAT;
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			CommandCollection.HAT = getClass(json.toString(), WeHAT.class);
 		} else {
 			logger.error("HAT error : " + json.has("errcode"));
-			return null;
 		}
+		return json;
 	}
 
-	public WeHAT refHAT(String refresh_token) {// 刷新授权码
+	public JSONObject refHAT(String refresh_token) {// 刷新授权码
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
 		table.setURL(CommandCollection.REF_ACCESS_TOKEN);
 		table.addParams("appid", CommandCollection.AppID);
@@ -247,13 +260,13 @@ public class WeGlobal {
 		table.addParams("refresh_token", refresh_token);
 		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
 		JSONObject json = JSONObject.fromObject(html.getBody());
-		if (!json.has("errcode")) {
-			CommandCollection.HAT = WeGlobal.getInstance().getClass(html.getBody(), WeHAT.class);
-			return CommandCollection.HAT;
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			CommandCollection.HAT = getClass(json.toString(), WeHAT.class);
 		} else {
 			logger.error("ref HAT error : " + json.has("errcode"));
-			return null;
 		}
+		return json;
 	}
 
 	/**
@@ -308,9 +321,10 @@ public class WeGlobal {
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
+				return addNews(adNew);
 			}
-			return addNews(adNew);
 		}
+		return json;
 	}
 
 	public JSONObject addVideo(String filePath, String type, String title, String introduction) {// 视频
@@ -323,9 +337,10 @@ public class WeGlobal {
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
+				return addVideo(filePath, type, title, introduction);
 			}
-			return addVideo(filePath, type, title, introduction);
 		}
+		return json;
 	}
 
 	public JSONObject addIV(String filePath, String type) {// 图形和语音
@@ -337,9 +352,10 @@ public class WeGlobal {
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
+				return addIV(filePath, type);
 			}
-			return addIV(filePath, type);
 		}
+		return json;
 	}
 
 	private JSONObject addIVV(String filePath, String type, String videoStr) {// IVV
@@ -364,9 +380,10 @@ public class WeGlobal {
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
+				return addNIVV(filePath, table, CommandCollection.MESSAGE_NEWS_IMAGE);
 			}
-			return addNIVV(filePath, table, CommandCollection.MESSAGE_NEWS_IMAGE);
 		}
+		return json;
 	}
 
 	private JSONObject addNIVV(String filePath, SAHttpTable table, String type) {// 添加图文内部图片资源
@@ -397,8 +414,9 @@ public class WeGlobal {
 		} else {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
+				return deleteNIVV(media_id);
 			}
-			return deleteNIVV(media_id);
 		}
+		return json;
 	}
 }

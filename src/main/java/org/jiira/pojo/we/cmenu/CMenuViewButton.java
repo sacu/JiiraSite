@@ -10,5 +10,4 @@ public class CMenuViewButton extends CMenuButton {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
 }

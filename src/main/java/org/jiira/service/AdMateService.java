@@ -19,7 +19,6 @@ public interface AdMateService <T> {
 	int ignore(List<String> voices);
 
 	int update(int id, String media_id);
-	int update(int id, String media_id, String url);
 	int update(String id, String media_id);
 	int update(String id, String media_id, String url);
 	

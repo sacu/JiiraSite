@@ -2,19 +2,11 @@ package org.jiira.we.process;
 
 import java.util.Date;
 
-import org.jiira.pojo.we.article.WeArticle;
-import org.jiira.pojo.we.article.WeArticleItem;
-import org.jiira.pojo.we.ivv.WeIVV;
-import org.jiira.pojo.we.ivv.WeIVVItem;
 import org.jiira.utils.CommandCollection;
-import org.jiira.we.WeGlobal;
 import org.jiira.we.message.WeChatMessage;
 import org.jiira.we.message.WeChatMusicMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HandleText {
-	private static final Logger logger = LoggerFactory.getLogger(HandleText.class);
 	private static HandleText instance;
 	public static HandleText getInstance() {
 		if(null == instance) {

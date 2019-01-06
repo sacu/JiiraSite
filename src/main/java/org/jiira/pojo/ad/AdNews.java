@@ -9,7 +9,6 @@ public class AdNews {
 	private String digest;//'图文消息的摘要，不填写会自动抓取',
 	private int show_cover_pic;// '是否显示封面，1显示 0不显示',
 	private String content;// '文章内容，支持HTML',
-	private String content_source_url;// '图文消息的原文地址',
 	private int need_open_comment;// '是否打开评论 1打开 0关闭',
 	private int only_fans_can_comment;// '是否限制评论 1限制 0不限制'
 	public int getId() {
@@ -60,12 +59,6 @@ public class AdNews {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public String getContent_source_url() {
-		return content_source_url;
-	}
-	public void setContent_source_url(String content_source_url) {
-		this.content_source_url = content_source_url;
 	}
 	public int getNeed_open_comment() {
 		return need_open_comment;

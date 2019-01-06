@@ -16,24 +16,22 @@ import org.jiira.we.SAHttpTable;
 public class CommandCollection {
 	public static final String Token = "sacu";
 	//正式
-	 public static final String AppID = "wxbe33419389062baf";
-	 public static final String Appsecret = "9825b2ee097c860161004a6f12bc38a7";
-	// 测试
-//	public static final String AppID = "wxeb5a9c34e7d8e1d4";
-//	public static final String Appsecret = "3916d9c38526662c982212051a73de9d";
+//	 public static final String AppID = "wxbe33419389062baf";
+//	 public static final String Appsecret = "9825b2ee097c860161004a6f12bc38a7";
+	// 测试（主要测试授权和消息推送）
+	public static final String AppID = "wxeb5a9c34e7d8e1d4";
+	public static final String Appsecret = "3916d9c38526662c982212051a73de9d";
 
 	public static final String AI_AppID = "2110982891";
 	public static final String AI_AppKey = "cWIPxtEqyc8mMQSW";
 
 	public static String AccessToken;
 
-	public static String HCODE;// 网页获取密钥的代码
 	public static WeHAT HAT;// 网页密钥
-	
 	//
 	public static final String HOST_NAME = "188.131.228.192";// 以后换成域名
-	public static final String WEB_NAME2 = "http://" + HOST_NAME + "/";// 以后换成域名
-	public static final String RES_NAME = WEB_NAME2 + "manager/resource/";
+	public static final String WEB_NAME = "http://" + HOST_NAME + "/";// 以后换成域名
+	public static final String RES_NAME = WEB_NAME + "manager/resource/";
 	///##################################################################
 	// 各种消息类型,除了扫带二维码事件
 	public static final String MESSAGE_TEXT = "text";// 文本消息
@@ -74,7 +72,6 @@ public class CommandCollection {
 	
 	// menu
 	public static final String MENU_RECENT = "recent";
-	public static final String MENU_SEARCH = "search";
 	public static final String MENU_DIVINATION = "divination";
 
 	// 各种请求地址
@@ -82,7 +79,7 @@ public class CommandCollection {
 	public static final String CREATE_MENU = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";// 创建菜单
 	public static final String ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token";// 生成 ACCESS TOKEN
 	
-	public static final String AUTH_CODE = "https://open.weixin.qq.com/connect/oauth2/authorize";// 获取授权码
+	public static final String AUTH_CODE = "https://open.weixin.qq.com/connect/oauth2/authorize";// 获取授权码 code
 	public static final String HTML_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token";// 获取HTML ACCESS
 																										// TOKEN
 	public static final String REF_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/refresh_token";// 更新授权码
@@ -93,42 +90,65 @@ public class CommandCollection {
 	
 	public static final String USER_INFO = "https://api.weixin.qq.com/sns/userinfo";//获取用户信息
 
+	//////////////真TM坑到家了！！！！触发类型！！！必须小写！！！！！不然他竟会报个{"errcode":65318,"errmsg":"must use utf-8 charset hint: [bKu2cA00243125]"}
+	//////////////这TM跟UTF8有关系吗？？？？
+	public static final String WE_CLICK = "click";// 
+	public static final String WE_VIEW = "view";// 
+	//微信授权跳转规范
+	public static final String WE_REDIRECT = WEB_NAME + "we/redirect?redirect=";//重定向地址前缀
+	public static final String WE_USER = "user";//用户信息
+	public static final String WE_RECHARGE = "recharge";//充值
+	public static final String WE_NEWS = "news";//浏览图文	从拉取信息 或 推送信息内 进入
+	public static final String WE_INDEX = "index";//首页
+	public static final String WE_LIST = "list";//列表(往期回顾)
+	public static final String WE_SEARCH = "serch";//搜索
+	
 	public static CMenu GetMenu() {
 		CMenu menu = new CMenu();
 		// 倒叙创建
-		// 创建二级菜单
-		CMenuClickButton m221 = new CMenuClickButton();
+		// 创建二级菜单2
+		CMenuClickButton m221 = new CMenuClickButton();//点击拉取消息	会使用到 WE_NEWS
 		m221.setName("最新动态");
-		m221.setType("click");
+		m221.setType(WE_CLICK);
 		m221.setKey(MENU_RECENT);
-		CMenuViewButton m222 = new CMenuViewButton();
+		CMenuViewButton m222 = new CMenuViewButton();//打开网页
 		m222.setName("往期回顾");
-		m222.setType("view");
-		m222.setUrl("http://www.qq.com");
-		CMenuClickButton m223 = new CMenuClickButton();
+		m222.setType(WE_VIEW);
+		m222.setUrl(WE_REDIRECT + WE_LIST);
+		CMenuViewButton m223 = new CMenuViewButton();
 		m223.setName("搜索...");
-		m223.setType("click");
-		m223.setKey(MENU_SEARCH);
+		m223.setType(WE_VIEW);
+		m223.setUrl(WE_REDIRECT + WE_SEARCH);
+		//创建二级菜单3
+		CMenuClickButton m231 = new CMenuClickButton();//点击消息返回
+		m231.setName("每日一签");
+		m231.setType(WE_CLICK);
+		m231.setKey(MENU_DIVINATION);
+		CMenuViewButton m232 = new CMenuViewButton();//跳转到账户网页
+		m232.setName("账户");
+		m232.setType(WE_VIEW);
+		m232.setUrl(WE_REDIRECT + WE_USER);
+		CMenuViewButton m233 = new CMenuViewButton();//跳转到充值网页
+		m233.setName("充值");
+		m233.setType(WE_VIEW);
+		m233.setUrl(WE_REDIRECT + WE_RECHARGE);
 		// 创建一级
-		CMenuClickButton m11 = new CMenuClickButton();
-		m11.setName("每日一签");
-		m11.setType("click");
-		m11.setKey(MENU_DIVINATION);
+		CMenuViewButton m11 = new CMenuViewButton();//跳转到首页
+		m11.setName("首页");
+		m11.setType(WE_VIEW);
+		m11.setUrl(WE_REDIRECT + WE_INDEX);
 		CMenuButton m12 = new CMenuButton();
 		m12.setName("大事件");
 		m12.setSub_button(new CMenuButton[] { m221, m222, m223 });
-		CMenuViewButton m13 = new CMenuViewButton();
-		m13.setName("我");
-		m13.setType("view");
-		m13.setUrl("http://" + HOST_NAME + "/we/userInfo");
+		CMenuButton m13 = new CMenuButton();
+		m13.setName("我的");
+		m13.setSub_button(new CMenuButton[] { m231, m232, m233 });
+		
 		menu.setButton(new CMenuButton[] { m11, m12, m13 });
 		return menu;
 	}
 
 	public static MateNews GetMateNews(AdNews adNew) {
-//		adNew.getId(), adNew.getTitle(), adNew.getThumb_media_id(), adNew.getAuthor(), adNew.getDigest(),
-//		adNew.getShow_cover_pic(), adNew.getContent(), adNew.getContent_source_url(), adNew.getNeed_open_comment(),
-//		adNew.getOnly_fans_can_comment()
 		MateNewsElement element = new MateNewsElement();
 		element.setTitle(adNew.getTitle());
 		element.setThumb_media_id(adNew.getThumb_media_id());
@@ -136,17 +156,15 @@ public class CommandCollection {
 		element.setDigest(adNew.getDigest());
 		element.setShow_cover_pic(adNew.getShow_cover_pic());
 		element.setContent(adNew.getContent());
-		if(adNew.getContent_source_url().length() > 0) {
-			element.setContent_source_url(adNew.getContent_source_url());
-		} else {
-			element.setContent_source_url(WEB_NAME2 + "we/news?id=" + adNew.getId());
-			adNew.setContent_source_url(element.getContent_source_url());
-		}
+		element.setContent_source_url(GetNewsURL(adNew.getId()));
 		element.setNeed_open_comment(adNew.getNeed_open_comment());
 		element.setOnly_fans_can_comment(adNew.getOnly_fans_can_comment());
 		MateNews news = new MateNews();
 		news.setArticles(new MateNewsElement[] {element});
 		return news;
+	}
+	public static String GetNewsURL(int id) {
+		return WE_REDIRECT + WE_NEWS + "&id=" + id;
 	}
 	public static MateVideo GetMateVideo(String title, String introduction) {
 		MateVideo video = new MateVideo();//因为比较少

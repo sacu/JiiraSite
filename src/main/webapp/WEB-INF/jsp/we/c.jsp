@@ -15,24 +15,7 @@
 <link rel="stylesheet" href="../style/ad.css" />
 <script type="text/javascript" src="../javascript/ad.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-		var page = '${page}';
-		var ad = ${adNews};
-		var thumb = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_THUMB + "/"%>' + '${thumb}';
-		switch(page){
-		case "news":
-			var html = "<div class='div_news_title'>" + ad.title + "</div>";
-			html += "<div class='div_news_author'>" + "作者:" + ad.author + "</div>";
-			html += "<div class='div_news_content'>" + ad.content + "</div>";
-			html += "<img src='" + thumb + "'/>";
-			$('#content').empty()
-			$('#content').html(html)
-			break;
-		default:
-			break;
-		}
-	});
-	</script>
+</script>
 </head>
 
 <body>
@@ -42,6 +25,7 @@
 	<article>
 		<div style="height: 48px;"></div>
 		<div id="content">
+			<jsp:include page="${page}.jsp"></jsp:include>
 		</div>
 		<div style="height: 150px;"></div>
 	</article>

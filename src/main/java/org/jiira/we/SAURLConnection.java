@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -78,15 +79,7 @@ public class SAURLConnection {
 			len = kvos.size();
 			String paramStr = options.getURL();
 			if (len > 0) {
-				paramStr += "?";
-				for (i = 0; i < len; ++i) {
-					kvo = kvos.get(i);
-					if (i == len - 1) {
-						paramStr += kvo.getKey() + "=" + URLEncoder.encode(kvo.getValue(), "utf-8");
-					} else {
-						paramStr += kvo.getKey() + "=" + URLEncoder.encode(kvo.getValue(), "utf-8") + "&";
-					}
-				}
+				paramStr += getURL(kvos);
 			}
 			gconn = getConnection(paramStr);
 			gconn.setDoOutput(true);
@@ -263,26 +256,28 @@ public class SAURLConnection {
 			conn.setRequestProperty("Connection", "Keep-Alive");
 			conn.setRequestProperty("Charset", "UTF-8");
 			// 设置边界
-            String BOUNDARY;
-            if(isVideo) {
-                conn.setRequestProperty("Cache-Control", "no-cache");
-            	BOUNDARY = "-----------------------------" + System.currentTimeMillis();
-            } else {
-            	BOUNDARY = "----------" + System.currentTimeMillis();
-            }
+			String BOUNDARY;
+			if (isVideo) {
+				conn.setRequestProperty("Cache-Control", "no-cache");
+				BOUNDARY = "-----------------------------" + System.currentTimeMillis();
+			} else {
+				BOUNDARY = "----------" + System.currentTimeMillis();
+			}
 			conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
 			// 获得输出流
 			out = new DataOutputStream(conn.getOutputStream());
 			// 请求正文信息
 			// 第一部分：
 			out.write(("--" + BOUNDARY + "\r\n").getBytes("utf-8")); // 必须多两道线
-			
-			if(isVideo) {
-				out.write(("Content-Disposition: form-data;name=\"media\";filename=\"" + file.getName() + "\"\r\n").getBytes("utf-8"));
-				out.write("Content-Type:video/mp4\r\n\r\n".getBytes("utf-8"));//类型
+
+			if (isVideo) {
+				out.write(("Content-Disposition: form-data;name=\"media\";filename=\"" + file.getName() + "\"\r\n")
+						.getBytes("utf-8"));
+				out.write("Content-Type:video/mp4\r\n\r\n".getBytes("utf-8"));// 类型
 			} else {
-				out.write(("Content-Disposition: form-data;name=\"media\";filelength=\""+file.length()+"\";filename=\""+ file.getName() + "\"\r\n").getBytes("utf-8"));
-				out.write(("Content-Type:application/octet-stream\r\n\r\n").getBytes("utf-8"));//类型
+				out.write(("Content-Disposition: form-data;name=\"media\";filelength=\"" + file.length()
+						+ "\";filename=\"" + file.getName() + "\"\r\n").getBytes("utf-8"));
+				out.write(("Content-Type:application/octet-stream\r\n\r\n").getBytes("utf-8"));// 类型
 			}
 			// 输出表头
 			// 文件正文部分
@@ -294,12 +289,13 @@ public class SAURLConnection {
 				out.write(bufferOut, 0, bytes);
 			}
 			in.close();
-			if (options.isUseJson()) {//在结尾前写入媒体数据
+			if (options.isUseJson()) {// 在结尾前写入媒体数据
 				out.write(("--" + BOUNDARY + "\r\n").getBytes("utf-8"));// 定义最后数据分隔线
-				//第二部分 写入附带值部分
+				// 第二部分 写入附带值部分
 				out.write("Content-Disposition: form-data; name=\"description\";\r\n\r\n".getBytes("utf-8"));
 				out.write(options.getJson().getBytes("utf-8"));
-//				out.write(String.format("{\"title\":\"%s\", \"introduction\":\"%s\"}","你好", "我是谁").getBytes("utf-8"));
+				// out.write(String.format("{\"title\":\"%s\", \"introduction\":\"%s\"}","你好",
+				// "我是谁").getBytes("utf-8"));
 				out.write(("\r\n--" + BOUNDARY + "--\r\n\r\n").getBytes("utf-8"));
 			} else {
 				out.write(("\r\n--" + BOUNDARY + "--\r\n").getBytes("utf-8"));// 定义最后数据分隔线
@@ -326,7 +322,7 @@ public class SAURLConnection {
 				if (reader != null) {
 					out.close();
 				}
-				if(null != conn) {
+				if (null != conn) {
 					conn.disconnect();
 				}
 			} catch (IOException e) {
@@ -335,5 +331,27 @@ public class SAURLConnection {
 			}
 		}
 
+	}
+
+	public String getURL(ArrayList<SAHttpKVO> kvos) {
+		String paramStr = "?";
+		int len = kvos.size();
+		if (len > 0) {
+			SAHttpKVO kvo;
+			for (int i = 0; i < len; ++i) {
+				kvo = kvos.get(i);
+				try {
+					if (i == len - 1) {
+						paramStr += kvo.getKey() + "=" + URLEncoder.encode(kvo.getValue(), "utf-8");
+					} else {
+						paramStr += kvo.getKey() + "=" + URLEncoder.encode(kvo.getValue(), "utf-8") + "&";
+					}
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return paramStr;
 	}
 }
