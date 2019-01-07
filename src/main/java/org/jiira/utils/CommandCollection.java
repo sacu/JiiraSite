@@ -1,5 +1,10 @@
 package org.jiira.utils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.we.WeClearQuota;
 import org.jiira.pojo.we.authorization.WeHAT;
@@ -11,6 +16,8 @@ import org.jiira.pojo.we.mate.MateDelete;
 import org.jiira.pojo.we.mate.ivv.MateVideo;
 import org.jiira.pojo.we.mate.news.MateNews;
 import org.jiira.pojo.we.mate.news.MateNewsElement;
+import org.jiira.pojo.we.push.MessageByID;
+import org.jiira.pojo.we.push.MessageMediaID;
 import org.jiira.we.SAHttpTable;
 
 public class CommandCollection {
@@ -28,6 +35,8 @@ public class CommandCollection {
 	public static String AccessToken;
 
 	public static WeHAT HAT;// 网页密钥
+	
+	public static int[] BAN_TYPE = {0};
 	//
 	public static final String HOST_NAME = "188.131.228.192";// 以后换成域名
 	public static final String WEB_NAME = "http://" + HOST_NAME + "/";// 以后换成域名
@@ -89,6 +98,8 @@ public class CommandCollection {
 	public static final String MATE_DELETE = "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=";//删除NIVV
 	
 	public static final String USER_INFO = "https://api.weixin.qq.com/sns/userinfo";//获取用户信息
+	public static final String USER_INFO_OID = "https://api.weixin.qq.com/cgi-bin/user/info";//open id  获取用户信息
+	public static final String SEND_ALL_OID = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=";//openid群发
 
 	//////////////真TM坑到家了！！！！触发类型！！！必须小写！！！！！不然他竟会报个{"errcode":65318,"errmsg":"must use utf-8 charset hint: [bKu2cA00243125]"}
 	//////////////这TM跟UTF8有关系吗？？？？
@@ -164,7 +175,20 @@ public class CommandCollection {
 		return news;
 	}
 	public static String GetNewsURL(int id) {
-		return WE_REDIRECT + WE_NEWS + "&id=" + id;
+		return WE_REDIRECT + WE_NEWS + "*news_id=" + id;
+	}
+	
+	public static MessageByID GetMessageByID(String media_id) {
+		MessageByID mbid = new MessageByID();
+		List<String> touser = new ArrayList<>();
+		for (String key : OPENID.keySet()) {
+			touser.add(key);
+		}
+		mbid.setTouser(touser);
+		mbid.setMpnews(new MessageMediaID(media_id));
+		mbid.setMsgtype("mpnews");
+		mbid.setSend_ignore_reprint(1);//遇到转发文章继续发送 0为停止发送
+		return mbid;
 	}
 	public static MateVideo GetMateVideo(String title, String introduction) {
 		MateVideo video = new MateVideo();//因为比较少
@@ -205,5 +229,21 @@ public class CommandCollection {
 		} else {
 			return "";
 		}
+	}
+	/**
+	 * openid缓存
+	 * 主要用于推送
+	 */
+	private static Map<String, Integer> OPENID = new HashMap<>();
+	public static boolean ContainsOpenID(String openid) {
+		return OPENID.containsKey(openid);
+	}
+	public static void PutOpenID(String openid) {
+		if(!OPENID.containsKey(openid)) {//spring会加载两次，所以加个判断！
+			OPENID.put(openid, 0);
+		}
+	}
+	public static void RemoveOpenID(String openid) {
+		OPENID.remove(openid);
 	}
 }

@@ -21,13 +21,11 @@ public class AdInterceptor extends Interceptor{
 	public void postHandle(
 			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
 					throws Exception {
-		logger.error("preHandle");
-		logger.error("URI : " + request.getRequestURI());
 		if(check(request) && null == request.getSession().getAttribute("adUser")) {
 			modelAndView.setViewName("redirect:/ad");
-			logger.error("拦截");
+//			logger.error("拦截");
 		} else {
-			logger.error("放行");
+//			logger.error("放行");
 		}
 	}
 	@Override

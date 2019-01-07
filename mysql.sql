@@ -82,7 +82,7 @@ CREATE TABLE `sa_dt_news` (
 
 	`type` int COMMENT '类别id',
 	`consume` int COMMENT '所需代金券',
-	`name_id` int COMMENT '书名ID',
+	`name_id` int COMMENT '书名ID'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图文表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -95,6 +95,8 @@ CREATE TABLE `sa_dt_news_name` (
 	`digest` varchar(50) not null COMMENT '简介',
 	`author` varchar(50) not null COMMENT '作者'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='书名表';
+insert into sa_dt_news_name(name, digest, author) values('none', '不是图书', 'sa')-- 占用
+
 
 DROP TABLE IF EXISTS `sa_dt_news_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -103,6 +105,7 @@ CREATE TABLE `sa_dt_news_type` (
 	`id` int(4) primary key not null auto_increment COMMENT '类型ID',
 	`name` varchar(100) COMMENT '类型名称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='类型表';
+insert into sa_dt_news_type(name) values('图书')-- 占用
 
 -- 以下为网站表
 DROP TABLE IF EXISTS `sa_dt_user`;
@@ -112,12 +115,13 @@ CREATE TABLE `sa_dt_user` (
 	`openid` varchar(32) not null COMMENT 'openid',
 	`nickname` varchar(32) not null COMMENT '昵称',
 	`sex` TINYINT(1) COMMENT '0女1男2保密',
-	`vouchers` varchar(32) not null COMMENT '代金券',
+	`vouchers` int not null COMMENT '代金券',
+	`language` varchar(20) COMMENT '语言',
 	`country` varchar(32) not null COMMENT '国家',
 	`province` varchar(32) not null COMMENT '省',
 	`city` varchar(32) not null COMMENT '市',
 	`headimgurl` varchar(300) not null COMMENT '头像地址',
-	`privilege` varchar(300) not null COMMENT '特权(用,隔开)',
+	`privilege` varchar(300) default "" COMMENT '特权(用,隔开)',
 	`jointime` timestamp default CURRENT_TIMESTAMP COMMENT '加入时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;

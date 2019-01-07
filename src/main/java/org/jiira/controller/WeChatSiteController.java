@@ -8,8 +8,13 @@ import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jiira.pojo.ad.AdIV;
+import org.jiira.pojo.ad.AdNews;
+import org.jiira.pojo.ad.WeUser;
 import org.jiira.pojo.we.WeToken;
+import org.jiira.service.AdMateService;
 import org.jiira.service.WeChatService;
+import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.DecriptUtil;
 import org.jiira.we.StrComparator;
@@ -20,6 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
+import net.sf.json.JSONObject;
 
 /**
  * 微信的
@@ -34,7 +44,13 @@ public class WeChatSiteController {
 
 	@Autowired
 	private WeChatService weChatService = null;
-
+	@Autowired
+	private AdMateService<AdNews> adNewsService = null;
+	@Autowired
+	private AdMateService<AdIV> adIVService = null;
+	@Autowired
+	private WeUserService weUserService = null;
+	
 	/**
 	 * 微信token验证
 	 * 
@@ -81,7 +97,11 @@ public class WeChatSiteController {
 		out.flush();
 		out.close();
 	}
-
+/**
+ * 微信的消息回复
+ * @param response
+ * @param request
+ */
 	@RequestMapping(value = "as", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	public void weChat(HttpServletResponse response, HttpServletRequest request) {
 		// 解析用户发来的数据
@@ -105,5 +125,39 @@ public class WeChatSiteController {
 				out.close();
 			}
 		}
+	}
+	
+
+	/**
+	 * 获取新闻
+	 * @param response
+	 * @param request
+	 */
+	@RequestMapping(value="/getNews")
+	public ModelAndView getNews(@RequestParam(name="news_id") int news_id, 
+			@RequestParam(name="openid") String openid, 
+			HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		AdNews adNews = adNewsService.selectById(news_id);
+		boolean consume = false;
+		if(adNews.getConsume() > 0) {
+			WeUser weUser = weUserService.selectWeUser(openid);
+			if(weUser.getVouchers() >= adNews.getConsume()) {
+				consume = weUserService.updateWeUserVouchers(openid, weUser.getVouchers() - adNews.getConsume()) > 0;
+			}
+		} else {
+			consume = true;
+		}
+		mv.setView(new MappingJackson2JsonView());
+		if(consume) {
+			AdIV adIV = adIVService.selectIVByMediaId(adNews.getThumb_media_id());
+			mv.addObject("check", 1);
+			mv.addObject("adNews", adNews);
+			mv.addObject("thumb", adIV.getIV());
+		} else {
+			mv.addObject("check", 0);
+			mv.addObject("info", "需要付费:" + adNews.getConsume() + ",才能观看");
+		}
+	    return mv;
 	}
 }

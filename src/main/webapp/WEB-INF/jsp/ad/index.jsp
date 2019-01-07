@@ -42,12 +42,11 @@
 	<header id="header1"> 极光互娱后台管理系统 </header>
 	<!--用来定义主体中的头-->
 	<article>
-		<div style="height: 48px;"></div>
-		${msg}
-		<div id="content">
+		<div style="height: 48px; width: 100%; float: left;"></div>
+		<div style="height: auto" id="content">
 			<%@ include file="login.jsp"%>
 		</div>
-		<div style="height: 150px;"></div>
+		<div style="height: 150px; width: 100%; float: left;"></div>
 	</article>
 	<!--一般被放置在页面或者页面中某个区块的底部，包含版权信息、联系方式等信息。-->
 	<%if (null != session.getAttribute("adUser")) { %>

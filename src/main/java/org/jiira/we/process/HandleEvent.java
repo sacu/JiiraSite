@@ -5,17 +5,23 @@ import java.util.List;
 import org.jiira.config.Application;
 import org.jiira.pojo.ad.AdIV;
 import org.jiira.pojo.ad.AdNews;
+import org.jiira.pojo.ad.WeUser;
 import org.jiira.service.AdMateService;
+import org.jiira.service.WeUserService;
 import org.jiira.service.impl.AdIVServiceImpl;
 import org.jiira.service.impl.AdNewsServiceImpl;
 import org.jiira.utils.CommandCollection;
+import org.jiira.we.WeGlobal;
 import org.jiira.we.message.WeChatMessage;
 import org.jiira.we.message.WeChatNewsMessage;
-import org.springframework.stereotype.Controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Controller
+import net.sf.json.JSONObject;
+
 public class HandleEvent {
-
+	private static final Logger logger = LoggerFactory.getLogger(HandleEvent.class);
+	
 	private static HandleEvent instance;
 	public static HandleEvent getInstance() {
 		if(null == instance) {
@@ -35,6 +41,30 @@ public class HandleEvent {
 			msg.setContent("/:heart/:heart/:heart/:heart/:heart\n"
 					+ "您好，很高兴为您服务！\n无聊了可以找我聊天~我可是随时待命呦~\n"
 					+ "/:heart/:heart/:heart/:heart/:heart");
+			//这里要注意……调用函数进入到这里时！收发双方的身份已调换，所以现在要取收信方
+			String openid = msg.getToUserName();
+			if(!CommandCollection.ContainsOpenID(openid)) {//判断缓存是否存在
+				WeUserService weUserService = Application.getInstance().getBean(WeUserService.class);
+				WeUser weUser = weUserService.selectWeUser(openid);
+				if(null == weUser) {
+					JSONObject json = WeGlobal.getInstance().getUserInfoByOpenID(openid);
+					if(json.getInt("subscribe") != 0) {//获取成功,
+						weUser = new WeUser();
+						weUser.setOpenid(json.getString("openid"));
+						weUser.setNickname(json.getString("nickname"));
+						weUser.setSex(json.getInt("sex"));
+						weUser.setVouchers(0);
+						weUser.setLanguage(json.getString("language"));
+						weUser.setCountry(json.getString("country"));
+						weUser.setProvince(json.getString("province"));
+						weUser.setCity(json.getString("city"));
+						weUser.setHeadimgurl(json.getString("headimgurl"));
+						weUserService.insertWeUser(weUser);
+						logger.error("json : " + json.getString("nickname"));
+					}
+				}
+				CommandCollection.PutOpenID(openid);
+			}
 			break;
 		}
 		/**
@@ -43,6 +73,10 @@ public class HandleEvent {
 		case CommandCollection.MESSAGE_EVENT_UNSUBSCRIBE: {//取消订阅
 			msg.setMsgType(CommandCollection.MESSAGE_TEXT);
 			msg.setContent("期待您的下次关注！");
+			String openid = msg.getToUserName();
+			if(CommandCollection.ContainsOpenID(openid)) {//判断缓存是否存在
+				CommandCollection.RemoveOpenID(openid);
+			}
 			break;
 		}
 		/**

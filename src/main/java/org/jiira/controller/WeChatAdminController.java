@@ -6,10 +6,14 @@ import java.util.List;
 import org.jiira.pojo.ad.AdIV;
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.AdNewsImage;
+import org.jiira.pojo.ad.AdNewsName;
+import org.jiira.pojo.ad.AdNewsType;
 import org.jiira.pojo.ad.AdVideo;
 import org.jiira.pojo.ad.AdVoice;
 import org.jiira.pojo.ad.ResultIVV;
 import org.jiira.service.AdMateService;
+import org.jiira.service.AdNewsNameService;
+import org.jiira.service.AdNewsTypeService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.SAHTML;
 import org.jiira.we.WeGlobal;
@@ -45,6 +49,10 @@ public class WeChatAdminController {
 	@Autowired
 	private AdMateService<AdNews> adNewsService = null;
 
+	@Autowired
+	private AdNewsTypeService adNewsTypeService = null;
+	@Autowired
+	private AdNewsNameService adNewsNameService = null;
 	/**
 	 * 创建菜单
 	 * 
@@ -81,6 +89,100 @@ public class WeChatAdminController {
 		return mv;
 	}
 	/**
+	 * 获取图文类型
+	 */
+	@RequestMapping(value = "/getNewsTypeList")
+	public ModelAndView getNewsTypeList() {
+		ModelAndView mv = new ModelAndView();
+		List<AdNewsType> adNewsTypeList = adNewsTypeService.selectNewsType();
+		mv.addObject(adNewsTypeList);
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	@RequestMapping(value = "/addNewsType")
+	public ModelAndView addNewsType(String name) {
+		ModelAndView mv = new ModelAndView();
+		int rows = adNewsTypeService.insertNewsType(name);
+		if(rows > 0) {
+			mv.addObject("添加成功");
+		} else {
+			mv.addObject("添加失败");
+		}
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	@RequestMapping(value = "/delNewsType")
+	public ModelAndView delNewsType(int id) {
+		ModelAndView mv = new ModelAndView();
+		int rows = adNewsTypeService.deleteNewsType(id);
+		if(rows > 0) {
+			mv.addObject("删除成功");
+		} else {
+			mv.addObject("删除失败");
+		}
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	@RequestMapping(value = "/reNewsType")
+	public ModelAndView reNewsType(int id, String name) {
+		ModelAndView mv = new ModelAndView();
+		int rows = adNewsTypeService.updateNewsType(id, name);
+		if(rows > 0) {
+			mv.addObject("修改成功");
+		} else {
+			mv.addObject("修改失败");
+		}
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	/**
+	 * 获取书籍列表
+	 */
+	@RequestMapping(value = "/getNewsNameList")
+	public ModelAndView getNewsNameList() {
+		ModelAndView mv = new ModelAndView();
+		List<AdNewsName> adNewsNameList = adNewsNameService.selectNewsName();
+		mv.addObject(adNewsNameList);
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	@RequestMapping(value = "/addNewsName")
+	public ModelAndView addNewsName(AdNewsName adNewsName) {
+		ModelAndView mv = new ModelAndView();
+		int rows = adNewsNameService.insertNewsName(adNewsName);
+		if(rows > 0) {
+			mv.addObject("添加成功");
+		} else {
+			mv.addObject("添加失败");
+		}
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	@RequestMapping(value = "/delNewsName")
+	public ModelAndView delNewsName(int id) {
+		ModelAndView mv = new ModelAndView();
+		int rows = adNewsNameService.deleteNewsName(id);
+		if(rows > 0) {
+			mv.addObject("删除成功");
+		} else {
+			mv.addObject("删除失败");
+		}
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	@RequestMapping(value = "/reNewsName")
+	public ModelAndView reNewsName(AdNewsName adNewsName) {
+		ModelAndView mv = new ModelAndView();
+		int rows = adNewsNameService.updateNewsName(adNewsName);
+		if(rows > 0) {
+			mv.addObject("修改成功");
+		} else {
+			mv.addObject("修改失败");
+		}
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	/**
 	 * 上传图文到服务器
 	 */
 	@RequestMapping(value = "/addNews")
@@ -89,7 +191,7 @@ public class WeChatAdminController {
 		int rows = adNewsService.insert(adNews);
 		if(rows > 0) {
 			mv.addObject("插入成功");
-		}else {
+		} else {
 			mv.addObject("插入失败");
 		}
 		mv.setView(new MappingJackson2JsonView());
@@ -174,6 +276,24 @@ public class WeChatAdminController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("success", success);
 		mv.addObject("dataFault", dataFault);
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+
+	/**
+	 * 推送图文
+	 * @param adNews
+	 * @return
+	 */
+	@RequestMapping(value = "/pushNewsToWe")
+	public ModelAndView pushNewsToWe(@RequestBody String media_id) {
+		ModelAndView mv = new ModelAndView();
+		if(null == media_id || media_id.length() == 0) {
+			mv.addObject("MediaID 不能为空");
+		} else {
+			JSONObject json = WeGlobal.getInstance().pushMessageByOpenID(media_id);
+			mv.addObject(json);
+		}
 		mv.setView(new MappingJackson2JsonView());
 		return mv;
 	}

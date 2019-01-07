@@ -155,8 +155,15 @@ footer{
 	padding-left: 10px;
 	padding-right: 10px;
 }
-input[type="text"]{
-	width: 50px;
+input[type="text"] {
+	min-width: 300px;
+	max-width: 550px;
+}
+textarea {
+	min-width: 200px;
+	max-width: 600px;
+	height: 180px;
+	width: 550px;
 }
 #rgb, #hsl{
 	width: 100px;

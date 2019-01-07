@@ -12,6 +12,7 @@ import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.mate.news.MateNews;
+import org.jiira.pojo.we.push.MessageByID;
 import org.jiira.pojo.we.robot.WeRobot;
 import org.jiira.utils.CommandCollection;
 import org.slf4j.Logger;
@@ -90,7 +91,6 @@ public class WeGlobal {
 	}
 
 	public <T> T getClass(String body, Class<T> cls) {
-		logger.error("body : " + body);
 		if (null == mapper) {
 			mapper = new ObjectMapper();
 		}
@@ -209,7 +209,27 @@ public class WeGlobal {
 			}
 		}
 	}
-
+	//需要openid
+	public JSONObject getUserInfoByOpenID(String openid) {
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("GET");
+		table.setURL(CommandCollection.USER_INFO_OID);
+		table.addParams("access_token", CommandCollection.AccessToken);
+		table.addParams("openid", openid);
+		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			return json;
+		} else {
+			if (code == 42001 || code == 40001) {
+				createAccessToken();
+				return getUserInfoByOpenID(openid);//重新获取
+			}
+		}
+		return json;
+	}
+	//需要 code
 	public JSONObject getUserInfo(String authCode) {
 		if(null == CommandCollection.HAT) {//需要获取HTML ACCESS TOKEN
 			getHAT(authCode);
@@ -268,7 +288,30 @@ public class WeGlobal {
 		}
 		return json;
 	}
-
+	/**
+	 * 
+	 */
+	public JSONObject pushMessageByOpenID(String media_id) {
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.SEND_ALL_OID + CommandCollection.AccessToken);
+		MessageByID mbid = CommandCollection.GetMessageByID(media_id);
+		String mbidStr = JSONObject.fromObject(mbid).toString();
+		logger.error(mbidStr);
+		table.setJson(mbidStr);
+		table.setUseJson(true);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			return json;
+		} else {
+			if (code == 42001 || code == 40001) {
+				createAccessToken();
+				return pushMessageByOpenID(media_id);
+			}
+		}
+		return json;
+	}
 	/**
 	 * 以下为素材
 	 */

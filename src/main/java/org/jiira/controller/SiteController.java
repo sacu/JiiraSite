@@ -5,9 +5,8 @@ import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jiira.pojo.ad.AdIV;
-import org.jiira.pojo.ad.AdNews;
-import org.jiira.service.AdMateService;
+import org.jiira.pojo.ad.WeUser;
+import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.WeGlobal;
 import org.slf4j.Logger;
@@ -30,25 +29,8 @@ import net.sf.json.JSONObject;
 public class SiteController {
 	// 日志记录
 	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
-
 	@Autowired
-	private AdMateService<AdNews> adNewsService = null;
-
-	@Autowired
-	private AdMateService<AdIV> adIVService = null;
-	
-	@RequestMapping(value="/getNews")
-	public ModelAndView getNews(int id, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		AdNews adNews = adNewsService.selectById(id);
-		request.setAttribute("page", "news");
-		request.setAttribute("adNews", JSONObject.fromObject(adNews).toString());
-		AdIV adIV = adIVService.selectIVByMediaId(adNews.getThumb_media_id());
-		request.setAttribute("thumb", adIV.getIV());
-	    
-	    return mv;
-	}
-	
+	private WeUserService weUserService = null;
 	/**
 	 * 获取到微信用户信息
 	 */
@@ -58,8 +40,30 @@ public class SiteController {
 		ModelAndView mv = new ModelAndView();
 		//获取用户信息
 		JSONObject json = WeGlobal.getInstance().getUserInfo(code);
-		request.setAttribute("page", redirect);//写入index执行页面规则
-		request.setAttribute("json", json);
+		json.remove("privilege");//老报错 不要了
+		logger.error("调试code：" + code);
+		//从前TX又有个BUG，就是URL只能传一个参数，所以只能把所有参数压缩到第一个里边
+		WeUser weUser = WeGlobal.getInstance().getClass(json.toString(), WeUser.class);
+		WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
+		if(null == _weUser) {//用户不存在
+			logger.error(JSONObject.fromObject(weUser).toString());
+			int rows = weUserService.insertWeUser(weUser);
+			if(rows == 0) {
+				mv.addObject("获取失败");
+			} else {
+				weUser = weUserService.selectWeUser(weUser.getOpenid());
+			}
+		}
+		
+		String[] args = redirect.split("\\*");
+		String[] group;
+		request.setAttribute("page", args[0]);//写入index执行页面规则
+		for(int i = 1; i < args.length; ++i) {//写入其他参数(包含news_id)
+			group = args[i].split("=");
+			request.setAttribute(group[0], group[1]);
+		}
+		request.setAttribute("weUser", weUser);//其实就是WeUser
+		request.setAttribute("code", code);//测试用
 		mv.setViewName("we/c");//去微信页
 		return mv;
 	}

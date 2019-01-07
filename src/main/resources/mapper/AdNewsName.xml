@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdNewsNameDao">
+	<resultMap id="adNewsName" type="org.jiira.pojo.ad.AdNewsName">
+		<id column="id" property="id" />
+		<id column="name" property="name" />
+		<id column="author" property="author" />
+		<id column="digest" property="digest" />
+	</resultMap>
+	
+	<select id="selectNewsName" resultMap="adNewsName">
+		select * from sa_dt_news_name
+	</select>
+	
+	<select id="selectNewsNameById" parameterType="Integer" resultMap="adNewsName">
+		select * from
+		sa_dt_news_name where id=#{id}
+	</select>
+	<insert id="insertNewsName">
+		insert into sa_dt_news_name(name, digest, author) 
+			values(#{name}, #{author}, #{author})
+	</insert>
+	<!-- 更新 -->
+	<update id="updateNewsName">
+		update sa_dt_news_name set name=#{name}, author=#{author}, author=#{author} where id=#{id}
+	</update>
+	<!-- 删除图片 -->
+	<delete id="deleteNewsName">
+		delete from sa_dt_news_name where id=#{id}
+	</delete>
+</mapper>

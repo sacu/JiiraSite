@@ -23,11 +23,12 @@
 	<header id="header1">极光互娱</header>
 	<!--用来定义主体中的头-->
 	<article>
-		<div style="height: 48px;"></div>
+		<div style="height: 48px; width: 100%; float: left;"></div>
+		code${code}
 		<div id="content">
 			<jsp:include page="${page}.jsp"></jsp:include>
 		</div>
-		<div style="height: 150px;"></div>
+		<div style="height: 150px; width: 100%; float: left;"></div>
 	</article>
 	<!--一般被放置在页面或者页面中某个区块的底部，包含版权信息、联系方式等信息。-->
 	<footer>

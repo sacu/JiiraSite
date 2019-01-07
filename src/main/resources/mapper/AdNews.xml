@@ -5,6 +5,9 @@
 	<resultMap id="adNews" type="org.jiira.pojo.ad.AdNews">
 		<id column="id" property="id" />
 		<id column="title" property="title" />
+		<id column="type" property="type" />
+		<id column="consume" property="consume" />
+		<id column="name_id" property="name_id" />
 		<id column="media_id" property="media_id" />
 		<id column="thumb_media_id" property="thumb_media_id" />
 		<id column="author" property="author" />
@@ -29,8 +32,8 @@
 		sa_dt_news where id=#{id}
 	</select>
 	<insert id="insertNews">
-		insert into sa_dt_news(title, thumb_media_id, author, digest, show_cover_pic, content, need_open_comment, only_fans_can_comment) 
-			values(#{title}, #{thumb_media_id}, #{author}, #{digest}, #{show_cover_pic}, #{content}, #{need_open_comment}, #{only_fans_can_comment})
+		insert into sa_dt_news(title, type, consume, name_id, thumb_media_id, author, digest, show_cover_pic, content, need_open_comment, only_fans_can_comment) 
+			values(#{title}, #{type}, #{consume}, #{name_id}, #{thumb_media_id}, #{author}, #{digest}, #{show_cover_pic}, #{content}, #{need_open_comment}, #{only_fans_can_comment})
 	</insert>
 	<!-- 更新IV -->
 	<update id="updateNews">

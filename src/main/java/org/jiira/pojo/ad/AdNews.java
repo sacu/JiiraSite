@@ -4,6 +4,10 @@ public class AdNews {
 	private int id;//'主键',
 	private String media_id;//
 	private String title;// '图文标题',
+	private int type;// '图文类型',
+	private int consume;// '阅读花费',
+	private int name_id;// '书名ID',
+
 	private String thumb_media_id;//'图文消息的封面图片素材id',
 	private String author;//'图文作者',
 	private String digest;//'图文消息的摘要，不填写会自动抓取',
@@ -29,6 +33,25 @@ public class AdNews {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	public int getConsume() {
+		return consume;
+	}
+	public void setConsume(int consume) {
+		this.consume = consume;
+	}
+	public int getName_id() {
+		return name_id;
+	}
+	public void setName_id(int name_id) {
+		this.name_id = name_id;
 	}
 	public String getThumb_media_id() {
 		return thumb_media_id;

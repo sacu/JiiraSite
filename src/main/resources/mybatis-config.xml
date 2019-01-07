@@ -10,5 +10,8 @@
         <mapper resource="mapper/AdVoice.xml"/>
         <mapper resource="mapper/AdVideo.xml"/>
         <mapper resource="mapper/AdNews.xml"/>
+        <mapper resource="mapper/AdNewsType.xml"/>
+        <mapper resource="mapper/AdNewsName.xml"/>
+        <mapper resource="mapper/WeUser.xml"/>
     </mappers>
 </configuration>

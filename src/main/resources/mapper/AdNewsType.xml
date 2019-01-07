@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.AdNewsTypeDao">
+	<resultMap id="adNewsType" type="org.jiira.pojo.ad.AdNewsType">
+		<id column="id" property="id" />
+		<id column="name" property="name" />
+	</resultMap>
+	<select id="selectNewsType" resultMap="adNewsType">
+		select * from sa_dt_news_type
+	</select>
+	<insert id="insertNewsType">
+		insert into sa_dt_news_type(name) values(#{name})
+	</insert>
+	<!-- 更新类型 -->
+	<update id="updateNewsType">
+		update sa_dt_news_type set name=#{name} where id=#{id}
+	</update>
+	<!-- 删除类型 -->
+	<delete id="deleteNewsType">
+		delete from sa_dt_news_type where id=#{id}
+	</delete>
+</mapper>

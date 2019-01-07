@@ -1,14 +1,13 @@
 @charset "utf-8";
 /* CSS Document */
-.div_list, .div_list_check, .div_list_key, .div_list_digest, .div_list_value, .div_list_submit, .div_list_clear, .div_list_delete, .div_list_media_id, .div_list_type, .div_list_title, .div_list_introduction {
-	width: 100%;
+.div_list, .div_list_check, .div_list_key, .div_list_digest, .div_list_value, .div_list_submit, .div_list_clear, .div_list_push, .div_list_delete, .div_list_media_id, .div_list_type, .div_list_title, .div_list_introduction {
+	width: 90%;
 	float: left;
 	border:1px dashed #000;
 	background-color:#fff;
 	white-space : nowrap;
 	overflow:hidden; 
 }
-
 .div_list_check {
 	width: 5%;
 }
@@ -30,6 +29,9 @@
 }
 
 .div_list_delete {
+	width: 5%;
+}
+.div_list_push {
 	width: 5%;
 }
 
@@ -64,7 +66,28 @@
 	padding-left: 30px;
 }
 .div_news_content {
-	width: 100%;
+	width: 95%;
 	font-size: 30px;
 	padding:30px 30px 30px 30px;
+}
+.div_content_block {
+	float: left;
+	min-width: 800px;
+	width: 95%;
+	height: auto;
+}
+.div_content_value {
+	min-width: 580px;
+	float: left;
+	width: auto;
+}
+.div_content_key {
+	float: left;
+	width: 200px;
+}
+div{
+	float: left;
+}
+hr{
+	width: 95%;
 }
