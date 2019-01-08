@@ -8,10 +8,8 @@ public interface AdMateService <T> {
 	
 	List<T> select();
 	List<T> selectByType(String type);
-	List<T> selectOderByDesc(int limit);
 	T selectById(String id);
 	T selectById(int id);
-	T selectIVByMediaId(String media_id);
 	
 	int insert(T ad);
 	int ignore(String id, String title, String introduction);

@@ -91,8 +91,8 @@ public class WeChatAdminController {
 	/**
 	 * 获取图文类型
 	 */
-	@RequestMapping(value = "/getNewsTypeList")
-	public ModelAndView getNewsTypeList() {
+	@RequestMapping(value = "/getNewsTypeList_Deprecated")
+	public ModelAndView getNewsTypeList_Deprecated() {//已弃用，程序启动时会自动拉取，后台更新后会重新拉取
 		ModelAndView mv = new ModelAndView();
 		List<AdNewsType> adNewsTypeList = adNewsTypeService.selectNewsType();
 		mv.addObject(adNewsTypeList);
@@ -105,6 +105,9 @@ public class WeChatAdminController {
 		int rows = adNewsTypeService.insertNewsType(name);
 		if(rows > 0) {
 			mv.addObject("添加成功");
+			//更新图文类型缓存
+			List<AdNewsType> list = adNewsTypeService.selectNewsType();
+			CommandCollection.SetNewsTypeList(list);
 		} else {
 			mv.addObject("添加失败");
 		}
@@ -117,8 +120,11 @@ public class WeChatAdminController {
 		int rows = adNewsTypeService.deleteNewsType(id);
 		if(rows > 0) {
 			mv.addObject("删除成功");
+			//更新图文类型缓存
+			List<AdNewsType> list = adNewsTypeService.selectNewsType();
+			CommandCollection.SetNewsTypeList(list);
 		} else {
-			mv.addObject("删除失败");
+			mv.addObject("删除失败,权限不够");
 		}
 		mv.setView(new MappingJackson2JsonView());
 		return mv;

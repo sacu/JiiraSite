@@ -1,3 +1,4 @@
+<%@page import="org.jiira.utils.CommandCollection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!doctype html>
@@ -120,7 +121,7 @@
 														data : adVLD[target.attr("v")]['media_id'],
 														contentType : "application/json",
 														success : function(result) {
-															alert(result)
+															alert(JSON.stringify(result))
 														}
 													});
 													
@@ -193,25 +194,18 @@
 
 						//获取图文类型
 						function getNTList() {
-							//提交表单
-							$.post({
-								url : ad + "getNewsTypeList",
-								//成功后的方法
-								success : function(result) {
-									var _adNTL = result['adNewsTypeList'];
-									adType = {};
-									var type = $('#type');
-									var etype = $('#etype');
-									type.empty();
-									etype.empty();
-									$.each(_adNTL, function(idx, i) {
-										adType[i['id']] = i;
-										option = "<option value='" + i['id'] + "'>" + i['name'] + "</option>";
-										type.append(option);
-										etype.append(option);
-									});
-								}
-							})
+							var _adNTL = <%=CommandCollection.GetNewsTypeJson()%>
+							adType = {};
+							var type = $('#type');
+							var etype = $('#etype');
+							type.empty();
+							etype.empty();
+							$.each(_adNTL, function(idx, i) {
+								adType[i['id']] = i;
+								option = "<option value='" + i['id'] + "'>" + i['name'] + "</option>";
+								type.append(option);
+								etype.append(option);
+							});
 						}
 						getNTList();
 						$("#add_type_btn").click(function(event) {//增

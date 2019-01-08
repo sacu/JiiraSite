@@ -64,6 +64,7 @@ CREATE TABLE `sa_dt_video` (
 	`introduction` varchar(255) not null COMMENT '视频介绍200字'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='视频表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 DROP TABLE IF EXISTS `sa_dt_news`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -97,15 +98,17 @@ CREATE TABLE `sa_dt_news_name` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='书名表';
 insert into sa_dt_news_name(name, digest, author) values('none', '不是图书', 'sa')-- 占用
 
-
 DROP TABLE IF EXISTS `sa_dt_news_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_news_type` (
 	`id` int(4) primary key not null auto_increment COMMENT '类型ID',
-	`name` varchar(100) COMMENT '类型名称'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='类型表';
-insert into sa_dt_news_type(name) values('图书')-- 占用
+	`name` varchar(100) COMMENT '类型名称',
+	`protect` TINYINT(1) default 0 COMMENT '是否保护，不可删除 1是 0否',
+	`level` int default 0 COMMENT '拉取权限，0为最低都可拉取，3为最高都不可拉取'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图文类型表';
+INSERT INTO `sa_dt_news_type` (`name`, `protect`, `level`) VALUES
+('全部', 1, 0),('图书', 1, 2),('休闲', 1, 0),('社会', 1, 0),('美食', 1, 0),('养生', 1, 0);
 
 -- 以下为网站表
 DROP TABLE IF EXISTS `sa_dt_user`;

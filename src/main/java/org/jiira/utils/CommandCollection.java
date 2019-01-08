@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jiira.pojo.ad.AdNews;
+import org.jiira.pojo.ad.AdNewsType;
 import org.jiira.pojo.we.WeClearQuota;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
@@ -19,6 +20,8 @@ import org.jiira.pojo.we.mate.news.MateNewsElement;
 import org.jiira.pojo.we.push.MessageByID;
 import org.jiira.pojo.we.push.MessageMediaID;
 import org.jiira.we.SAHttpTable;
+
+import net.sf.json.JSONArray;
 
 public class CommandCollection {
 	public static final String Token = "sacu";
@@ -36,7 +39,14 @@ public class CommandCollection {
 
 	public static WeHAT HAT;// 网页密钥
 	
-	public static int[] BAN_TYPE = {0};
+	public static int ENABLE = 1;//可用
+	public static int DISABLE = 0;//禁用
+	public static int LEVEL_NONE = 0;//无限制
+	public static int LEVEL_LOWER = 1;//较低的
+	public static int LEVEL_MEDIUM = 2;//中等
+	public static int LEVEL_HIGHER = 3;//较高的
+	private static List<AdNewsType> NEWS_TYPE_LIST;
+	private static JSONArray NEWS_TYPE_JSON;
 	//
 	public static final String HOST_NAME = "188.131.228.192";// 以后换成域名
 	public static final String WEB_NAME = "http://" + HOST_NAME + "/";// 以后换成域名
@@ -112,7 +122,7 @@ public class CommandCollection {
 	public static final String WE_NEWS = "news";//浏览图文	从拉取信息 或 推送信息内 进入
 	public static final String WE_INDEX = "index";//首页
 	public static final String WE_LIST = "list";//列表(往期回顾)
-	public static final String WE_SEARCH = "serch";//搜索
+	public static final String WE_SEARCH = "search";//搜索
 	
 	public static CMenu GetMenu() {
 		CMenu menu = new CMenu();
@@ -229,6 +239,19 @@ public class CommandCollection {
 		} else {
 			return "";
 		}
+	}
+	/**
+	 * 图文类型表
+	 */
+	public static void SetNewsTypeList(List<AdNewsType> list) {
+		NEWS_TYPE_LIST = list;
+		NEWS_TYPE_JSON = JSONArray.fromObject(NEWS_TYPE_LIST);
+	}
+	public static List<AdNewsType> GetNewsTypeList() {
+		return NEWS_TYPE_LIST;
+	}
+	public static JSONArray GetNewsTypeJson() {
+		return NEWS_TYPE_JSON;
 	}
 	/**
 	 * openid缓存

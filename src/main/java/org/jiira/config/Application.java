@@ -2,9 +2,17 @@ package org.jiira.config;
 
 import java.util.List;
 
+import org.jiira.pojo.ad.AdNews;
+import org.jiira.pojo.ad.AdNewsType;
+import org.jiira.service.AdNewsService;
+import org.jiira.service.AdNewsTypeService;
 import org.jiira.service.WeUserService;
+import org.jiira.service.impl.AdNewsServiceImpl;
 import org.jiira.utils.CommandCollection;
 import org.springframework.context.ApplicationContext;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class Application {
 
@@ -26,6 +34,10 @@ public class Application {
 		for(int i = 0; i < openids.size(); ++i) {
 			CommandCollection.PutOpenID(openids.get(i));
 		}
+		//初始化图文类型列表
+		AdNewsTypeService adNewsTypeService = getBean(AdNewsTypeService.class);
+		List<AdNewsType> list = adNewsTypeService.selectNewsType();
+		CommandCollection.SetNewsTypeList(list);
 	}
 	public ApplicationContext getContext() {
 		return applicationContext;

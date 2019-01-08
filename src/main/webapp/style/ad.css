@@ -88,6 +88,12 @@
 div{
 	float: left;
 }
+.div_we_list_content {
+	text-align:center;
+	width: 100%;
+	padding-top:30px;
+	padding-bottom:30px;
+}
 hr{
 	width: 95%;
 }

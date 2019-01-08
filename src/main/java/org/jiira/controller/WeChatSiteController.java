@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +13,9 @@ import org.jiira.pojo.ad.AdIV;
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.WeUser;
 import org.jiira.pojo.we.WeToken;
+import org.jiira.service.AdIVService;
 import org.jiira.service.AdMateService;
+import org.jiira.service.AdNewsService;
 import org.jiira.service.WeChatService;
 import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
@@ -29,8 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import net.sf.json.JSONObject;
-
 /**
  * 微信的
  * @author time
@@ -45,7 +46,7 @@ public class WeChatSiteController {
 	@Autowired
 	private WeChatService weChatService = null;
 	@Autowired
-	private AdMateService<AdNews> adNewsService = null;
+	private AdNewsService adNewsService = null;
 	@Autowired
 	private AdMateService<AdIV> adIVService = null;
 	@Autowired
@@ -131,12 +132,10 @@ public class WeChatSiteController {
 	/**
 	 * 获取新闻
 	 * @param response
-	 * @param request
 	 */
 	@RequestMapping(value="/getNews")
 	public ModelAndView getNews(@RequestParam(name="news_id") int news_id, 
-			@RequestParam(name="openid") String openid, 
-			HttpServletRequest request) {
+			@RequestParam(name="openid") String openid) {
 		ModelAndView mv = new ModelAndView();
 		AdNews adNews = adNewsService.selectById(news_id);
 		boolean consume = false;
@@ -150,7 +149,7 @@ public class WeChatSiteController {
 		}
 		mv.setView(new MappingJackson2JsonView());
 		if(consume) {
-			AdIV adIV = adIVService.selectIVByMediaId(adNews.getThumb_media_id());
+			AdIV adIV = ((AdIVService) adIVService).selectIVByMediaId(adNews.getThumb_media_id());
 			mv.addObject("check", 1);
 			mv.addObject("adNews", adNews);
 			mv.addObject("thumb", adIV.getIV());
@@ -160,4 +159,21 @@ public class WeChatSiteController {
 		}
 	    return mv;
 	}
+	@RequestMapping(value="/getNewsList")
+	public ModelAndView getNewsList() {
+		ModelAndView mv = new ModelAndView();
+		List<AdNews> adNews = adNewsService.selectNewsByLevel(CommandCollection.LEVEL_LOWER);//暂时排除了文章类
+		mv.addObject("adNews", adNews);
+		mv.setView(new MappingJackson2JsonView());
+	    return mv;
+	}
+	@RequestMapping(value="/getNewsSearch")
+	public ModelAndView getNewsSearch(int type, String search) {
+		ModelAndView mv = new ModelAndView();
+		List<AdNews> adNews = adNewsService.selectNewsByTypeAndLike(type, search);//类型搜索
+		mv.addObject("adNews", adNews);
+		mv.setView(new MappingJackson2JsonView());
+	    return mv;
+	}
+	
 }

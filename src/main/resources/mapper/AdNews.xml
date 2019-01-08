@@ -18,12 +18,28 @@
 		<id column="only_fans_can_comment" property="only_fans_can_comment" />
 	</resultMap>
 	
-	<select id="selectNews" resultMap="adNews">
+	<!-- 全部获取，即将弃用 -->
+	<select id="selectNewsAll" resultMap="adNews">
 		select * from sa_dt_news
 	</select>
-	
-	<select id="selectOderByDesc" parameterType="Integer" resultMap="adNews">
-		select * from sa_dt_news where media_id!='' order by id desc limit 0,#{rows}
+	<!-- 
+		级别限制拉取模式,列表拉取 其实只是拉取的目录
+	 -->
+	<select id="selectNewsByLevel" resultMap="adNews">
+		select id, title from sa_dt_news where
+			 (select level from sa_dt_news_type where id=sa_dt_news.type) &lt;= #{level};
+	</select>
+	<!-- 类型限制拉取模式 只是拉取的目录 -->
+	<select id="selectNewsByType" resultMap="adNews">
+		select id, title from sa_dt_news where type=#{type}
+	</select>
+	<!-- 级别模式拉取+limit条数排序 级别符合并且media_id不为空 -->
+	<select id="selectOderByLevelAndDesc" parameterType="Integer" resultMap="adNews">
+		select * from sa_dt_news where  (select level from sa_dt_news_type where id=sa_dt_news.type) &lt;= #{level} and media_id!='' order by id desc limit 0,#{rows}
+	</select>
+	<!-- 类型限制模糊查询 -->
+	<select id="selectNewsByTypeAndLike" resultMap="adNews">
+		select id, title from sa_dt_news where (type=#{type} or #{type}=1) and (title like "%"#{search_text}"%" or digest like "%"#{search_text}"%")
 	</select>
 	
 	<!-- 获取全部 -->

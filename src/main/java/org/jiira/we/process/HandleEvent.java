@@ -6,7 +6,9 @@ import org.jiira.config.Application;
 import org.jiira.pojo.ad.AdIV;
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.WeUser;
+import org.jiira.service.AdIVService;
 import org.jiira.service.AdMateService;
+import org.jiira.service.AdNewsService;
 import org.jiira.service.WeUserService;
 import org.jiira.service.impl.AdIVServiceImpl;
 import org.jiira.service.impl.AdNewsServiceImpl;
@@ -92,9 +94,10 @@ public class HandleEvent {
 			String key = msg.getEventKey();
 			switch(key) {
 			case CommandCollection.MENU_RECENT:{//拉取图文
-				AdMateService<AdIV> adIVService = Application.getInstance().getBean(AdIVServiceImpl.class);
-				AdMateService<AdNews> adNewsService = Application.getInstance().getBean(AdNewsServiceImpl.class);
-				List<AdNews> adNews = adNewsService.selectOderByDesc(3);
+				AdIVService adIVService = Application.getInstance().getBean(AdIVServiceImpl.class);
+				AdNewsService adNewsService = Application.getInstance().getBean(AdNewsServiceImpl.class);
+				//拉取最低级别的消息
+				List<AdNews> adNews = adNewsService.selectOderByLevelAndDesc(CommandCollection.LEVEL_LOWER, 3);
 				int len = adNews.size();
 				msg.setMsgType(CommandCollection.MESSAGE_NEWS);
 				msg.setArticleCount(len);

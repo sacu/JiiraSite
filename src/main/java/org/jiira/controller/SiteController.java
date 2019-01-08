@@ -37,7 +37,6 @@ public class SiteController {
 	@RequestMapping("/c")
 	public ModelAndView c(HttpServletRequest request, @RequestParam(required = false, name="redirect") String redirect, 
 			@RequestParam(name="code")String code, @RequestParam(name="state")String state) {
-		ModelAndView mv = new ModelAndView();
 		//获取用户信息
 		JSONObject json = WeGlobal.getInstance().getUserInfo(code);
 		json.remove("privilege");//老报错 不要了
@@ -48,13 +47,20 @@ public class SiteController {
 		if(null == _weUser) {//用户不存在
 			logger.error(JSONObject.fromObject(weUser).toString());
 			int rows = weUserService.insertWeUser(weUser);
-			if(rows == 0) {
-				mv.addObject("获取失败");
-			} else {
+			if(rows != 0) {
 				weUser = weUserService.selectWeUser(weUser.getOpenid());
 			}
 		}
-		
+		request.getSession().setAttribute("weUser", weUser);
+		request.getSession().setAttribute("code", code);//测试用
+		return jump(request, redirect);
+	}
+	@RequestMapping("/ic")
+	public ModelAndView ic(HttpServletRequest request, String redirect) {
+		return jump(request, redirect);
+	}
+	private ModelAndView jump(HttpServletRequest request, String redirect) {
+		ModelAndView mv = new ModelAndView();
 		String[] args = redirect.split("\\*");
 		String[] group;
 		request.setAttribute("page", args[0]);//写入index执行页面规则
@@ -62,8 +68,6 @@ public class SiteController {
 			group = args[i].split("=");
 			request.setAttribute(group[0], group[1]);
 		}
-		request.setAttribute("weUser", weUser);//其实就是WeUser
-		request.setAttribute("code", code);//测试用
 		mv.setViewName("we/c");//去微信页
 		return mv;
 	}

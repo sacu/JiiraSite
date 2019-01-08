@@ -63,37 +63,13 @@ public class AdVideoServiceImpl implements AdMateService<AdVideo> {
 	}
 
 	@Override
-	public int update(String id, String media_id, String url) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public List<AdVideo> selectByType(String type) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int ignore(List<String> ids, String type) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public AdVideo selectById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int insert(AdVideo ad) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int update(int id, String media_id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(String id, String media_id, String url) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -105,14 +81,26 @@ public class AdVideoServiceImpl implements AdMateService<AdVideo> {
 	}
 
 	@Override
-	public List<AdVideo> selectOderByDesc(int limit) {
+	public AdVideo selectById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public AdVideo selectIVByMediaId(String media_id) {
+	public List<AdVideo> selectByType(String type) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int insert(AdVideo ad) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int ignore(List<String> ids, String type) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -19,7 +19,7 @@ $(document).ready(function() {
 			url : "ad/" + $(this).attr("id"),
 			//成功后的方法
 			success : function(result) {
-				alert(result)
+				alert(JSON.stringify(result))
 				Object.keys(result).forEach(function(key){
 				     console.log(key,result[key]);
 				});

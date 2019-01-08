@@ -61,7 +61,7 @@ public class AdNewsImageServiceImpl implements AdMateService<AdNewsImage> {
 	}
 
 	@Override
-	public int ignore(String id, String title, String introduction) {
+	public int update(int id, String media_id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -73,13 +73,7 @@ public class AdNewsImageServiceImpl implements AdMateService<AdNewsImage> {
 	}
 
 	@Override
-	public List<AdNewsImage> selectByType(String type) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int ignore(List<String> ids, String type) {
+	public int delete(int id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -91,33 +85,26 @@ public class AdNewsImageServiceImpl implements AdMateService<AdNewsImage> {
 	}
 
 	@Override
+	public List<AdNewsImage> selectByType(String type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public int insert(AdNewsImage ad) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int update(int id, String media_id) {
+	public int ignore(String id, String title, String introduction) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int delete(int id) {
+	public int ignore(List<String> ids, String type) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	@Override
-	public List<AdNewsImage> selectOderByDesc(int limit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public AdNewsImage selectIVByMediaId(String media_id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

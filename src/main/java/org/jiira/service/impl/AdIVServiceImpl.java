@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.jiira.dao.AdIVDao;
 import org.jiira.pojo.ad.AdIV;
-import org.jiira.service.AdMateService;
+import org.jiira.service.AdIVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdIVServiceImpl implements AdMateService<AdIV> {
+public class AdIVServiceImpl implements AdIVService {
 
 	@Autowired
 	private AdIVDao adIVDao = null;
@@ -69,12 +69,6 @@ public class AdIVServiceImpl implements AdMateService<AdIV> {
 	}
 
 	@Override
-	public int ignore(String id, String title, String introduction) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int ignore(List<String> voices) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -82,18 +76,6 @@ public class AdIVServiceImpl implements AdMateService<AdIV> {
 
 	@Override
 	public int update(String id, String media_id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public AdIV selectById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int insert(AdIV ad) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -111,8 +93,21 @@ public class AdIVServiceImpl implements AdMateService<AdIV> {
 	}
 
 	@Override
-	public List<AdIV> selectOderByDesc(int limit) {
+	public AdIV selectById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int insert(AdIV ad) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int ignore(String id, String title, String introduction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -5,6 +5,8 @@
 	<resultMap id="adNewsType" type="org.jiira.pojo.ad.AdNewsType">
 		<id column="id" property="id" />
 		<id column="name" property="name" />
+		<id column="protect" property="protect" />
+		<id column="level" property="level" />
 	</resultMap>
 	<select id="selectNewsType" resultMap="adNewsType">
 		select * from sa_dt_news_type
@@ -16,8 +18,8 @@
 	<update id="updateNewsType">
 		update sa_dt_news_type set name=#{name} where id=#{id}
 	</update>
-	<!-- 删除类型 -->
+	<!-- 删除类型 有删除保护的 需要在外部做提示 -->
 	<delete id="deleteNewsType">
-		delete from sa_dt_news_type where id=#{id}
+		delete from sa_dt_news_type where id=#{id} and protect=0
 	</delete>
 </mapper>
