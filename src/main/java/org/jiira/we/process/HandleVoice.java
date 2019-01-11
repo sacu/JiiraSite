@@ -30,7 +30,6 @@ public class HandleVoice {
 		msg.setMsgType(CommandCollection.MESSAGE_TEXT);
 		if(r.getRet() == 0) {
 			String message = r.getAnswer();
-			logger.error("[原始]message:" + message);
 			int ret = -1;
 			String speech = null;
 			if(message.length() > 85) {//超过最大限制
@@ -51,7 +50,6 @@ public class HandleVoice {
 					speech = r2.getSpeech();
 				}
 			} else if(message.length() < 85) {//优图最大支持89
-				logger.error("[实际]message:" + message);
 				WeYTVoiceSay r2 = WeGlobal.getInstance().getYTVoiceSay(message);
 				if((ret = r2.getRet()) == 0) {
 					speech = r2.getVoice();
