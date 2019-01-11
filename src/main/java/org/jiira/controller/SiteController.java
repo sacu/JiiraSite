@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jiira.pojo.ad.WeUser;
 import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
+import org.jiira.we.DecriptUtil;
 import org.jiira.we.WeGlobal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +39,16 @@ public class SiteController {
 	public ModelAndView c(HttpServletRequest request, @RequestParam(required = false, name="redirect") String redirect, 
 			@RequestParam(name="code")String code, @RequestParam(name="state")String state) {
 		//获取用户信息
-		JSONObject json = WeGlobal.getInstance().getUserInfo(code);
+		JSONObject json = WeGlobal.getInstance().getUserInfo(code, request.getSession());
 		json.remove("privilege");//老报错 不要了
 		logger.error("调试code：" + code);
+		logger.error("json：" + json.toString());
 		//从前TX又有个BUG，就是URL只能传一个参数，所以只能把所有参数压缩到第一个里边
 		WeUser weUser = WeGlobal.getInstance().getClass(json.toString(), WeUser.class);
+		logger.error("openid：" + weUser.getOpenid());
 		WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
 		if(null == _weUser) {//用户不存在
+			weUser.setNickname(DecriptUtil.removeUnicode(weUser.getNickname()));
 			logger.error(JSONObject.fromObject(weUser).toString());
 			int rows = weUserService.insertWeUser(weUser);
 			if(rows != 0) {

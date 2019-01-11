@@ -8,7 +8,6 @@ import java.util.Map;
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.AdNewsType;
 import org.jiira.pojo.we.WeClearQuota;
-import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.cmenu.CMenuButton;
 import org.jiira.pojo.we.cmenu.CMenuClickButton;
@@ -36,8 +35,6 @@ public class CommandCollection {
 	public static final String AI_AppKey = "cWIPxtEqyc8mMQSW";
 
 	public static String AccessToken;
-
-	public static WeHAT HAT;// 网页密钥
 
 	public static int ENABLE = 1;// 可用
 	public static int DISABLE = 0;// 禁用

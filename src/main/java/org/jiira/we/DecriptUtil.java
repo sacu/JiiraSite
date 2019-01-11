@@ -280,4 +280,11 @@ public class DecriptUtil {
 	public static String create_timestamp() {
         return Long.toString(System.currentTimeMillis() / 1000);
     }
+	
+	/*
+     * unicode编码转中文
+     */
+    public static String removeUnicode(String data) {
+    	return data.replaceAll("[^\u4e00-\u9fa5]+","");
+    }
 }

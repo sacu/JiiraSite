@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.we.ai.image.WeImageSay;
 import org.jiira.pojo.we.ai.text.WeTextSay;
@@ -287,11 +289,12 @@ public class WeGlobal {
 		return json;
 	}
 	//需要 code
-	public JSONObject getUserInfo(String authCode) {
-		if(null == CommandCollection.HAT) {//需要获取HTML ACCESS TOKEN
-			getHAT(authCode);
+	public JSONObject getUserInfo(String authCode, HttpSession session) {
+		WeHAT hat = (WeHAT) session.getAttribute("hat");
+		if(null == hat) {//需要获取HTML ACCESS TOKEN
+			hat = getHAT(authCode);
+			session.setAttribute("hat", hat);
 		}
-		WeHAT hat = CommandCollection.HAT;
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
 		table.setURL(CommandCollection.USER_INFO);
 		table.addParams("access_token", hat.getAccess_token());
@@ -304,14 +307,18 @@ public class WeGlobal {
 			return json;
 		} else {
 			if (code == 42001 || code == 40001) {
-				refHAT(hat.getRefresh_token());//刷新HAT
-				return getUserInfo(authCode);//重新获取
+				hat = refHAT(hat.getRefresh_token());//刷新HAT
+				if(null == hat) {
+					hat = getHAT(authCode);
+				}
+				session.setAttribute("hat", hat);
+				return getUserInfo(authCode, session);//重新获取
 			}
 		}
 		return json;
 	}
 
-	public JSONObject getHAT(String authCode) {// 获取html 的 access token
+	public WeHAT getHAT(String authCode) {// 获取html 的 access token
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
 		table.setURL(CommandCollection.HTML_ACCESS_TOKEN);
 		table.addParams("appid", CommandCollection.AppID);
@@ -322,14 +329,14 @@ public class WeGlobal {
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		int code = WeCode.getInstance().check(json);
 		if(code == 0) {
-			CommandCollection.HAT = getClass(json.toString(), WeHAT.class);
+			return getClass(json.toString(), WeHAT.class);
 		} else {
-			logger.error("HAT error : " + json.has("errcode"));
+			logger.error("HAT error : " + json.getString("errcode"));
+			return getHAT(authCode);
 		}
-		return json;
 	}
 
-	public JSONObject refHAT(String refresh_token) {// 刷新授权码
+	public WeHAT refHAT(String refresh_token) {// 刷新授权码
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
 		table.setURL(CommandCollection.REF_ACCESS_TOKEN);
 		table.addParams("appid", CommandCollection.AppID);
@@ -339,11 +346,11 @@ public class WeGlobal {
 		JSONObject json = JSONObject.fromObject(html.getBody());
 		int code = WeCode.getInstance().check(json);
 		if(code == 0) {
-			CommandCollection.HAT = getClass(json.toString(), WeHAT.class);
+			return getClass(json.toString(), WeHAT.class);
 		} else {
-			logger.error("ref HAT error : " + json.has("errcode"));
+			logger.error("ref HAT error : " + json.getString("errcode"));
+			return null;
 		}
-		return json;
 	}
 	/**
 	 * 
