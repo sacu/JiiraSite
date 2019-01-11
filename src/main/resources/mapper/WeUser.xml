@@ -13,6 +13,7 @@
 		<id column="city" property="city" />
 		<id column="headimgurl" property="headimgurl" />
 		<id column="privilege" property="privilege" />
+		<id column="birthday" property="birthday" />
 		<id column="jointime" property="jointime" />
 	</resultMap>
 	<select id="selectWeUser" resultMap="weUser">
@@ -28,6 +29,9 @@
 	<delete id="deleteWeUser">
 		delete from sa_dt_user where openid=#{openid};
 	</delete>
+	<update id="updateWeUserBirthday">
+		update sa_dt_user set birthday=#{birthday} where openid=#{openid}
+	</update>
 	<update id="updateWeUserVouchers">
 		update sa_dt_user set vouchers=#{vouchers} where openid=#{openid}
 	</update>

@@ -50,6 +50,8 @@ public class SiteController {
 			if(rows != 0) {
 				weUser = weUserService.selectWeUser(weUser.getOpenid());
 			}
+		} else {
+			weUser = _weUser;
 		}
 		request.getSession().setAttribute("weUser", weUser);
 		request.getSession().setAttribute("code", code);//测试用

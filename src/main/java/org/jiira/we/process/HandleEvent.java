@@ -7,7 +7,6 @@ import org.jiira.pojo.ad.AdIV;
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.WeUser;
 import org.jiira.service.AdIVService;
-import org.jiira.service.AdMateService;
 import org.jiira.service.AdNewsService;
 import org.jiira.service.WeUserService;
 import org.jiira.service.impl.AdIVServiceImpl;
@@ -16,6 +15,8 @@ import org.jiira.utils.CommandCollection;
 import org.jiira.we.WeGlobal;
 import org.jiira.we.message.WeChatMessage;
 import org.jiira.we.message.WeChatNewsMessage;
+import org.jiira.we.url.SAHttpTable;
+import org.jiira.we.url.SAURLConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,33 +41,24 @@ public class HandleEvent {
 		 */
 		case CommandCollection.MESSAGE_EVENT_SUBSCRIBE: {//订阅消息
 			msg.setMsgType(CommandCollection.MESSAGE_TEXT);
-			msg.setContent("/:heart/:heart/:heart/:heart/:heart\n"
-					+ "您好，很高兴为您服务！\n无聊了可以找我聊天~我可是随时待命呦~\n"
-					+ "/:heart/:heart/:heart/:heart/:heart");
 			//这里要注意……调用函数进入到这里时！收发双方的身份已调换，所以现在要取收信方
 			String openid = msg.getToUserName();
+			String nickName = "";
 			if(!CommandCollection.ContainsOpenID(openid)) {//判断缓存是否存在
 				WeUserService weUserService = Application.getInstance().getBean(WeUserService.class);
 				WeUser weUser = weUserService.selectWeUser(openid);
 				if(null == weUser) {
-					JSONObject json = WeGlobal.getInstance().getUserInfoByOpenID(openid);
-					if(json.getInt("subscribe") != 0) {//获取成功,
-						weUser = new WeUser();
-						weUser.setOpenid(json.getString("openid"));
-						weUser.setNickname(json.getString("nickname"));
-						weUser.setSex(json.getInt("sex"));
-						weUser.setVouchers(0);
-						weUser.setLanguage(json.getString("language"));
-						weUser.setCountry(json.getString("country"));
-						weUser.setProvince(json.getString("province"));
-						weUser.setCity(json.getString("city"));
-						weUser.setHeadimgurl(json.getString("headimgurl"));
+					weUser = getUser(openid);
+					if(null != weUser) {
 						weUserService.insertWeUser(weUser);
-						logger.error("json : " + json.getString("nickname"));
 					}
 				}
+				nickName = "[" + weUser.getNickname() + "]";
 				CommandCollection.PutOpenID(openid);
 			}
+			msg.setContent("/:heart/:heart/:heart/:heart/:heart\n"
+					+ nickName + " 您好，很高兴为您服务！\n无聊了可以找我聊天~\n我可是随时待命呦~\n"
+					+ "/:heart/:heart/:heart/:heart/:heart");
 			break;
 		}
 		/**
@@ -78,6 +70,8 @@ public class HandleEvent {
 			String openid = msg.getToUserName();
 			if(CommandCollection.ContainsOpenID(openid)) {//判断缓存是否存在
 				CommandCollection.RemoveOpenID(openid);
+				WeUserService weUserService = Application.getInstance().getBean(WeUserService.class);
+				weUserService.deleteWeUser(openid);
 			}
 			break;
 		}
@@ -120,7 +114,37 @@ public class HandleEvent {
 			}
 			case CommandCollection.MENU_DIVINATION://每日一签
 				msg.setMsgType(CommandCollection.MESSAGE_TEXT);
-				msg.setContent("心情也算不错了吧!\r\n虽然有时会遇到失败,\r\n但切勿放弃啊!");
+				//这里要注意……调用函数进入到这里时！收发双方的身份已调换，所以现在要取收信方
+				String openid = msg.getToUserName();
+				WeUserService weUserService = Application.getInstance().getBean(WeUserService.class);
+				WeUser weUser = weUserService.selectWeUser(openid);
+				String birthday = "";
+				if(null == weUser) {
+					weUser = getUser(openid);
+					if(null != weUser) {
+						weUserService.insertWeUser(weUser);
+					}
+				} else {
+					birthday = weUser.getBirthday();
+				}
+				if(birthday.length() == CommandCollection.Birthday_Len) {
+					int month = Integer.valueOf(birthday.substring(4, 6));
+					int day = Integer.valueOf(birthday.substring(6, 8));
+					SAHttpTable table = new SAHttpTable();
+					table.setURL("https://www.meiguoshenpo.com/yunshi/" + CommandCollection.getConstellation(month, day));
+					table.setMethod("GET");
+					String info = SAURLConnection.getInstance().GetRequest(table).getBody();
+					try {
+						int begin = info.indexOf("\"zt\">");
+						begin = info.indexOf("</span>", begin);
+						info = info.substring(begin + 7, info.indexOf("</p>", begin));
+						msg.setContent("[每日一签]\t" + info.trim() + "\r\n[纯属娱乐,切勿较真儿呦~]");
+					} catch(Exception ex) {
+						msg.setContent("抱歉,服务器出了点小问题,请您稍后再试~");
+					}
+				} else {
+					msg.setContent("我还不知道您的生日呢！" + CommandCollection.Birthday_Info);
+				}
 				break;
 			default:
 				msg.setMsgType(CommandCollection.MESSAGE_TEXT);
@@ -135,7 +159,7 @@ public class HandleEvent {
 			break;
 		}
 		default:{//交给机器人处理
-			msg.setUseRobot(true);
+			msg.setUseTextSay(true);
 		}
 		}
 	}
@@ -151,5 +175,23 @@ public class HandleEvent {
 		}
 		}
 		return xml;
+	}
+	
+	private WeUser getUser(String openid) {
+		JSONObject json = WeGlobal.getInstance().getUserInfoByOpenID(openid);
+		WeUser weUser = null;
+		if(json.getInt("subscribe") != 0) {//获取成功,
+			weUser = new WeUser();
+			weUser.setOpenid(json.getString("openid"));
+			weUser.setNickname(json.getString("nickname"));
+			weUser.setSex(json.getInt("sex"));
+			weUser.setVouchers(0);
+			weUser.setLanguage(json.getString("language"));
+			weUser.setCountry(json.getString("country"));
+			weUser.setProvince(json.getString("province"));
+			weUser.setCity(json.getString("city"));
+			weUser.setHeadimgurl(json.getString("headimgurl"));
+		}
+		return weUser;
 	}
 }

@@ -193,8 +193,7 @@
 						getNIList();
 
 						//获取图文类型
-						function getNTList() {
-							var _adNTL = <%=CommandCollection.GetNewsTypeJson()%>
+						function getNTList(_adNTL) {
 							adType = {};
 							var type = $('#type');
 							var etype = $('#etype');
@@ -207,7 +206,7 @@
 								etype.append(option);
 							});
 						}
-						getNTList();
+						getNTList(<%=CommandCollection.GetNewsTypeJson()%>);
 						$("#add_type_btn").click(function(event) {//增
 							var url = ad + "addNewsType";
 							$.post({
@@ -216,7 +215,11 @@
 									name : $("#type_name").val()
 								},
 								success : function(result) {
-									getNTList();
+									if(result.hasOwnProperty("json")){
+										getNTList(result['json']);
+									} else {
+										alert("添加失败");
+									}
 								}
 							});
 							event.preventDefault(); // 阻止链接跳转
@@ -229,7 +232,11 @@
 									id : $("#etype").val()
 								},
 								success : function(result) {
-									getNTList();
+									if(result.hasOwnProperty("json")){
+										getNTList(result['json']);
+									} else {
+										alert("删除失败");
+									}
 								}
 							});
 							event.preventDefault(); // 阻止链接跳转
@@ -243,7 +250,11 @@
 									name : $("#type_name").val()
 								},
 								success : function(result) {
-									getNTList();
+									if(result.hasOwnProperty("json")){
+										getNTList(result['json']);
+									} else {
+										alert("修改失败");
+									}
 								}
 							});
 							event.preventDefault(); // 阻止链接跳转

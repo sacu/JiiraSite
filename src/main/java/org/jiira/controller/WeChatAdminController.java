@@ -15,8 +15,8 @@ import org.jiira.service.AdMateService;
 import org.jiira.service.AdNewsNameService;
 import org.jiira.service.AdNewsTypeService;
 import org.jiira.utils.CommandCollection;
-import org.jiira.we.SAHTML;
 import org.jiira.we.WeGlobal;
+import org.jiira.we.url.SAHTML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -104,10 +104,10 @@ public class WeChatAdminController {
 		ModelAndView mv = new ModelAndView();
 		int rows = adNewsTypeService.insertNewsType(name);
 		if(rows > 0) {
-			mv.addObject("添加成功");
 			//更新图文类型缓存
 			List<AdNewsType> list = adNewsTypeService.selectNewsType();
 			CommandCollection.SetNewsTypeList(list);
+			mv.addObject("json", CommandCollection.GetNewsTypeJson());
 		} else {
 			mv.addObject("添加失败");
 		}
@@ -119,10 +119,10 @@ public class WeChatAdminController {
 		ModelAndView mv = new ModelAndView();
 		int rows = adNewsTypeService.deleteNewsType(id);
 		if(rows > 0) {
-			mv.addObject("删除成功");
 			//更新图文类型缓存
 			List<AdNewsType> list = adNewsTypeService.selectNewsType();
 			CommandCollection.SetNewsTypeList(list);
+			mv.addObject("json", CommandCollection.GetNewsTypeJson());
 		} else {
 			mv.addObject("删除失败,权限不够");
 		}
@@ -134,7 +134,9 @@ public class WeChatAdminController {
 		ModelAndView mv = new ModelAndView();
 		int rows = adNewsTypeService.updateNewsType(id, name);
 		if(rows > 0) {
-			mv.addObject("修改成功");
+			List<AdNewsType> list = adNewsTypeService.selectNewsType();
+			CommandCollection.SetNewsTypeList(list);
+			mv.addObject("json", CommandCollection.GetNewsTypeJson());
 		} else {
 			mv.addObject("修改失败");
 		}
@@ -679,9 +681,7 @@ public class WeChatAdminController {
 				if(type.equals(CommandCollection.MESSAGE_NEWS)) {
 					row = as.delete(Integer.valueOf(nivv));
 				} else {
-					if(!type.equals(CommandCollection.MESSAGE_NEWS_IMAGE)) {
-						WeGlobal.getInstance().unload(path, nivv);
-					}
+					WeGlobal.getInstance().unload(path, nivv);
 					row = as.delete(nivv);
 				}
 			} else if((row = as.update(nivv, "")) == 0) {// 清空

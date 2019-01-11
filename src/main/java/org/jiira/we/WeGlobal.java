@@ -9,12 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jiira.pojo.ad.AdNews;
+import org.jiira.pojo.we.ai.image.WeImageSay;
+import org.jiira.pojo.we.ai.text.WeTextSay;
+import org.jiira.pojo.we.ai.voice.WeVoiceSay;
+import org.jiira.pojo.we.ai.voice.WeYTVoiceSay;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.mate.news.MateNews;
 import org.jiira.pojo.we.push.MessageByID;
-import org.jiira.pojo.we.robot.WeRobot;
 import org.jiira.utils.CommandCollection;
+import org.jiira.we.url.SAHTML;
+import org.jiira.we.url.SAHttpKVO;
+import org.jiira.we.url.SAHttpTable;
+import org.jiira.we.url.SAURLConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,23 +55,73 @@ public class WeGlobal {
 	 * @param message
 	 * @return
 	 */
-	public WeRobot getRobot(String message) {
+	public WeTextSay getTextSay(String text) {
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
+		table.setURL(CommandCollection.AI_Text_Say);
 		table.addParams("app_id", CommandCollection.AI_AppID);
-		table.addParams("nonce_str", String.valueOf(Math.round(Math.random() * 32768)));
-		table.addParams("question", message);
+		table.addParams("nonce_str", DecriptUtil.create_nonce_str());
+		table.addParams("question", text);
 		table.addParams("session", "123456");
-		table.addParams("time_stamp", String.valueOf(System.currentTimeMillis()).substring(0, 10));
+		table.addParams("time_stamp", DecriptUtil.create_timestamp());
 		ArrayList<SAHttpKVO> params = table.getParams();
 		table.addParams("sign", DecriptUtil.ReqSign(params));
 		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
-		JSONObject json = JSONObject.fromObject(html.getBody());
-		if (json.getInt("ret") == 0) {
-			return getClass(html.getBody(), WeRobot.class);
-		}
-		return null;
+		return getClass(html.getBody(), WeTextSay.class);
+	}
+	/**
+	 * 获取图片转对话
+	 * @return
+	 */
+	public WeImageSay getImageSay(String image, String session_id) {
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.AI_Image_Say);
+		table.addParams("app_id", CommandCollection.AI_AppID);
+		table.addParams("image", image);
+		table.addParams("session_id", session_id);
+		table.addParams("time_stamp", DecriptUtil.create_timestamp());
+		table.addParams("nonce_str", DecriptUtil.create_nonce_str());
+		ArrayList<SAHttpKVO> params = table.getParams();
+		table.addParams("sign", DecriptUtil.ReqSign(params));
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
+		return getClass(html.getBody(), WeImageSay.class);
+	}
+	/**
+	 * 获取语音转对话
+	 * @return
+	 */
+	public WeVoiceSay getVoiceSay(String text) {
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.AI_Voice_Say);
+		table.addParams("app_id", CommandCollection.AI_AppID);
+		table.addParams("time_stamp", DecriptUtil.create_timestamp());
+		table.addParams("nonce_str", DecriptUtil.create_nonce_str());
+		table.addParams("speaker", "7");//声音类型 1普通话男声 5静琪女声 6欢馨女声 7碧萱女声
+		table.addParams("format", "3");//声音格式 1PCM 2WAV 3MP3
+		table.addParams("volume", "10");//音量-10,10
+		table.addParams("speed", "100");//语速,默认100 50,200
+		table.addParams("text", text);//要合成的文本
+		table.addParams("aht", "0");//高音设定,默认0 -24,24
+		table.addParams("apc", "58");//改变语调,默认58 0,100
+		ArrayList<SAHttpKVO> params = table.getParams();
+		table.addParams("sign", DecriptUtil.ReqSign(params));
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
+		return getClass(html.getBody(), WeVoiceSay.class);
 	}
 
+	public WeYTVoiceSay getYTVoiceSay(String text) {
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.AI_YTVoice_Say);
+		table.addParams("app_id", CommandCollection.AI_AppID);
+		table.addParams("time_stamp", DecriptUtil.create_timestamp());
+		table.addParams("nonce_str", DecriptUtil.create_nonce_str());
+		table.addParams("speed", "0");//语速,默认0 -2,2
+		table.addParams("text", text);//要合成的文本
+		table.addParams("model_type", "0");//高音设定,默认0 0,2
+		ArrayList<SAHttpKVO> params = table.getParams();
+		table.addParams("sign", DecriptUtil.ReqSign(params));
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
+		return getClass(html.getBody(), WeYTVoiceSay.class);
+	}
 	public JSONObject createMenu() {
 		checkAccessToken();
 		SAHttpTable table = CommandCollection.GetHttpTable("POST");
@@ -381,6 +438,29 @@ public class WeGlobal {
 			if (code == 42001 || code == 40001) {
 				createAccessToken();
 				return addVideo(filePath, type, title, introduction);
+			}
+		}
+		return json;
+	}
+	
+	public JSONObject addTemp(String filePath, String type) {
+		File file = new File(filePath);
+		if (!file.exists() || !file.isFile()) {
+			logger.error("上传的文件不存在:" + filePath);
+			return null;
+		}
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("POST");
+		table.setURL(CommandCollection.MATE_TEMP + CommandCollection.AccessToken + "&type=" + type);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table, file, false);
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			return json;
+		} else {
+			if (code == 42001 || code == 40001) {
+				createAccessToken();
+				return addIV(filePath, type);
 			}
 		}
 		return json;

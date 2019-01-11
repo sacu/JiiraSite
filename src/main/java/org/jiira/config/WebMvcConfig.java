@@ -136,6 +136,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addViewControllers(ViewControllerRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addViewController("/").setViewName("login");
+		registry.addViewController("/MP_verify_csoWHdDH8SiGtt5f.txt").setViewName("MP_verify_csoWHdDH8SiGtt5f");
 		registry.addViewController("/ad").setViewName("ad/index");
 		registry.addViewController("/login").setViewName("login");
 		registry.addViewController("/register").setViewName("register");

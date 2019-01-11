@@ -1,4 +1,4 @@
-package org.jiira.we;
+package org.jiira.we.url;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -67,6 +67,9 @@ public class SAURLConnection {
 
 	// 处理http请求 requestUrl为请求地址 requestMethod请求方式，值为"GET"或"POST"
 	public SAHTML GetRequest(SAHttpTable options) {
+		return GetRequest(options, null);
+	}
+	public SAHTML GetRequest(SAHttpTable options, String charsetName) {
 		StringBuffer buffer = null;
 		SAHTML h = new SAHTML();
 		h.setCode(0);
@@ -109,7 +112,7 @@ public class SAURLConnection {
 			if (statusCode == HTML_SUCCESS) {
 				// 读取服务器端返回的内容
 				InputStream is = gconn.getInputStream();
-				InputStreamReader isr = new InputStreamReader(is, "utf-8");
+				InputStreamReader isr = new InputStreamReader(is, charsetName==null?"utf-8":charsetName);
 				BufferedReader br = new BufferedReader(isr);
 				buffer = new StringBuffer();
 				String line = null;

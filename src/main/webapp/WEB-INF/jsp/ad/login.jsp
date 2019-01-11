@@ -32,11 +32,11 @@
 		<table>
 			<tr>
 				<td>用户名</td>
-				<td><input type="text" id="userName" name="userName" value="sa" /></td>
+				<td><input type="text" id="userName" name="userName" value="" /></td>
 			</tr>
 			<tr>
 				<td>密码</td>
-				<td><input type="password" id="passWord" name="passWord" value="521haiqi" /></td>
+				<td><input type="password" id="passWord" name="passWord" value="" /></td>
 			</tr>
 			<tr>
 				<td></td>

@@ -8,6 +8,7 @@ import org.jiira.pojo.Login;
 import org.jiira.pojo.ad.AdUser;
 import org.jiira.service.AdUserService;
 import org.jiira.utils.CommandCollection;
+import org.jiira.we.DecriptUtil;
 import org.jiira.we.message.WeChatMessage;
 import org.jiira.we.process.HandleEvent;
 import org.slf4j.Logger;
@@ -123,7 +124,7 @@ public class AdminController {
 		WeChatMessage msg = new WeChatMessage();
 		msg.setToUserName("sa");
 		msg.setFromUserName("as");
-		msg.setCreateTime(123);
+		msg.setCreateTime(DecriptUtil.create_timestamp());
 		msg.setMsgType(CommandCollection.MESSAGE_EVENT);
 		msg.setEvent(CommandCollection.MESSAGE_EVENT_CLICK);
 		msg.setEventKey(CommandCollection.MENU_RECENT);

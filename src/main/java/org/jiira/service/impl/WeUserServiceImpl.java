@@ -24,6 +24,11 @@ public class WeUserServiceImpl implements WeUserService {
 	public List<String> selectAll(){
 		return weUserDao.selectAll();
 	}
+	@Override
+	public int updateWeUserBirthday(String openid, String birthday) {
+		// TODO Auto-generated method stub
+		return weUserDao.updateWeUserBirthday(openid, birthday);
+	}
 
 	@Override
 	public int insertWeUser(WeUser weUser) {
@@ -42,5 +47,4 @@ public class WeUserServiceImpl implements WeUserService {
 		// TODO Auto-generated method stub
 		return weUserDao.updateWeUserVouchers(openid, vouchers);
 	}
-	
 }

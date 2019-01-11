@@ -7,6 +7,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
+import java.util.Collections;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -17,13 +25,19 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.jiira.utils.CommandCollection;
+import org.jiira.we.collection.KVOComparator;
+import org.jiira.we.url.SAHttpKVO;
 
 public class DecriptUtil {
+	private static Encoder encode = Base64.getEncoder();
+	private static Decoder decode = Base64.getDecoder();
+
 	/**
 	 * 获取
 	 */
 	public static String ReqSign(ArrayList<SAHttpKVO> params) {
 		// 1. 字典升序排序(小数在前,因为参数不变,直接口算了)
+		Collections.sort(params, new KVOComparator());
 		// 2. 拼按URL键值对
 		String str = "";
 		SAHttpKVO kvo;
@@ -41,6 +55,38 @@ public class DecriptUtil {
 		// 4. MD5运算+转换大写，得到请求签名
 		return DecriptUtil.MD5(str).toUpperCase();
 	}
+
+	public static Map<String, String> Sign(String jsapi_ticket, String url) {
+		Map<String, String> ret = new HashMap<String, String>();
+		String nonce_str = create_nonce_str();
+		String timestamp = create_timestamp();
+		String string1;
+		String signature = "";
+
+		// 注意这里参数名必须全部小写，且必须有序
+		string1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonce_str + "&timestamp=" + timestamp + "&url=" + url;
+		System.out.println(string1);
+
+		try {
+			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+			crypt.reset();
+			crypt.update(string1.getBytes("UTF-8"));
+			signature = byteToHex(crypt.digest());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		ret.put("url", url);
+		ret.put("appId", CommandCollection.AppID);
+		ret.put("jsapi_ticket", jsapi_ticket);
+		ret.put("nonceStr", nonce_str);
+		ret.put("timestamp", timestamp);
+		ret.put("signature", signature);
+
+		return ret;
+	}
+
 	/**
 	 * @Comment SHA1实现
 	 * @Author Ron
@@ -198,24 +244,40 @@ public class DecriptUtil {
 	/**
 	 * BASE64解密
 	 *
-	 * @param key
+	 * @param data
 	 * @return
 	 * @throws Exception
 	 */
-	public static String decryptBASE64(String key) {
-
-		return "";
+	public static byte[] decodeBASE64(String data) {
+		return decode.decode(data);
 	}
 
 	/**
 	 * BASE64加密
 	 *
-	 * @param key
+	 * @param data
 	 * @return
 	 * @throws Exception
 	 */
-	public static String encryptBASE64(String key) {
-
-		return "";
+	public static String encodeBASE64(byte[] data) {
+		return encode.encodeToString(data);
 	}
+	
+	public static String byteToHex(final byte[] hash) {
+        Formatter formatter = new Formatter();
+        for (byte b : hash)
+        {
+            formatter.format("%02x", b);
+        }
+        String result = formatter.toString();
+        formatter.close();
+        return result;
+    }
+	public static String create_nonce_str() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+	public static String create_timestamp() {
+        return Long.toString(System.currentTimeMillis() / 1000);
+    }
 }

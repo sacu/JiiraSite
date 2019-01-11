@@ -125,6 +125,7 @@ CREATE TABLE `sa_dt_user` (
 	`city` varchar(32) not null COMMENT '市',
 	`headimgurl` varchar(300) not null COMMENT '头像地址',
 	`privilege` varchar(300) default "" COMMENT '特权(用,隔开)',
+	`birthday` varchar(10) default "" COMMENT '生日',
 	`jointime` timestamp default CURRENT_TIMESTAMP COMMENT '加入时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;

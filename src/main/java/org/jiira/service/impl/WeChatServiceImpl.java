@@ -12,13 +12,15 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.jiira.pojo.we.robot.WeRobot;
+import org.jiira.pojo.we.ai.text.WeTextSay;
 import org.jiira.service.WeChatService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.WeGlobal;
 import org.jiira.we.message.WeChatMessage;
 import org.jiira.we.process.HandleEvent;
+import org.jiira.we.process.HandleImage;
 import org.jiira.we.process.HandleText;
+import org.jiira.we.process.HandleVoice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -47,7 +49,7 @@ public class WeChatServiceImpl implements WeChatService {
 		
 		Element root = doc.getRootElement();
 		WeChatMessage msg = new WeChatMessage();
-		msg.setUseRobot(false);
+		msg.setUseTextSay(false);
 		Method echoMethod;
 		@SuppressWarnings("unchecked")
 		List<Element> list = root.elements();
@@ -81,27 +83,39 @@ public class WeChatServiceImpl implements WeChatService {
 		switch (msg.getMsgType()) {
 			case CommandCollection.MESSAGE_TEXT: {//文本消息
 				HandleText.getInstance().process(msg);
-				if(msg.getUseRobot()) {
-					WeRobot r = WeGlobal.getInstance().getRobot(msg.getContent());
+				if(msg.getUseTextSay()) {
+					WeTextSay r = WeGlobal.getInstance().getTextSay(msg.getContent());
 					if(null == r) {
-						msg.setContent("欧耶~出错喽~！");
+						msg.setContent("出错了……");
 					} else if(r.getRet() == 0) {//成功
 						msg.setContent(r.getAnswer());
+					} else if(r.getRet() == 16394){
+						msg.setContent("[" + msg.getContent() + "]是什么？额……我不知道诶~");
 					} else {
-						msg.setContent("没人点赞……今晚没有鸡腿儿吃了！");
+						msg.setContent("没人点赞……今晚没有鸡腿儿吃了！" + r.getRet());
 					}
 				}
 				break;
 			}
 			/**
-			 * 图片case CommandCollection.final String MESSAtGE_IMAGE:{}"image"; /** 图文消息
+			 * 图片"image";
 			 */
+			case CommandCollection.MESSAGE_IMAGE:{
+				HandleImage.getInstance().process(msg);
+				break;
+			}
+			 /**
+			  * 图文消息
+			  */
 			case CommandCollection.MESSAGE_NEWS: {
+				break;
 			}
 			/**
 			 * 语音消息
 			 */
 			case CommandCollection.MESSAGE_VOICE: {
+				HandleVoice.getInstance().process(msg);
+				break;
 			}
 			/**
 			 * 视频消息

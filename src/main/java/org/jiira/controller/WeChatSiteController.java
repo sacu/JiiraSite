@@ -20,7 +20,7 @@ import org.jiira.service.WeChatService;
 import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.DecriptUtil;
-import org.jiira.we.StrComparator;
+import org.jiira.we.collection.StrComparator;
 import org.jiira.we.message.WeChatMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

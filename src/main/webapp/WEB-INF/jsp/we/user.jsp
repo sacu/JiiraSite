@@ -14,12 +14,16 @@
 			<div class="div_content_value">${weUser.nickname}</div>
 		</div>
 		<div class="div_content_block">
+			<div class="div_content_key">生日:</div>
+			<div class="div_content_value">${weUser.birthday}</div>
+		</div>
+		<div class="div_content_block">
 			<div class="div_content_key">头像:</div>
 			<div class="div_content_value"><img src="${weUser.headimgurl}"/></div>
 		</div>
 		<div class="div_content_block">
 			<div class="div_content_key">性别:</div>
-			<div class="div_content_value">${weUser.sex}</div>
+			<div class="div_content_value">${weUser.sex==1?"男":"女"}</div>
 		</div>
 		<div class="div_content_block">
 			<div class="div_content_key">代金券:</div>

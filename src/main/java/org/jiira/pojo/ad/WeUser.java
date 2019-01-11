@@ -11,6 +11,7 @@ public class WeUser {
 	private String city;//varchar(32) not null COMMENT '市',
 	private String headimgurl;//varchar(300) not null COMMENT '头像地址',
 	private String privilege;//varchar(300) not null COMMENT '特权(用,隔开)',
+	private String birthday;//出生日期
 	private String jointime;//timestamp default CURRENT_TIMESTAMP COMMENT '加入时间'
 	public String getOpenid() {
 		return openid;
@@ -71,6 +72,12 @@ public class WeUser {
 	}
 	public void setPrivilege(String privilege) {
 		this.privilege = privilege;
+	}
+	public String getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 	public String getJointime() {
 		return jointime;

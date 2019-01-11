@@ -1,4 +1,4 @@
-package org.jiira.we;
+package org.jiira.we.url;
 
 /**
  * @author sacu

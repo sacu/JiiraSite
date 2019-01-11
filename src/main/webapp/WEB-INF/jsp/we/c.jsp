@@ -24,7 +24,6 @@
 	<!--用来定义主体中的头-->
 	<article>
 		<div style="height: 48px; width: 100%; float: left;"></div>
-		code${code}
 		<div id="content">
 			<jsp:include page="${page}.jsp"></jsp:include>
 		</div>

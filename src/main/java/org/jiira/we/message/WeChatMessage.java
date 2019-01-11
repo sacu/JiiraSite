@@ -1,5 +1,7 @@
 package org.jiira.we.message;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 
 public class WeChatMessage {
@@ -8,18 +10,20 @@ public class WeChatMessage {
 	 */
 	private String ToUserName;//开发者微信号
 	private String FromUserName;//发送方帐号（一个OpenID）
-	private long CreateTime;//消息创建时间 （整型）
+	private String CreateTime;//消息创建时间 （整型）
 	private String MsgType;//消息类型
 	private String MsgId;//消息id，64位整型
 	
-	//普通消息类通用
-	private String MediaId;//图片消息媒体id，可以调用多媒体文件下载接口拉取数据。
 	//文字消息
 	private String Content;//内容
 	//图像
 	private String PicUrl;//图片链接（由系统生成
 	//语音消息
 	private String Format;//语音格式amr,speex
+	private WeChatVoiceMessage Voice;//mediaid
+	
+	//语音识别
+	private String Recognition;//语音识别的转换文字
 	//音乐
 	private WeChatMusicMessage Music;
 	//图文消息
@@ -44,7 +48,7 @@ public class WeChatMessage {
 	private String Latitude;//地理位置纬度
 	private String Longitude;//地理位置经度
 	private String Precision;//地理位置精度
-	private boolean useRobot;
+	private boolean useTextSay;
 	
 	public String getToUserName() {
 		return ToUserName;
@@ -62,14 +66,11 @@ public class WeChatMessage {
 		FromUserName = fromUserName;
 	}
 
-	public long getCreateTime() {
+	public String getCreateTime() {
 		return CreateTime;
 	}
 
 	public void setCreateTime(String createTime) {
-		CreateTime = Long.valueOf(createTime);
-	}
-	public void setCreateTime(long createTime) {
 		CreateTime = createTime;
 	}
 
@@ -130,20 +131,12 @@ public class WeChatMessage {
 		Music = music;
 	}
 
-	public boolean getUseRobot() {
-		return useRobot;
+	public boolean getUseTextSay() {
+		return useTextSay;
 	}
 
-	public void setUseRobot(boolean useRobot) {
-		this.useRobot = useRobot;
-	}
-	
-	public String getMediaId() {
-		return MediaId;
-	}
-
-	public void setMediaId(String mediaId) {
-		MediaId = mediaId;
+	public void setUseTextSay(boolean useTextSay) {
+		this.useTextSay = useTextSay;
 	}
 
 	public String getPicUrl() {
@@ -153,6 +146,14 @@ public class WeChatMessage {
 	public void setPicUrl(String picUrl) {
 		PicUrl = picUrl;
 	}
+	
+	public WeChatVoiceMessage getVoice() {
+		return Voice;
+	}
+
+	public void setVoice(WeChatVoiceMessage voice) {
+		Voice = voice;
+	}
 
 	public String getFormat() {
 		return Format;
@@ -160,6 +161,14 @@ public class WeChatMessage {
 
 	public void setFormat(String format) {
 		Format = format;
+	}
+
+	public String getRecognition() {
+		return Recognition;
+	}
+
+	public void setRecognition(String recognition) {
+		Recognition = recognition;
 	}
 
 	public String getLocation_X() {
@@ -263,7 +272,6 @@ public class WeChatMessage {
 		logger.error("##############################################");
 		logger.error("Content : " + Content);//文字消息
 		logger.error("##############################################");
-		logger.error("MediaId : " + MediaId);//通用MediaId
 		logger.error("PicUrl : " + PicUrl);//图像
 		logger.error("Format : " + Format);//语音消息
 		logger.error("##############################################");
