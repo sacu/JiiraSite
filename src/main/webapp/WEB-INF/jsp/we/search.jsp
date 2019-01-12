@@ -7,7 +7,7 @@
 	<title></title>
 	<script>
 	$(document).ready(function() {
-		$("#search").click(function(event) {
+		$("#search").click(function(event) {//搜索
 			$.post({
 				url : "getNewsSearch",
 				data : {
@@ -17,16 +17,16 @@
 				success : function(result) {
 					var adNews = result['adNews'];
 					var list_html = "";
-					var u = "ic?redirect=news*news_id=";
+					var u = "news*news_id=";
 					$.each(adNews, function(idx, i) {
-						list_html += "<div class='div_we_list_content'><a href='"+u+i['id']+"'>"+i['title']+"</a></div><br>";
+						list_html += "<div class='div_we_list_content'><a href='' v='"+u+i['id']+"'>"+i['title']+"</a></div><br>";
 					});
 					$('#we_search_content').html(list_html);
 				}
 			});
 			event.preventDefault(); // 阻止链接跳转
 		})
-		function getSearchType() {
+		function getSearchType() {//获取搜索类型
 			var adType = <%=CommandCollection.GetNewsTypeJson()%>
 			var type = $('#search_type');
 			type.empty();
@@ -36,6 +36,23 @@
 			});
 		}
 		getSearchType();
+		
+
+		$("#we_search_content").click(function(event) {
+			var target = $(event.target);
+			if (target.prop("tagName").toLowerCase() == "a") {
+				$.post({
+					url : "ic",
+					data : {redirect:target.attr("v")},
+					//成功后的方法
+					success : function(result) {
+						$('#content').empty()
+						$('#content').html(result)
+					}
+				});
+				event.preventDefault();  // 阻止链接跳转
+			}
+		});
 	})
 	</script>
 </head>

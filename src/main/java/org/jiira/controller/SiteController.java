@@ -39,12 +39,11 @@ public class SiteController {
 	@RequestMapping("/c")
 	public ModelAndView c(HttpServletRequest request, @RequestParam(required = false, name="redirect") String redirect, 
 			@RequestParam(name="code")String code, @RequestParam(name="state")String state) {
+		ModelAndView mv = new ModelAndView();
 		//获取用户信息
 		JSONObject json = WeGlobal.getInstance().getUserInfo(code, request.getSession());
 		if(null == json) {
-			ModelAndView mv = new ModelAndView();
-			mv.addObject("访问错误");
-			mv.setView(new MappingJackson2JsonView());
+			mv.setViewName("we/error");
 			return mv;
 		}
 		json.remove("privilege");//老报错 不要了
@@ -66,14 +65,18 @@ public class SiteController {
 		}
 		request.getSession().setAttribute("weUser", weUser);
 		request.getSession().setAttribute("code", code);//测试用
-		return jump(request, redirect);
+		jump(request, redirect);
+		mv.setViewName("we/c");//去微信页
+		return mv;
 	}
 	@RequestMapping("/ic")
 	public ModelAndView ic(HttpServletRequest request, String redirect) {
-		return jump(request, redirect);
-	}
-	private ModelAndView jump(HttpServletRequest request, String redirect) {
 		ModelAndView mv = new ModelAndView();
+		jump(request, redirect);
+		mv.setViewName("we/" + request.getAttribute("page"));//返回页面代码信息
+		return mv;
+	}
+	private void jump(HttpServletRequest request, String redirect) {
 		String[] args = redirect.split("\\*");
 		String[] group;
 		request.setAttribute("page", args[0]);//写入index执行页面规则
@@ -81,8 +84,6 @@ public class SiteController {
 			group = args[i].split("=");
 			request.setAttribute(group[0], group[1]);
 		}
-		mv.setViewName("we/c");//去微信页
-		return mv;
 	}
 
 	@RequestMapping("/error")
