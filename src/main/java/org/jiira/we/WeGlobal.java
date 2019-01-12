@@ -293,6 +293,9 @@ public class WeGlobal {
 		WeHAT hat = (WeHAT) session.getAttribute("hat");
 		if(null == hat) {//需要获取HTML ACCESS TOKEN
 			hat = getHAT(authCode);
+			if(null == hat) {
+				return null;
+			}
 			session.setAttribute("hat", hat);
 		}
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
@@ -332,7 +335,7 @@ public class WeGlobal {
 			return getClass(json.toString(), WeHAT.class);
 		} else {
 			logger.error("HAT error : " + json.getString("errcode"));
-			return getHAT(authCode);
+			return null;
 		}
 	}
 

@@ -3,6 +3,7 @@ package org.jiira.config;
 import java.util.List;
 
 import org.jiira.interceptor.AdInterceptor;
+import org.jiira.interceptor.WeInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -98,6 +99,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addInterceptor(new AdInterceptor()).addPathPatterns("/ad/*");
+		registry.addInterceptor(new WeInterceptor()).addPathPatterns("/we/*");
 	}
 
 	@Override
@@ -135,10 +137,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		// TODO Auto-generated method stub
-		registry.addViewController("/").setViewName("login");
 		registry.addViewController("/MP_verify_csoWHdDH8SiGtt5f.txt").setViewName("MP_verify_csoWHdDH8SiGtt5f");
 		registry.addViewController("/ad").setViewName("ad/index");
-		registry.addViewController("/login").setViewName("login");
-		registry.addViewController("/register").setViewName("register");
+		registry.addViewController("/we").setViewName("we/error");
+		registry.addViewController("/ad/").setViewName("ad/index");
+		registry.addViewController("/we/").setViewName("we/error");
 	}
 }

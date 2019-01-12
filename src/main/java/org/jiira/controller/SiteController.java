@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import net.sf.json.JSONObject;
 
@@ -40,6 +41,12 @@ public class SiteController {
 			@RequestParam(name="code")String code, @RequestParam(name="state")String state) {
 		//获取用户信息
 		JSONObject json = WeGlobal.getInstance().getUserInfo(code, request.getSession());
+		if(null == json) {
+			ModelAndView mv = new ModelAndView();
+			mv.addObject("访问错误");
+			mv.setView(new MappingJackson2JsonView());
+			return mv;
+		}
 		json.remove("privilege");//老报错 不要了
 		logger.error("调试code：" + code);
 		logger.error("json：" + json.toString());
@@ -77,6 +84,14 @@ public class SiteController {
 		mv.setViewName("we/c");//去微信页
 		return mv;
 	}
+
+	@RequestMapping("/error")
+	public ModelAndView error(HttpServletRequest request, String redirect) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("we/error");//去微信页
+		return mv;
+	}
+	
 	/**
 	 * 通过微信授权跳转到地址
 	 * @param url 要跳转的地址
