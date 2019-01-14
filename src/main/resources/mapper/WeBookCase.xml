@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.WeBookCaseDao">
+	<resultMap id="weBookCase" type="org.jiira.pojo.ad.WeBookCase">
+		<id column="openid" property="openid" />
+		<id column="newsid" property="newsid" />
+	</resultMap>
+	<select id="selectWeBookCase" resultMap="weBookCase">
+		select * from sa_dt_bookcase where openid=#{openid};
+	</select>
+	<insert id="insertWeBookCase">
+		insert into sa_dt_bookcase(openid, newsid)
+			values(#{openid}, #{newsid})
+	</insert>
+</mapper>

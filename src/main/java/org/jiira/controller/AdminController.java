@@ -33,6 +33,7 @@ public class AdminController {
 
 	@Autowired
 	private AdUserService adUserService = null;
+	
 	/**
 	 * ad index
 	 */
@@ -61,7 +62,8 @@ public class AdminController {
 	    }
 //	    redirect//request失效
 //	    forward//路径会改变……js css丢失
-		mv.setViewName("redirect:/ad");
+//	    redirect:/ad //这里设置会影响 相对路径
+		mv.setViewName("ad/index");
 		return mv;
 	}
 	/**
@@ -69,7 +71,7 @@ public class AdminController {
 	 */
 	@RequestMapping("/flip")
 	public ModelAndView doFlip(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/" + page);
+	    mv.setViewName("ad/" + page);
 	    return mv;
 	}
 	/**
@@ -80,7 +82,7 @@ public class AdminController {
 	 */
 	@RequestMapping("/setting_flip")
 	public ModelAndView doSettingFlip(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_" + page);
+	    mv.setViewName("ad/setting_" + page);
 	    return mv;
 	}
 	/**
@@ -91,32 +93,32 @@ public class AdminController {
 	 */
 	@RequestMapping("/setting_voice")
 	public ModelAndView dotest(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_voice");
+	    mv.setViewName("ad/setting_voice");
 	    return mv;
 	}
 	@RequestMapping("/setting_image")
 	public ModelAndView dotest2(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_image");
+	    mv.setViewName("ad/setting_image");
 	    return mv;
 	}
 	@RequestMapping("/setting_thumb")
 	public ModelAndView dotest3(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_thumb");
+	    mv.setViewName("ad/setting_thumb");
 	    return mv;
 	}
 	@RequestMapping("/setting_video")
 	public ModelAndView dotest4(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_video");
+	    mv.setViewName("ad/setting_video");
 	    return mv;
 	}
 	@RequestMapping("/setting_news")
 	public ModelAndView dotest5(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_news");
+	    mv.setViewName("ad/setting_news");
 	    return mv;
 	}
 	@RequestMapping("/setting_news_image")
 	public ModelAndView dotest6(String page, ModelAndView mv) {
-	    mv.setViewName("/ad/setting_news_image");
+	    mv.setViewName("ad/setting_news_image");
 	    return mv;
 	}
 	@RequestMapping("/test")
@@ -129,7 +131,7 @@ public class AdminController {
 		msg.setEvent(CommandCollection.MESSAGE_EVENT_CLICK);
 		msg.setEventKey(CommandCollection.MENU_RECENT);
 		HandleEvent.getInstance().process(msg);
-	    mv.setViewName("/ad/test");
+	    mv.setViewName("ad/test");
 	    return mv;
 	}
 	/**
@@ -143,7 +145,7 @@ public class AdminController {
 		session.removeAttribute("adUser");//session也要删除
 		map.remove("page");//map 需要删除 不然session里还有
 		session.removeAttribute("page");//session也要删除
-	    mv.setViewName("redirect:/ad");
+	    mv.setViewName("ad/index");
 	    return mv;
 	}
 }

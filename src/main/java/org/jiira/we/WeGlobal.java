@@ -18,6 +18,8 @@ import org.jiira.pojo.we.ai.voice.WeYTVoiceSay;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.mate.news.MateNews;
+import org.jiira.pojo.we.pay.WePay;
+import org.jiira.pojo.we.pay.WePayXML;
 import org.jiira.pojo.we.push.MessageByID;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.url.SAHTML;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thoughtworks.xstream.XStream;
 
 import net.sf.json.JSONObject;
 
@@ -51,6 +54,43 @@ public class WeGlobal {
 		mapper = new ObjectMapper();
 	}
 
+	/**
+	 * 微信支付
+	 */
+	public WePay getWePay(String ip, int money) {
+		SAHttpTable table = CommandCollection.GetHttpTable("GET");
+		table.setURL(CommandCollection.WE_PAY);
+		ArrayList<SAHttpKVO> params = new ArrayList<>();
+		WePayXML wepayxml = new WePayXML();
+		wepayxml.setAppid(CommandCollection.AppID);
+		params.add(new SAHttpKVO("appid", wepayxml.getAppid()));
+		wepayxml.setMch_id(CommandCollection.MCHID);
+		params.add(new SAHttpKVO("mch_id", wepayxml.getMch_id()));
+		wepayxml.setNonce_str(DecriptUtil.create_nonce_str());
+		params.add(new SAHttpKVO("nonce_str", wepayxml.getNonce_str()));
+		wepayxml.setBody("代金券充值");
+		params.add(new SAHttpKVO("body", wepayxml.getBody()));//描述
+		wepayxml.setOut_trade_no("20110101");
+		params.add(new SAHttpKVO("out_trade_no", wepayxml.getOut_trade_no()));//订单号
+		wepayxml.setTotal_fee(money);
+		params.add(new SAHttpKVO("total_fee", String.valueOf(wepayxml.getTotal_fee())));//金额
+		wepayxml.setSpbill_create_ip(ip);
+		params.add(new SAHttpKVO("spbill_create_ip", wepayxml.getSpbill_create_ip()));//看看request 能不能获取到了
+		wepayxml.setNotify_url(CommandCollection.CALL_PAY);
+		params.add(new SAHttpKVO("notify_url", wepayxml.getNotify_url()));
+		wepayxml.setTrade_type("JSAPI");
+		params.add(new SAHttpKVO("trade_type", wepayxml.getTrade_type()));
+		wepayxml.setSign(DecriptUtil.ReqSign(params));//最后计算
+		
+		XStream xstream = new XStream();
+		xstream.alias("xml", wepayxml.getClass());
+		String xml = xstream.toXML(wepayxml).replace("__", "_");
+		table.setJson(xml);
+		table.setUseJson(true);
+		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
+		WePay wePay = getClass(html.getBody(), WePay.class);
+		return wePay;
+	}
 	/**
 	 * 获取机器人对话
 	 * 

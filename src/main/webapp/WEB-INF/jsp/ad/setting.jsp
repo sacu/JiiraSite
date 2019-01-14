@@ -9,25 +9,32 @@
 <title>setting</title>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var onPage2 = $("#image");
 		$("#image").click(setting_flip);
 		$("#voice").click(setting_flip);
 		$("#video").click(setting_flip);
 		$("#thumb").click(setting_flip);
 		$("#news_image").click(setting_flip);
 		$("#news").click(setting_flip);
+		function setting_flip(event) {
+			var id = $(this).attr("id");
+			$.post({
+				url : "setting_flip",
+				data : {page:id},
+				//成功后的方法
+				success : function(result) {
+					onPage2.addClass("aunselect");
+					onPage2.removeClass("aselect");
+					onPage2 = $("#" + id);
+					onPage2.removeClass("aunselect");
+					onPage2.addClass("aselect");
+					$('#setting').empty();
+					$('#setting').html(result);
+				}
+			});
+			event.preventDefault();  // 阻止链接跳转
+		}
 	});
-	function setting_flip(event) {
-		$.post({
-			url : "ad/setting_flip",
-			data : {page:$(this).attr("id")},
-			//成功后的方法
-			success : function(result) {
-				$('#setting').empty();
-				$('#setting').html(result);
-			}
-		});
-		event.preventDefault();  // 阻止链接跳转
-	}
 </script>
 </head>
 <body>
@@ -35,12 +42,12 @@
 	<header id="header2">
 		<nav id="nav2">
 			<!--表示页面的导航，可以通过导航连接到网站的其他页面，或者当前页面的其它部分。-->
-			<li class="li1"><a id="image" href="">图片</a></li>
-			<li class="li1"><a id="voice" href="">语音</a></li>
-			<li class="li1"><a id="video" href="">视频</a></li>
-			<li class="li1"><a id="thumb" href="">缩略图</a></li>
-			<li class="li1"><a id="news_image" href="">图文内图片</a></li>
-			<li class="li1"><a id="news" href="">图文</a></li>
+			<li class="li1"><a class="aselect" id="image" href="">图片</a></li>
+			<li class="li1"><a class="aunselect" id="voice" href="">语音</a></li>
+			<li class="li1"><a class="aunselect" id="video" href="">视频</a></li>
+			<li class="li1"><a class="aunselect" id="thumb" href="">缩略图</a></li>
+			<li class="li1"><a class="aunselect" id="news_image" href="">图文内图片</a></li>
+			<li class="li1"><a class="aunselect" id="news" href="">图文</a></li>
 		</nav>
 	</header>
 	<article>

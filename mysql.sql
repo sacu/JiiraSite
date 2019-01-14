@@ -119,6 +119,7 @@ CREATE TABLE `sa_dt_user` (
 	`nickname` varchar(32) not null COMMENT '昵称',
 	`sex` TINYINT(1) COMMENT '0女1男2保密',
 	`vouchers` int not null COMMENT '代金券',
+	`autopay` TINYINT(1) COMMENT '0手动1自动 支付',
 	`language` varchar(20) COMMENT '语言',
 	`country` varchar(32) not null COMMENT '国家',
 	`province` varchar(32) not null COMMENT '省',

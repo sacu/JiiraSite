@@ -99,7 +99,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addInterceptor(new AdInterceptor()).addPathPatterns("/ad/*");
-		registry.addInterceptor(new WeInterceptor()).addPathPatterns("/we/*");
+//		registry.addInterceptor(new WeInterceptor()).addPathPatterns("/we/*");
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		// TODO Auto-generated method stub
 		registry.addResourceHandler("/javascript/**").addResourceLocations("/javascript/");
 		registry.addResourceHandler("/style/**").addResourceLocations("/style/");
-		registry.addResourceHandler("/music/**").addResourceLocations("/music/");
+		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
 	}
 
 	@Override
@@ -138,9 +138,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addViewControllers(ViewControllerRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addViewController("/MP_verify_csoWHdDH8SiGtt5f.txt").setViewName("MP_verify_csoWHdDH8SiGtt5f");
-		registry.addViewController("/ad").setViewName("ad/index");
-		registry.addViewController("/we").setViewName("we/error");
-		registry.addViewController("/ad/").setViewName("ad/index");
-		registry.addViewController("/we/").setViewName("we/error");
 	}
 }

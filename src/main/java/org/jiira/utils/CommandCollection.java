@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.AdNewsType;
 import org.jiira.pojo.we.WeClearQuota;
@@ -24,6 +26,8 @@ import net.sf.json.JSONArray;
 
 public class CommandCollection {
 	public static final String Token = "sacu";
+	//商户号
+	public static final String MCHID = "1523670331";
 	// 正式
 	public static final String AppID = "wxbe33419389062baf";
 	public static final String Appsecret = "9825b2ee097c860161004a6f12bc38a7";
@@ -36,6 +40,8 @@ public class CommandCollection {
 
 	public static String AccessToken;
 
+	public static int BOOK_TYPE = 2;
+	
 	public static int ENABLE = 1;// 可用
 	public static int DISABLE = 0;// 禁用
 	public static int LEVEL_NONE = 0;// 无限制
@@ -45,6 +51,7 @@ public class CommandCollection {
 	private static List<AdNewsType> NEWS_TYPE_LIST;
 	private static JSONArray NEWS_TYPE_JSON;
 
+	public static int AUTO_PAY = 1;//自动支付
 	// 运势
 	public static final String EveryDay = "https://www.meiguoshenpo.com/yunshi/";
 	public static final String ED_Aries = "baiyang/";// 白羊
@@ -138,6 +145,10 @@ public class CommandCollection {
 	public static final String AI_Image_Say = "https://api.ai.qq.com/fcgi-bin/vision/vision_imgtotext";//图片回答文字
 	public static final String AI_Voice_Say = "https://api.ai.qq.com/fcgi-bin/aai/aai_tts";//文字转语音
 	public static final String AI_YTVoice_Say = "https://api.ai.qq.com/fcgi-bin/aai/aai_tta";//优图文字转语音
+	//支付
+	public static final String WE_PAY = "https://api.mch.weixin.qq.com/pay/unifiedorder";//支付
+	public static final String CALL_PAY = "http://wx.jiira.com/we/callpay";//支付回调地址
+	public static final String SUCCESS = "SUCCESS";
 	
 	////////////// 真TM坑到家了！！！！触发类型！！！必须小写！！！！！不然他竟会报个{"errcode":65318,"errmsg":"must
 	////////////// use utf-8 charset hint: [bKu2cA00243125]"}
@@ -335,5 +346,25 @@ public class CommandCollection {
 		} else {// if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) {
 			return ED_Capricorn;
 		}
+	}
+	
+	public static String getIPByRequest(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");  
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+			ip = request.getHeader("Proxy-Client-IP");  
+		}  
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+			ip = request.getHeader("WL-Proxy-Client-IP");  
+		}  
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+			ip = request.getHeader("HTTP_CLIENT_IP");  
+		}  
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+			ip = request.getHeader("HTTP_X_FORWARDED_FOR");  
+		}  
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+			ip = request.getRemoteAddr();  
+		}
+		return ip;
 	}
 }

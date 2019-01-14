@@ -10,14 +10,15 @@
 <meta name="viewport"
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>极光互娱</title>
-<script src="https://code.jquery.com/jquery-3.2.0.js"></script>
 <link rel="stylesheet" href="../style/test1.css" />
-<link rel="stylesheet" href="../style/ad.css" />
+<link rel="stylesheet" href="../style/we.css" />
+<script type="text/javascript" src="../javascript/jquery-3.2.0.js"></script>
 <script type="text/javascript" src="../javascript/ad.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#welcome").click(flip);
-		$("#setting").click(flip);
+		var onPage2 = $("#index");
+		$("#index").click(flip);
+		$("#list").click(flip);
 		$("#search").click(flip);
 		$("#user").click(flip);
 		function flip(event) {
@@ -31,6 +32,11 @@
 				data : {redirect:page},
 				//成功后的方法
 				success : function(result) {
+					onPage2.addClass("aunselect");
+					onPage2.removeClass("aselect");
+					onPage2 = $("#" + page);
+					onPage2.removeClass("aunselect");
+					onPage2.addClass("aselect");
 					$('#content').empty()
 					$('#content').html(result)
 				}
@@ -55,10 +61,10 @@
 	<footer>
 		<nav id="nav1">
 			<!--表示页面的导航，可以通过导航连接到网站的其他页面，或者当前页面的其它部分。-->
-			<li class="li1"><a id="welcome" href="">首页</a></li>
-			<li class="li1"><a id="list" href="">往期回顾</a></li>
-			<li class="li1"><a id="search" href="">搜索</a></li>
-			<li class="li1"><a id="user" href="">我的</a></li>
+			<li class="li1"><a class="aselect" id=index href="">首页</a></li>
+			<li class="li1"><a class="aunselect" id="list" href="">往期回顾</a></li>
+			<li class="li1"><a class="aunselect" id="search" href="">搜索</a></li>
+			<li class="li1"><a class="aunselect" id="user" href="">我的</a></li>
 		</nav>
 	</footer>
 </body>

@@ -7,6 +7,7 @@
 		<id column="nickname" property="nickname" />
 		<id column="sex" property="sex" />
 		<id column="vouchers" property="vouchers" />
+		<id column="autopay" property="autopay" />
 		<id column="language" property="language" />
 		<id column="country" property="country" />
 		<id column="province" property="province" />
@@ -34,5 +35,8 @@
 	</update>
 	<update id="updateWeUserVouchers">
 		update sa_dt_user set vouchers=#{vouchers} where openid=#{openid}
+	</update>
+	<update id="updateWeUserAutoPay">
+		update sa_dt_user set autopay=#{autopay} where openid=#{openid}
 	</update>
 </mapper>

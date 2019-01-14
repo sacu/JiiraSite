@@ -12,4 +12,5 @@ public interface WeUserService {
 	int deleteWeUser(String openid);
 	int updateWeUserBirthday(@Param("openid")String openid, @Param("birthday")String birthday);
 	int updateWeUserVouchers(String openid, int vouchers);
+	int updateWeUserAutoPay(String openid, int autopay);
 }

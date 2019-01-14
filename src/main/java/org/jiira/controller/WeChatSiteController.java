@@ -16,6 +16,7 @@ import org.jiira.pojo.we.WeToken;
 import org.jiira.service.AdIVService;
 import org.jiira.service.AdMateService;
 import org.jiira.service.AdNewsService;
+import org.jiira.service.WeBookCaseService;
 import org.jiira.service.WeChatService;
 import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
@@ -51,6 +52,8 @@ public class WeChatSiteController {
 	private AdMateService<AdIV> adIVService = null;
 	@Autowired
 	private WeUserService weUserService = null;
+	@Autowired
+	private WeBookCaseService weBookCaseService = null;
 	
 	/**
 	 * 微信token验证
@@ -132,31 +135,54 @@ public class WeChatSiteController {
 	/**
 	 * 获取新闻
 	 * @param response
+	 * autopay 是页面判断是否是支付操作的
 	 */
 	@RequestMapping(value="/getNews")
-	public ModelAndView getNews(@RequestParam(name="news_id") int news_id, 
-			@RequestParam(name="openid") String openid) {
+	public ModelAndView getNews(HttpServletRequest request, @RequestParam(name="news_id") int news_id, 
+			@RequestParam(name="openid") String openid, @RequestParam(name="autopay")boolean autopay,
+			@RequestParam(name="autopay")boolean sautopay, @RequestParam(name="isdir")boolean isdir) {
 		ModelAndView mv = new ModelAndView();
+		WeUser weUser = (WeUser) request.getSession().getAttribute("weUser");
+		boolean consume = true;
+		if(null == weUser) {
+			weUser = weUserService.selectWeUser(openid);
+		}
 		AdNews adNews = adNewsService.selectById(news_id);
-		boolean consume = false;
-		if(adNews.getConsume() > 0) {
-			WeUser weUser = weUserService.selectWeUser(openid);
-			if(weUser.getVouchers() >= adNews.getConsume()) {
-				consume = weUserService.updateWeUserVouchers(openid, weUser.getVouchers() - adNews.getConsume()) > 0;
+		if(adNews.getConsume() > 0) {//是否需要花钱
+			if(weBookCaseService.selectWeBookCase(openid) == null) {//是否未支付
+				//如果autopay==true 表示该条是支付操作
+				if(autopay || weUser.getAutopay() == CommandCollection.AUTO_PAY) {//是否开通自动支付
+					if(weUser.getVouchers() >= adNews.getConsume()) {//是否足够支付
+						consume = weUserService.updateWeUserVouchers(openid, weUser.getVouchers() - adNews.getConsume()) > 0;//支付
+					} else {//显示充值页面
+						mv.addObject("check", 1);
+						consume = false;
+					}
+				} else {//显示支付页面
+					mv.addObject("check", 2);
+					consume = false;
+				}
 			}
-		} else {
-			consume = true;
 		}
 		mv.setView(new MappingJackson2JsonView());
 		if(consume) {
+			//获取图文封面
 			AdIV adIV = ((AdIVService) adIVService).selectIVByMediaId(adNews.getThumb_media_id());
-			mv.addObject("check", 1);
-			mv.addObject("adNews", adNews);
-			mv.addObject("thumb", adIV.getIV());
-		} else {
 			mv.addObject("check", 0);
-			mv.addObject("info", "需要付费:" + adNews.getConsume() + ",才能观看");
+			if(null != adIV) {
+				mv.addObject("thumb", adIV.getIV());
+			}
+		} else {//如果各种原因不能查看，则移除内容
+			adNews.setContent("");
 		}
+		//获取图书列表
+		if(isdir && adNews.getType() == CommandCollection.BOOK_TYPE) {//如果是图书，则获取列表
+			List<AdNews> dir = adNewsService.selectNewsByNameID(adNews.getName_id());
+			mv.addObject("dir", dir);
+		} else {
+			mv.addObject("dir", null);
+		}
+		mv.addObject("adNews", adNews);
 	    return mv;
 	}
 	@RequestMapping(value="/getNewsList")
@@ -167,6 +193,7 @@ public class WeChatSiteController {
 		mv.setView(new MappingJackson2JsonView());
 	    return mv;
 	}
+
 	@RequestMapping(value="/getNewsSearch")
 	public ModelAndView getNewsSearch(int type, String search) {
 		ModelAndView mv = new ModelAndView();
@@ -176,4 +203,11 @@ public class WeChatSiteController {
 	    return mv;
 	}
 	
+	@RequestMapping(value="/callpay")
+	public ModelAndView callpay() {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("支付回调");
+		mv.setView(new MappingJackson2JsonView());
+	    return mv;
+	}
 }

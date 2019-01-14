@@ -47,4 +47,10 @@ public class WeUserServiceImpl implements WeUserService {
 		// TODO Auto-generated method stub
 		return weUserDao.updateWeUserVouchers(openid, vouchers);
 	}
+
+	@Override
+	public int updateWeUserAutoPay(String openid, int autopay) {
+		// TODO Auto-generated method stub
+		return weUserDao.updateWeUserAutoPay(openid, autopay);
+	}
 }

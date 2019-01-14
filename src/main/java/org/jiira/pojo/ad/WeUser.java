@@ -5,6 +5,7 @@ public class WeUser {
 	private String nickname;//varchar(32) not null COMMENT '昵称',
 	private int sex;//TINYINT(1) COMMENT '0女1男2保密',
 	private int vouchers;//int not null COMMENT '代金券',
+	private int autopay;//自动支付
 	private String language;
 	private String country;//varchar(32) not null COMMENT '国家',
 	private String province;//varchar(32) not null COMMENT '省',
@@ -36,6 +37,12 @@ public class WeUser {
 	}
 	public void setVouchers(int vouchers) {
 		this.vouchers = vouchers;
+	}
+	public int getAutopay() {
+		return autopay;
+	}
+	public void setAutopay(int autopay) {
+		this.autopay = autopay;
 	}
 	public String getLanguage() {
 		return language;

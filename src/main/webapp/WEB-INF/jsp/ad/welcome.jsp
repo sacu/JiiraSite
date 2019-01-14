@@ -16,7 +16,7 @@ $(document).ready(function() {
 		alert($(this).attr("id"))
 		//提交表单
 		$.post({
-			url : "ad/" + $(this).attr("id"),
+			url : $(this).attr("id"),
 			//成功后的方法
 			success : function(result) {
 				alert(JSON.stringify(result))
@@ -34,7 +34,7 @@ $(document).ready(function() {
 </head>
 <body>
 	欢迎你 :${adUser.nickName}
-	<form action="ad/exit">
+	<form action="exit">
 		<input type="submit" value="退出">
 	</form>
 	<br>

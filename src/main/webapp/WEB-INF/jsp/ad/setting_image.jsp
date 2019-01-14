@@ -1,3 +1,4 @@
+<%@page import="org.jiira.utils.CommandCollection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!doctype html>
@@ -8,7 +9,7 @@
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>image</title>
 <script type="text/javascript">
-	var ad = "ad/";//提交服务器后是 ad/
+	var ad = "";//提交服务器后是 ad/
 	$(document).ready(function() {
 		var adVLD;
 		$("#uli_btn").click(function(event) {
@@ -37,16 +38,19 @@
 				success : function(result) {
 					adVLD = result['adIVList'];
 					var i_list_html = "";
+					var aurl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_IMAGE%>' + "/";
 					$.each(adVLD, function(idx, i) {
-						i_list_html += "<div class='div_list'><div class='div_list_check'>";
-						i_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
-						i_list_html += "<div class='div_list_key'>" + i['iv'] + "</div>";
-						i_list_html += "<div class='div_list_media_id'>" + i['media_id'] + "</div>";
-						i_list_html += "<div class='div_list_value'>" + i['url'] + "</div>";
-						i_list_html += "<div class='div_list_type'>" + i['type'] + "</div>";
-						i_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取URL</a></div>";
-						i_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除URL</a></div>";
-						i_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
+						i_list_html += "<div class='n_image_element'>";
+						i_list_html += "<div class='n_image_name'>";
+						i_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/>" + i['iv'];
+						i_list_html += "</div>";
+						i_list_html += "<div class='n_image_context'><img class='n_image_img' src='" + aurl + i['iv'] + "'></div>";
+						if(i['media_id'] == null || i['media_id'].length == 0){
+							i_list_html += "<div class='n_image_media'>[<a id='gni' v='" + idx + "' href=''>获取Media</a>]</div>";
+						} else {
+							i_list_html += "<div class='n_image_media'>[<a id='cni' v='" + idx + "' href=''>清除Media</a>]</div>";
+						}
+						i_list_html += "<div class='n_image_delete'>[<a id='cni' v='" + idx + "' href=''>删除</a>]</div>";
 						i_list_html += "</div>";
 					});
 					$('#i_list').empty();
@@ -133,33 +137,24 @@
 </head>
 <body>
 	<h1>图片</h1>
+	<div class="div_content_block">
 	<form id="uli_form">
-	bmp/png/jpeg/jpg/gif
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br>
-		<input type="hidden" name="type" value="image"/>
-		<input type="button" id="uli_btn" value="提交" />
-	</form>
-
+			<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" />
+<!-- 		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br> -->
+<!-- 		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br> -->
+<!-- 		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br> -->
+			<input type="hidden" name="type" value="image"/>
+			<input type="button" id="uli_btn" value="提交" />
+		</form>
+	</div>
 	<div id="uli_msg"></div>
+	<div class="div_content_block">
+		<a id="batch_gi" href="">批量获取URL</a>
+		<a id="batch_ci" href="">批量清除URL</a>
+		<a id="batch_di" href="">批量删除</a>
+	</div>
 	<!-- 开始列表 -->
-	<div class="div_list"><!-- 每一行 -->
-		<!-- 行里的列 -->
-		<div class="div_list_check">批量</div>
-		<div class="div_list_key">名称</div>
-		<div class="div_list_media_id">media_id</div>
-		<div class="div_list_value">URL</div>
-		<div class="div_list_type">类型</div>
-		<div class="div_list_submit">获取URL</div>
-		<div class="div_list_clear">清除URL</div>
-		<div class="div_list_delete">删除</div>
+	<div class="n_context_list" id="i_list"><!-- 列表 -->
 	</div>
-	<div id="i_list"><!-- 列表 -->
-	</div>
-	<a id="batch_gi" href="">批量获取URL</a>
-	<a id="batch_ci" href="">批量清除URL</a>
-	<a id="batch_di" href="">批量删除</a>
 </body>
 </html>

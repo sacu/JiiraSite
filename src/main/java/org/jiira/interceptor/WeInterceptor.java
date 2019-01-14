@@ -34,6 +34,6 @@ public class WeInterceptor extends Interceptor{
 	}
 	@Override
 	protected String[] excep() {//例外
-		return new String[] {"/we/error", "/we/c", "/we/redirect"};
+		return new String[] {"/we/error", "/we/c", "/we/redirect", "/we/callpay"};
 	}
 }

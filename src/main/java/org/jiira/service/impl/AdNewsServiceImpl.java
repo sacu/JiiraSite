@@ -120,4 +120,10 @@ public class AdNewsServiceImpl implements AdNewsService {
 		return 0;
 	}
 
+	@Override
+	public List<AdNews> selectNewsByNameID(int name_id) {
+		// TODO Auto-generated method stub
+		return adNewsDao.selectNewsByNameID(name_id);
+	}
+
 }

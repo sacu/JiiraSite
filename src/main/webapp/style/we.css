@@ -1,0 +1,75 @@
+@charset "utf-8";
+/* CSS Document */
+
+.div_news_title {
+	width: 100%;
+	height: 45px;
+	font-size: 36px;
+	text-align: center;
+	padding-top: 5px;
+}
+.div_news_author {
+	width: 100%;
+	height: 20px;
+	font-size: 24px;
+	padding-left: 30px;
+}
+.div_news_autopay {
+	width: 100%;
+	height: 20px;
+	font-size: 24px;
+	padding-left: 30px;
+}
+.div_news_content {
+	width: 95%;
+	font-size: 30px;
+	padding:30px 30px 30px 30px;
+}
+.div_content_block {
+	float: left;
+	min-width: 800px;
+	width: 95%;
+	height: auto;
+}
+.div_content_value {
+	min-width: 580px;
+	float: left;
+	width: auto;
+}
+.div_content_key {
+	float: left;
+	width: 200px;
+}
+.div_we_list_content {
+	text-align:center;
+	width: 100%;
+	padding-top:30px;
+	padding-bottom:30px;
+}
+/*翻页*/
+.div_flip {
+	width: 95%;
+	height: 20px;
+}
+.div_flip_prev{
+	float: left;
+	width: 30%;
+	text-align:center;
+}
+.div_flip_next{
+	float: left;
+	width: 30%;
+	text-align:center;
+}
+.div_flip_dir{
+	float: left;
+	width: 30%;
+	text-align:center;
+}	
+/*页签控制*/
+.aselect{
+	text-decoration: underline
+}
+.aunselect{
+	text-decoration: none
+}

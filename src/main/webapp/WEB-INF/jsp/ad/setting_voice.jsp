@@ -1,3 +1,4 @@
+<%@page import="org.jiira.utils.CommandCollection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!doctype html>
@@ -8,7 +9,7 @@
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>voice</title>
 <script type="text/javascript">
-	var ad = "ad/";//提交服务器后是 ad/
+	var ad = "";//提交服务器后是 ad/
 	$(document).ready(function() {
 		var adVLD;
 		$("#ulvo_btn").click(function(event) {
@@ -37,14 +38,22 @@
 				success : function(result) {
 					adVLD = result['adVoiceList'];
 					var vo_list_html = "";
+					var aurl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_VOICE%>' + "/";
 					$.each(adVLD, function(idx, i) {
-						vo_list_html += "<div class='div_list'><div class='div_list_check'>";
-						vo_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
-						vo_list_html += "<div class='div_list_key'>" + i['voice'] + "</div>";
-						vo_list_html += "<div class='div_list_media_id'>" + i['media_id'] + "</div>";
-						vo_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取URL</a></div>";
-						vo_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除URL</a></div>";
-						vo_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
+						vo_list_html += "<div class='n_voice_element'>";
+						vo_list_html += "<div class='n_voice_name'>";
+						vo_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/>" + i['voice'];
+						vo_list_html += "</div>";
+						vo_list_html += "<div class='n_voice_context'>";
+						vo_list_html += "<audio id='" + idx + "' src='" + aurl+ i['voice'] + "'></audio>";
+						vo_list_html += "<a id='vic' v='#" + idx + "' href=''>播放</a>";
+						vo_list_html += "</div>";
+						if(i['media_id'] == null || i['media_id'].length == 0){
+							vo_list_html += "<div class='n_voice_media'>[<a id='gni' v='" + idx + "' href=''>获取Media</a>]</div>";
+						} else {
+							vo_list_html += "<div class='n_voice_media'>[<a id='cni' v='" + idx + "' href=''>清除Media</a>]</div>";
+						}
+						vo_list_html += "<div class='n_voice_delete'>[<a id='cni' v='" + idx + "' href=''>删除</a>]</div>";
 						vo_list_html += "</div>";
 					});
 					$('#vo_list').empty();
@@ -52,6 +61,7 @@
 				}
 			});
 		}
+		var cvic = undefined;
 		$("#vo_list").click(function(event) {
 			var target = $(event.target);
 			var id = target.attr("id");
@@ -77,10 +87,33 @@
 					data={ivvs:[adV['voice']], type:"voice", media_ids:[adV['media_id']]}
 					nis_command(url, data)
 					break;
+				case "vic":
+					var vicp;
+					if(cvic != undefined && target.attr("v") == cvic.attr("v")){
+						vicp = $(cvic.attr("v"))[0];
+						$(cvic.attr("v")).unbind();
+						vicp.pause();
+						cvic.html("播放");
+					}
+					if(cvic == undefined || target.attr("v") != cvic.attr("v")){
+						cvic = target;
+						vicp = $(cvic.attr("v"))[0];
+						cvic.html("暂停");
+						vicp.play();
+						$(cvic.attr("v")).bind('ended',function () {
+							cvic.html("播放");
+							$(cvic.attr("v")).unbind();
+							vicp.pause();
+						});
+					} else {
+						cvic = undefined;
+					}
+					break;
 				}
 				event.preventDefault();  // 阻止链接跳转
 			}
 		})
+		
 		function nis_command(url, data){
 			if(url.length > 0 && data['ivvs'].length > 0){
 				$.post({
@@ -131,31 +164,24 @@
 </head>
 <body>
 	<h1>语音</h1>
-	<form id="ulvo_form">
-		mp3/wma/wav/amr
-		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br>
-		<input type="hidden" name="type" value="voice"/>
-		<input type="button" id="ulvo_btn" value="提交" />
-	</form>
-
+	<div class="div_content_block">
+		<form id="ulvo_form">
+			<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/>
+<!-- 			<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br> -->
+<!-- 			<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br> -->
+<!-- 			<input type="file" name="files" value="请选择上传的文件" accept="audio/*"/><br> -->
+			<input type="hidden" name="type" value="voice"/>
+			<input type="button" id="ulvo_btn" value="提交" />
+		</form>
+	</div>
 	<div id="ulvo_msg"></div>
+	<div class="div_content_block">
+		<a id="batch_gvo" href="">批量获取URL</a>
+		<a id="batch_cvo" href="">批量清除URL</a>
+		<a id="batch_dvo" href="">批量删除</a>
+	</div>
 	<!-- 开始列表 -->
-	<div class="div_list"><!-- 每一行 -->
-		<!-- 行里的列 -->
-		<div class="div_list_check">批量</div>
-		<div class="div_list_key">名称</div>
-		<div class="div_list_media_id">media_id</div>
-		<div class="div_list_submit">获取URL</div>
-		<div class="div_list_clear">清除URL</div>
-		<div class="div_list_delete">删除</div>
+	<div class="n_context_list" id="vo_list"><!-- 列表 -->
 	</div>
-	<div id="vo_list"><!-- 列表 -->
-	</div>
-	<a id="batch_gvo" href="">批量获取URL</a>
-	<a id="batch_cvo" href="">批量清除URL</a>
-	<a id="batch_dvo" href="">批量删除</a>
 </body>
 </html>

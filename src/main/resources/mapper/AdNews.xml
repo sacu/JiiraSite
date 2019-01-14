@@ -22,6 +22,10 @@
 	<select id="selectNewsAll" resultMap="adNews">
 		select * from sa_dt_news
 	</select>
+	<!-- 通过图书ID获取目录 这里注意type是书籍类型 -->
+	<select id="selectNewsByNameID" resultMap="adNews">
+		select id,title from sa_dt_news where name_id=#{name_id} and type=2
+	</select>
 	<!-- 
 		级别限制拉取模式,列表拉取 其实只是拉取的目录
 	 -->

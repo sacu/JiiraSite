@@ -22,11 +22,7 @@ test[type*="test"]{}/*选择具有type属性且属性值包含test的元素*/
 test t1{}/*后代选择器，选择某元素包含的所有指定元素*/
 test>t1{}/*子元素选择器，选择某元素的下级指定元素，相当于后代选择器的简版*/
 test1+test2{}/*相邻选择器，选择元素test1后边紧跟的test2元素，如果后边不是test2，则不会被选择*/
-h2~div{/*兄弟选择器，选择元素test1后边的所有名为test2的兄弟元素*/
-	width: 300px;
-	height: 50px;
-	background-color: yellowgreen;
-}
+
 /*伪元素选择器*/
 test::first-letter{}/*设置元素内第一个字符的样式*/
 test::first-line{}/*设置元素内第一行的样式*/
@@ -34,24 +30,9 @@ test::before{}/*在每个test元素内容之前插入内容，可以是图形等
 test::after{}/*在每个test元素内容之后插入内容，可以是图形等*/
 test::selection{}/*元素内被选中时的样式（比如div中字体被选中后变换颜色）*/
 /*结构伪类选择器*/
-div:first-child{/*如果div是其父元素的第一个子元素则选中*/
-	background-color: violet;
-}
 :root{/*文档根元素选择器，HTML标签*/
 	background-color: wheat;
 }
-div:last-child{/*如果div是其父元素的最后一个子元素则选中*/
-	background-color: violet;
-}
-div:only-child{}/*如果div是其父元素的唯一元素，则选中*/
-div:only-of-type{}/*如果div在其父元素中是唯一的div则选中，only-child父级只能有一个元素*/
-div:nth-child(1){}/*选中div在其父类中第1个div元素 可以用奇偶数：Odd 和 even*/
-div:nth-last-child(1){}/*选中div在其父类中倒数第1个div元素*/
-div:first-of-type{}/*选中同级中的第一个div元素*/
-div:last-of-type{}/*选中同级中的最后一个div元素*/
-div:nth-of-type(1){}/*选中其父级中第1个同级元素div*/
-div:nth-last-of-type(1){}/*选中其父级中倒数第1个同级元素div*/
-div:empty{}/*选中没有任何子元素的div元素（包括text节点）*/
 /*UI伪类及其他选择器*/
 a:link{color: turquoise}/*未被访问过的链接，a的数序不能变*/
 a:visited{color: red}/*已被访问过的链接*/

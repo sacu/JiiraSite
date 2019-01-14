@@ -8,7 +8,7 @@
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>thumb</title>
 <script type="text/javascript">
-	var ad = "ad/";//提交服务器后是 ad/
+	var ad = "";//提交服务器后是 ad/
 	$(document).ready(function() {
 		var adVLD;
 		$("#ult_btn").click(function(event) {

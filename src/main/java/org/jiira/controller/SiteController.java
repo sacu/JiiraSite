@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jiira.pojo.ad.WeUser;
+import org.jiira.pojo.we.pay.WePay;
 import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.DecriptUtil;
@@ -86,6 +87,16 @@ public class SiteController {
 		}
 	}
 
+	@RequestMapping("/ict")
+	public ModelAndView ict(HttpServletRequest request, String redirect, String openid) {
+		ModelAndView mv = new ModelAndView();
+		WeUser weUser = weUserService.selectWeUser(openid);
+		request.setAttribute("weUser", weUser);
+		jump(request, redirect);
+		mv.setViewName("we/" + request.getAttribute("page"));//返回页面代码信息
+		return mv;
+	}
+	
 	@RequestMapping("/error")
 	public ModelAndView error(HttpServletRequest request, String redirect) {
 		ModelAndView mv = new ModelAndView();
@@ -112,4 +123,18 @@ public class SiteController {
 				+"&scope=snsapi_userinfo" + "&state=test#wechat_redirect";
 		return "redirect:" + url;//使用重定向到用户验证
 	}
+	
+	/**
+	 * 支付
+	 */
+	@RequestMapping(value = "/pay")
+	public ModelAndView pay(HttpServletRequest request, int money) {
+		String ip = CommandCollection.getIPByRequest(request);
+		ModelAndView mv = new ModelAndView();
+		WePay wepay = WeGlobal.getInstance().getWePay(ip, money);
+		mv.setView(new MappingJackson2JsonView());
+		mv.addObject("wepay", wepay);
+		return mv;
+	}
+	
 }

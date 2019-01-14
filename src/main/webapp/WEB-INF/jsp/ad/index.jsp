@@ -8,12 +8,13 @@
 <meta name="viewport"
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>极光互娱</title>
-<link rel="stylesheet" href="style/test1.css" />
-<link rel="stylesheet" href="style/ad.css" />
-<script type="text/javascript" src="javascript/jquery-3.2.0.js"></script>
-<script type="text/javascript" src="javascript/ad.js"></script>
+<link rel="stylesheet" href="../style/test1.css" />
+<link rel="stylesheet" href="../style/ad.css" />
+<script type="text/javascript" src="../javascript/jquery-3.2.0.js"></script>
+<script type="text/javascript" src="../javascript/ad.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var onPage1 = $("#welcome");
 		$("#welcome").click(flip);
 		$("#setting").click(flip);
 		$("#about").click(flip);
@@ -24,10 +25,15 @@
 		function flipForPage(page){
 			//提交表单
 			$.post({
-				url : "ad/flip",
+				url : "flip",
 				data : {page:page},
 				//成功后的方法
 				success : function(result) {
+					onPage1.addClass("aunselect");
+					onPage1.removeClass("aselect");
+					onPage1 = $("#" + page);
+					onPage1.removeClass("aunselect");
+					onPage1.addClass("aselect");
 					$('#content').empty()
 					$('#content').html(result)
 				}
@@ -53,9 +59,9 @@
 	<footer>
 		<nav id="nav1">
 			<!--表示页面的导航，可以通过导航连接到网站的其他页面，或者当前页面的其它部分。-->
-			<li class="li1"><a id="welcome" href="">首页</a></li>
-			<li class="li1"><a id="setting" href="">设置</a></li>
-			<li class="li1"><a id="about" href="">介绍</a></li>
+			<li class="li1"><a class="aselect" id="welcome" href="">首页</a></li>
+			<li class="li1"><a class="aunselect" id="setting" href="">设置</a></li>
+			<li class="li1"><a class="aunselect" id="about" href="">介绍</a></li>
 		</nav>
 	</footer>
 	<%} %>

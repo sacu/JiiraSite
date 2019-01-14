@@ -23,7 +23,7 @@
 	</insert>
 	<!-- 更新 -->
 	<update id="updateNewsName">
-		update sa_dt_news_name set name=#{name}, author=#{author}, author=#{author} where id=#{id}
+		update sa_dt_news_name set name=#{name}, author=#{author}, digest=#{digest} where id=#{id}
 	</update>
 	<!-- 删除图片 -->
 	<delete id="deleteNewsName">

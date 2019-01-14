@@ -91,7 +91,7 @@ public class HandleEvent {
 				AdIVService adIVService = Application.getInstance().getBean(AdIVServiceImpl.class);
 				AdNewsService adNewsService = Application.getInstance().getBean(AdNewsServiceImpl.class);
 				//拉取最低级别的消息
-				List<AdNews> adNews = adNewsService.selectOderByLevelAndDesc(CommandCollection.LEVEL_LOWER, 3);
+				List<AdNews> adNews = adNewsService.selectOderByLevelAndDesc(CommandCollection.LEVEL_LOWER, 8);
 				int len = adNews.size();
 				msg.setMsgType(CommandCollection.MESSAGE_NEWS);
 				msg.setArticleCount(len);

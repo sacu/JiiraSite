@@ -13,4 +13,5 @@ public interface WeUserDao {
 	public int deleteWeUser(String openid);
 	public int updateWeUserBirthday(@Param("openid")String openid, @Param("birthday")String birthday);
 	public int updateWeUserVouchers(String openid, int vouchers);
+	public int updateWeUserAutoPay(String openid, int autopay);
 }

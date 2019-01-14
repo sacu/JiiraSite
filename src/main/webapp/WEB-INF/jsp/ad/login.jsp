@@ -17,7 +17,7 @@
 		$(document).ready(function() {
 			//提交表单
 			$.post({
-				url : "ad/flip",
+				url : "flip",
 				data : {page:"welcome"},
 				//成功后的方法
 				success : function(result) {
@@ -28,7 +28,7 @@
 		});
 		</script>
 	<%}%>
-	<form id="form" action="ad/login">
+	<form id="form" action="login" method="post">
 		<table>
 			<tr>
 				<td>用户名</td>
