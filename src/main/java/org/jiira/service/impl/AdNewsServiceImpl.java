@@ -125,4 +125,10 @@ public class AdNewsServiceImpl implements AdNewsService {
 		// TODO Auto-generated method stub
 		return adNewsDao.selectNewsByNameID(name_id);
 	}
+
+	@Override
+	public int updateNewSourceURL(int id, String content_source_url) {
+		// TODO Auto-generated method stub
+		return adNewsDao.updateNewSourceURL(id, content_source_url);
+	}
 }

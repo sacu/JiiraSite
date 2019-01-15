@@ -13,6 +13,7 @@ import org.jiira.pojo.ad.AdVoice;
 import org.jiira.pojo.ad.ResultIVV;
 import org.jiira.service.AdMateService;
 import org.jiira.service.AdNewsNameService;
+import org.jiira.service.AdNewsService;
 import org.jiira.service.AdNewsTypeService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.we.WeGlobal;
@@ -196,8 +197,12 @@ public class WeChatAdminController {
 	@RequestMapping(value = "/addNews")
 	public ModelAndView addNews(AdNews adNews) {
 		ModelAndView mv = new ModelAndView();
+		String url = adNews.getContent_source_url().trim();
 		int rows = adNewsService.insert(adNews);
 		if(rows > 0) {
+			if(url.length() == 0) {//如果没有，则设置当前页
+				((AdNewsService)adNewsService).updateNewSourceURL(adNews.getId(), CommandCollection.GetNewsURL(adNews.getId()));
+			}
 			mv.addObject("插入成功");
 		} else {
 			mv.addObject("插入失败");
@@ -224,7 +229,6 @@ public class WeChatAdminController {
 	}
 	@RequestMapping(value = "/getNewsToWe")
 	public ModelAndView getNewsToWe(@RequestBody AdNews[] adNews) {
-		// 提交图片到公众号
 		JSONObject json;
 		AdNews adNew;
 		String media_id;

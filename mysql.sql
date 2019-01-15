@@ -78,7 +78,7 @@ CREATE TABLE `sa_dt_news` (
 	`digest` varchar(50) not null COMMENT '图文消息的摘要，不填写会自动抓取',
 	`show_cover_pic` TINYINT(1) not null COMMENT '是否显示封面，1显示 0不显示',
 	`content` text not null COMMENT '文章内容，支持HTML',
-	-- `content_source_url` varchar(300) not null COMMENT '图文消息的原文地址',(弃用！直接用服务器地址+各种路径补足，详情 CommandCollection.GetMateNews)
+	`content_source_url` varchar(300) not null COMMENT '图文消息的原文地址',--(弃用！直接用服务器地址+各种路径补足，详情 CommandCollection.GetMateNews)
 	`need_open_comment` TINYINT(1) not null COMMENT '是否打开评论 1打开 0关闭',
 	`only_fans_can_comment` TINYINT(1) not null COMMENT '是否限制评论 1限制 0不限制',
 

@@ -519,6 +519,12 @@
 						</div>
 					</div>
 					<div class="div_content_block">
+						<div class="div_content_key">原文链接:</div>
+						<div class="div_content_value">
+							<input type="text" name="content_source_url" placeholder="留空则为当前页"/>
+						</div>
+					</div>
+					<div class="div_content_block">
 						<div class="div_content_key">是否打开评论(腾讯有BUG):</div>
 						<div class="div_content_value">
 							是<input type='radio' name='need_open_comment' value="1" />

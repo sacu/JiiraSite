@@ -103,7 +103,7 @@ public class HandleEvent {
 					article.setTitle(adNew.getTitle());
 					article.setDescription(adNew.getDigest());
 					article.setPicUrl(adNew.getThumb_id());
-					article.setUrl(CommandCollection.GetNewsURL(adNew.getId()));
+					article.setUrl(adNew.getContent_source_url());
 					articles[i] = article;
 				}
 				msg.setArticles(articles);
