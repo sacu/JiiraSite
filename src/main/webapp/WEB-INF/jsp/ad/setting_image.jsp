@@ -50,7 +50,7 @@
 						} else {
 							i_list_html += "<div class='n_image_media'>[<a id='cni' v='" + idx + "' href=''>清除Media</a>]</div>";
 						}
-						i_list_html += "<div class='n_image_delete'>[<a id='cni' v='" + idx + "' href=''>删除</a>]</div>";
+						i_list_html += "<div class='n_image_delete'>[<a id='dni' v='" + idx + "' href=''>删除</a>]</div>";
 						i_list_html += "</div>";
 					});
 					$('#i_list').empty();
@@ -138,7 +138,7 @@
 <body>
 	<h1>图片</h1>
 	<div class="div_content_block">
-	<form id="uli_form">
+		<form id="uli_form">
 			<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" />
 <!-- 		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br> -->
 <!-- 		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg" /><br> -->

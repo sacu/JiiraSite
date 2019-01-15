@@ -11,10 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jiira.pojo.ad.AdIV;
 import org.jiira.pojo.ad.AdNews;
+import org.jiira.pojo.ad.AdNewsName;
+import org.jiira.pojo.ad.WeBookCase;
 import org.jiira.pojo.ad.WeUser;
 import org.jiira.pojo.we.WeToken;
 import org.jiira.service.AdIVService;
 import org.jiira.service.AdMateService;
+import org.jiira.service.AdNewsNameService;
 import org.jiira.service.AdNewsService;
 import org.jiira.service.WeBookCaseService;
 import org.jiira.service.WeChatService;
@@ -54,6 +57,9 @@ public class WeChatSiteController {
 	private WeUserService weUserService = null;
 	@Autowired
 	private WeBookCaseService weBookCaseService = null;
+	@Autowired
+	private AdNewsNameService adNewsNameService = null;
+	
 	
 	/**
 	 * 微信token验证
@@ -149,7 +155,7 @@ public class WeChatSiteController {
 		}
 		AdNews adNews = adNewsService.selectById(news_id);
 		if(adNews.getConsume() > 0) {//是否需要花钱
-			if(weBookCaseService.selectWeBookCase(openid) == null) {//是否未支付
+			if(weBookCaseService.selectWeBookCase(openid, news_id) == null) {//是否未支付
 				//如果autopay==true 表示该条是支付操作
 				if(autopay || weUser.getAutopay() == CommandCollection.AUTO_PAY) {//是否开通自动支付
 					if(weUser.getVouchers() >= adNews.getConsume()) {//是否足够支付
@@ -166,6 +172,14 @@ public class WeChatSiteController {
 		}
 		mv.setView(new MappingJackson2JsonView());
 		if(consume) {
+			//插入已购买
+			WeBookCase weBookCase = new WeBookCase();
+			weBookCase.setOpenid(openid);
+			weBookCase.setNewsid(news_id);
+			weBookCase.setNameid(adNews.getName_id());
+			weBookCaseService.ignoreWeBookCase(weBookCase);
+			//这里要改
+			weBookCaseService.updateBookCaseForRead(openid, adNews.getName_id(), adNews.getId());//设置阅读页
 			//获取图文封面
 			AdIV adIV = ((AdIVService) adIVService).selectIVByMediaId(adNews.getThumb_media_id());
 			mv.addObject("check", 0);
@@ -177,7 +191,7 @@ public class WeChatSiteController {
 		}
 		//获取图书列表
 		if(isdir && adNews.getType() == CommandCollection.BOOK_TYPE) {//如果是图书，则获取列表
-			List<AdNews> dir = adNewsService.selectNewsByNameID(adNews.getName_id());
+			List<AdNews> dir = adNewsService.selectNewsByNameID(adNews.getName_id());//获取目录
 			mv.addObject("dir", dir);
 		} else {
 			mv.addObject("dir", null);
@@ -197,8 +211,37 @@ public class WeChatSiteController {
 	@RequestMapping(value="/getNewsSearch")
 	public ModelAndView getNewsSearch(int type, String search) {
 		ModelAndView mv = new ModelAndView();
-		List<AdNews> adNews = adNewsService.selectNewsByTypeAndLike(type, search);//类型搜索
-		mv.addObject("adNews", adNews);
+		if(type == CommandCollection.BOOK_TYPE || type == CommandCollection.ALL_TYPE) {
+			List<AdNewsName> adNewsName = adNewsNameService.selectNewsNameByLike(search);
+			mv.addObject("adNewsName", adNewsName);
+		}
+		if(type == CommandCollection.ALL_TYPE || type != CommandCollection.BOOK_TYPE) {
+			List<AdNews> adNews = adNewsService.selectNewsByTypeAndLike(type, search);//类型搜索
+			mv.addObject("adNews", adNews);
+		}
+		mv.setView(new MappingJackson2JsonView());
+	    return mv;
+	}
+	/**
+	 * 获取新闻
+	 * @param response
+	 * autopay 是页面判断是否是支付操作的
+	 */
+	@RequestMapping(value="/getNewsName")
+	public ModelAndView getNewsName(HttpServletRequest request,
+			@RequestParam(name="name_id") int name_id, @RequestParam(name="openid") String openid) {
+		AdNewsName adNewsName = adNewsNameService.selectNewsNameById(name_id);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("adNewsName", adNewsName);
+		WeBookCase weBookCase = weBookCaseService.selectBookCaseForRead(openid, name_id);//获取阅读的页数
+		int news_id;
+		if(null == weBookCase) {
+			List<AdNews> dir = adNewsService.selectNewsByNameID(name_id);//获取阅读的页数
+			news_id = dir.get(0).getId();
+		} else {
+			news_id = weBookCase.getNewsid();
+		}
+		mv.addObject("news_id", news_id);
 		mv.setView(new MappingJackson2JsonView());
 	    return mv;
 	}

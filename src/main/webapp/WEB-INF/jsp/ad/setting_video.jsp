@@ -1,3 +1,4 @@
+<%@page import="org.jiira.utils.CommandCollection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!doctype html>
@@ -12,6 +13,7 @@
 	$(document).ready(function() {
 		var adVLD;
 		$("#ulvi_btn").click(function(event) {
+			$("#uplayer").css('display','none'); 
 			var formData = new FormData($("#ulvi_form")[0]);//[0]必须的
 			$.ajax({//必须使用ajax
 				url : ad + "addIVV",//地址是 ad/addNewsImage
@@ -37,16 +39,19 @@
 				success : function(result) {
 					adVLD = result['adVideoList'];
 					var vi_list_html = "";
+					var aurl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_VIDEO%>' + "/";
 					$.each(adVLD, function(idx, i) {
-						vi_list_html += "<div class='div_list'><div class='div_list_check'>";
-						vi_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
-						vi_list_html += "<div class='div_list_key'>" + i['video'] + "</div>";
-						vi_list_html += "<div class='div_list_title'>" + i['title'] + "</div>";
-						vi_list_html += "<div class='div_list_introduction'>" + i['introduction'] + "</div>";
-						vi_list_html += "<div class='div_list_media_id'>" + i['media_id'] + "</div>";
-						vi_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取Media</a></div>";
-						vi_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除Media</a></div>";
-						vi_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
+						vi_list_html += "<div class='n_video_element'>";
+						vi_list_html += "<div class='n_video_name'>";
+						vi_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/>" + i['title'];
+						vi_list_html += "</div>";
+						vi_list_html += "<div class='n_video_context'><video class='n_video_video' src='" + aurl + i['video'] + "' controls='controls'></div>";
+						if(i['media_id'] == null || i['media_id'].length == 0){
+							vi_list_html += "<div class='n_video_media'>[<a id='gni' v='" + idx + "' href=''>获取Media</a>]</div>";
+						} else {
+							vi_list_html += "<div class='n_video_media'>[<a id='cni' v='" + idx + "' href=''>清除Media</a>]</div>";
+						}
+						vi_list_html += "<div class='n_video_delete'>[<a id='dni' v='" + idx + "' href=''>删除</a>]</div>";
 						vi_list_html += "</div>";
 					});
 					$('#vi_list').empty();
@@ -130,37 +135,51 @@
 			event.preventDefault();  // 阻止链接跳转
 		})
 		getNIList();
+		$("#upvideo").click(function(event) {
+			$("#uplayer").css('display','block'); 
+			event.preventDefault();  // 阻止链接跳转
+		});
+		$("#cls_btn").click(function(event) {
+			$("#uplayer").css('display','none'); 
+			event.preventDefault();  // 阻止链接跳转
+		})
 	});
 </script>
 </head>
 <body>
 	<h1>视频</h1>
-	<form id="ulvi_form">
-		MP4<br>
-		标题:<input type="text" name="title" value="我是标题"/><br>
-		简介:<textarea name="introduction" maxlength="200">这个文章不错的</textarea><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="video/*"/><br><br>
-		<input type="hidden" name="type" value="video"/><br>
-		<input type="button" id="ulvi_btn" value="提交" />
-	</form>
-
+	<a href="" id="upvideo">上传视频</a>
 	<div id="ulvi_msg"></div>
+	<div class="div_content_block">
+		<a id="batch_gvi" href="">批量获取Media</a>
+		<a id="batch_cvi" href="">批量清除Media</a>
+		<a id="batch_dvi" href="">批量删除</a>
+	</div>
 	<!-- 开始列表 -->
-	<div class="div_list"><!-- 每一行 -->
-		<!-- 行里的列 -->
-		<div class="div_list_check">批量</div>
-		<div class="div_list_key">名称</div>
-		<div class="div_list_title">标题</div>
-		<div class="div_list_introduction">简介</div>
-		<div class="div_list_media_id">media_id</div>
-		<div class="div_list_submit">获取Media</div>
-		<div class="div_list_clear">清除Media</div>
-		<div class="div_list_delete">删除</div>
+	<div class="n_context_list" id="vi_list"><!-- 列表 -->
 	</div>
-	<div id="vi_list"><!-- 列表 -->
+	<div class="n_float_layer" id="uplayer">
+		<div class=n_float_video>
+			<div class="div_content_block"><h2>上传视频</h2></div>
+			<form id="ulvi_form">
+				<div class="div_content_block">
+					<div class="div_content_key">标题:</div>
+					<div class="div_content_value"><input type="text" name="title" value="我是标题"/></div>
+				</div>
+				<div class="div_content_block">
+					<div class="div_content_key">简介:</div>
+					<div class="div_content_value"><textarea name="introduction" maxlength="200">这个文章不错的</textarea></div>
+				</div>
+				<div class="div_content_block">
+					<input type="file" name="files" value="请选择上传的文件" accept="video/*"/>
+				</div>
+				<div class="div_content_block">
+					<input type="hidden" name="type" value="video"/>
+					<input type="button" id="ulvi_btn" value="提交" />
+					<input type="button" id="cls_btn" value="关闭" />
+				</div>
+			</form>
+		</div>
 	</div>
-	<a id="batch_gvi" href="">批量获取Media</a>
-	<a id="batch_cvi" href="">批量清除Media</a>
-	<a id="batch_dvi" href="">批量删除</a>
 </body>
 </html>

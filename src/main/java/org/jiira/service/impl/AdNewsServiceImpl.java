@@ -125,5 +125,4 @@ public class AdNewsServiceImpl implements AdNewsService {
 		// TODO Auto-generated method stub
 		return adNewsDao.selectNewsByNameID(name_id);
 	}
-
 }

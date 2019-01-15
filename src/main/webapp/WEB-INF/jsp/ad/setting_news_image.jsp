@@ -1,3 +1,4 @@
+<%@page import="org.jiira.utils.CommandCollection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!doctype html>
@@ -36,14 +37,21 @@
 				success : function(result) {
 					adVLD = result['adNewsImageList'];
 					var ni_list_html = "";
+					var aurl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_NEWS_IMAGE%>' + "/";
 					$.each(adVLD, function(idx, i) {
-						ni_list_html += "<div class='div_list'><div class='div_list_check'>";
-						ni_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
-						ni_list_html += "<div class='div_list_key'>" + i['newsImage'] + "</div>";
-						ni_list_html += "<div class='div_list_value'>" + i['url'] + "</div>";
-						ni_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取URL</a></div>";
-						ni_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除URL</a></div>";
-						ni_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
+						
+						
+						ni_list_html += "<div class='n_image_element'>";
+						ni_list_html += "<div class='n_image_name'>";
+						ni_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/>" + i['newsImage'];
+						ni_list_html += "</div>";
+						ni_list_html += "<div class='n_image_context'><img class='n_image_img' src='" + aurl + i['newsImage'] + "'></div>";
+						if(i['url'] == null || i['url'].length == 0){
+							ni_list_html += "<div class='n_image_media'>[<a id='gni' v='" + idx + "' href=''>获取URL</a>]</div>";
+						} else {
+							ni_list_html += "<div class='n_image_media'>[<a id='cni' v='" + idx + "' href=''>清除URL</a>]</div>";
+						}
+						ni_list_html += "<div class='n_image_delete'>[<a id='dni' v='" + idx + "' href=''>删除</a>]</div>";
 						ni_list_html += "</div>";
 					});
 					$('#ni_list').empty();
@@ -129,29 +137,16 @@
 <body>
 	<h1>图文内图片</h1>
 	<form id="ulni_form">
-	bmp/png/jpeg/jpg/gif
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
 		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
 		<input type="button" id="ulni_btn" value="提交" />
 	</form>
-
+	<div class="div_content_block">
+		<a id="batch_gni" href="">批量获取URL</a>
+		<a id="batch_cni" href="">批量清除URL</a>
+		<a id="batch_dni" href="">批量删除</a>
+	</div>
 	<div id="ulni_msg"></div>
-	<!-- 开始列表 -->
-	<div class="div_list"><!-- 每一行 -->
-		<!-- 行里的列 -->
-		<div class="div_list_check">批量</div>
-		<div class="div_list_key">名称</div>
-		<div class="div_list_value">URL</div>
-		<div class="div_list_submit">获取URL</div>
-		<div class="div_list_clear">清除URL</div>
-		<div class="div_list_delete">删除</div>
+	<div class="n_context_list" id="ni_list"><!-- 列表 -->
 	</div>
-	<div id="ni_list"><!-- 列表 -->
-	</div>
-	<a id="batch_gni" href="">批量获取URL</a>
-	<a id="batch_cni" href="">批量清除URL</a>
-	<a id="batch_dni" href="">批量删除</a>
 </body>
 </html>

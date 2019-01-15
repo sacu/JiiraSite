@@ -73,6 +73,7 @@ CREATE TABLE `sa_dt_news` (
 	`media_id` varchar(100) COMMENT '公众号ID',
 	`title` varchar(100) not null COMMENT '图文标题',
 	`thumb_media_id` varchar(100) COMMENT '图文消息的封面图片素材id',
+	`thumb_id` varchar(100) COMMENT '图文消息的封面本地图片名称',
 	`author` varchar(50) not null COMMENT '图文作者',
 	`digest` varchar(50) not null COMMENT '图文消息的摘要，不填写会自动抓取',
 	`show_cover_pic` TINYINT(1) not null COMMENT '是否显示封面，1显示 0不显示',
@@ -147,7 +148,9 @@ DROP TABLE IF EXISTS `sa_dt_bookcase`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_bookcase` (
 	`openid` varchar(32) not null COMMENT 'openid',
-	`newsid` int(4) not null COMMENT '图文id(已买到的)'
+	`read` TINYINT(1) default 0 COMMENT '1为正在阅读项',
+	`name_id` int COMMENT '书名ID',
+	`news_id` int(4) not null COMMENT '图文id(已买到的)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户书架';
 /*!40101 SET character_set_client = @saved_cs_client */;
 

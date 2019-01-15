@@ -10,6 +10,7 @@
 		<id column="name_id" property="name_id" />
 		<id column="media_id" property="media_id" />
 		<id column="thumb_media_id" property="thumb_media_id" />
+		<id column="thumb_id" property="thumb_id" />
 		<id column="author" property="author" />
 		<id column="digest" property="digest" />
 		<id column="show_cover_pic" property="show_cover_pic" />
@@ -20,11 +21,11 @@
 	
 	<!-- 全部获取，即将弃用 -->
 	<select id="selectNewsAll" resultMap="adNews">
-		select * from sa_dt_news
+		select * from sa_dt_news order by id desc
 	</select>
-	<!-- 通过图书ID获取目录 这里注意type是书籍类型 -->
+	<!-- 通过图书ID获取目录 这里注意type是书籍类型  -->
 	<select id="selectNewsByNameID" resultMap="adNews">
-		select id,title from sa_dt_news where name_id=#{name_id} and type=2
+		select id,title from sa_dt_news where name_id=#{name_id} and type=2 order by id
 	</select>
 	<!-- 
 		级别限制拉取模式,列表拉取 其实只是拉取的目录
@@ -39,11 +40,11 @@
 	</select>
 	<!-- 级别模式拉取+limit条数排序 级别符合并且media_id不为空 -->
 	<select id="selectOderByLevelAndDesc" parameterType="Integer" resultMap="adNews">
-		select * from sa_dt_news where  (select level from sa_dt_news_type where id=sa_dt_news.type) &lt;= #{level} and media_id!='' order by id desc limit 0,#{rows}
+		select * from sa_dt_news where  (select level from sa_dt_news_type where id=sa_dt_news.type) &lt;= #{level} order by id desc limit 0,#{rows}
 	</select>
 	<!-- 类型限制模糊查询 -->
 	<select id="selectNewsByTypeAndLike" resultMap="adNews">
-		select id, title from sa_dt_news where (type=#{type} or #{type}=1) and (title like "%"#{search_text}"%" or digest like "%"#{search_text}"%")
+		select id, title from sa_dt_news where (type=#{type} or #{type}=1) and type!=2 and (title like "%"#{search_text}"%" or digest like "%"#{search_text}"%")
 	</select>
 	
 	<!-- 获取全部 -->
@@ -52,13 +53,14 @@
 		sa_dt_news where id=#{id}
 	</select>
 	<insert id="insertNews">
-		insert into sa_dt_news(title, type, consume, name_id, thumb_media_id, author, digest, show_cover_pic, content, need_open_comment, only_fans_can_comment) 
-			values(#{title}, #{type}, #{consume}, #{name_id}, #{thumb_media_id}, #{author}, #{digest}, #{show_cover_pic}, #{content}, #{need_open_comment}, #{only_fans_can_comment})
+		insert into sa_dt_news(title, type, consume, name_id, thumb_media_id, thumb_id, author, digest, show_cover_pic, content, need_open_comment, only_fans_can_comment) 
+			values(#{title}, #{type}, #{consume}, #{name_id}, #{thumb_media_id}, #{thumb_id}, #{author}, #{digest}, #{show_cover_pic}, #{content}, #{need_open_comment}, #{only_fans_can_comment})
 	</insert>
 	<!-- 更新IV -->
 	<update id="updateNews">
 		update sa_dt_news set media_id=#{media_id} where id=#{id}
 	</update>
+	
 	<!-- 删除图片 -->
 	<delete id="deleteNews">
 		delete from sa_dt_news where id=#{id}

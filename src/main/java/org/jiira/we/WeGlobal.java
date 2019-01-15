@@ -295,7 +295,8 @@ public class WeGlobal {
 			br = new BufferedReader(new FileReader(file));
 			CommandCollection.AccessToken = br.readLine();
 		} catch (IOException e) {
-			createAccessToken();// 读取accesstoken
+			logger.error(e.getMessage());
+			//createAccessToken();// 读取accesstoken
 		} finally {
 			if (null != br) {
 				try {

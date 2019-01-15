@@ -16,6 +16,9 @@
 			iv=#{file}
 		</foreach>
 	</select>
+	<select id="select" resultMap="adIV">
+		select * from sa_dt_iv where type="image" or type="thumb"
+	</select>
 	<select id="selectIVs" resultMap="adIV">
 		select * from
 		sa_dt_iv where type=#{type}

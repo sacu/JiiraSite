@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdIVDao {
-	/**
-	 * 获取用户
-	 */
+	public List<AdIV> select();
 	public List<AdIV> checkIV(List<String> ivs);
 	public List<AdIV> selectIVs(@Param("type")String type);
 	public AdIV selectIV(@Param("iv")String iv);

@@ -40,6 +40,7 @@ public class CommandCollection {
 
 	public static String AccessToken;
 
+	public static int ALL_TYPE = 1;
 	public static int BOOK_TYPE = 2;
 	
 	public static int ENABLE = 1;// 可用
@@ -96,7 +97,7 @@ public class CommandCollection {
 	/// ###################### 本地或服务器本地路径
 	/// ############################################
 	// 测试路径
-	// public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS
+//	 public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS
 	/// TOKEN路径
 	// public static final String NEWS_PATH = "F:\\\\upload\\\\";//图文路径，可能用不到
 	// public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径

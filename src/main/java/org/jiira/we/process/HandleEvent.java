@@ -88,7 +88,6 @@ public class HandleEvent {
 			String key = msg.getEventKey();
 			switch(key) {
 			case CommandCollection.MENU_RECENT:{//拉取图文
-				AdIVService adIVService = Application.getInstance().getBean(AdIVServiceImpl.class);
 				AdNewsService adNewsService = Application.getInstance().getBean(AdNewsServiceImpl.class);
 				//拉取最低级别的消息
 				List<AdNews> adNews = adNewsService.selectOderByLevelAndDesc(CommandCollection.LEVEL_LOWER, 8);
@@ -98,14 +97,12 @@ public class HandleEvent {
 				WeChatNewsMessage[] articles = new WeChatNewsMessage[len];
 				WeChatNewsMessage article;
 				AdNews adNew;
-				AdIV adiv;
 				for(int i = 0; i < len; ++i) {
 					article = new WeChatNewsMessage();
 					adNew = adNews.get(i);
 					article.setTitle(adNew.getTitle());
 					article.setDescription(adNew.getDigest());
-					adiv = adIVService.selectIVByMediaId(adNew.getThumb_media_id());
-					article.setPicUrl(adiv.getUrl());
+					article.setPicUrl(adNew.getThumb_id());
 					article.setUrl(CommandCollection.GetNewsURL(adNew.getId()));
 					articles[i] = article;
 				}

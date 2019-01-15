@@ -12,14 +12,16 @@
 	<select id="selectNewsName" resultMap="adNewsName">
 		select * from sa_dt_news_name
 	</select>
-	
 	<select id="selectNewsNameById" parameterType="Integer" resultMap="adNewsName">
 		select * from
 		sa_dt_news_name where id=#{id}
 	</select>
+	<select id="selectNewsNameByLike" resultMap="adNewsName">
+		select id, name from sa_dt_news_name where id!=1 and (name like "%"#{search_text}"%" or digest like "%"#{search_text}"%")
+	</select>
 	<insert id="insertNewsName">
 		insert into sa_dt_news_name(name, digest, author) 
-			values(#{name}, #{author}, #{author})
+			values(#{name}, #{digest}, #{author})
 	</insert>
 	<!-- 更新 -->
 	<update id="updateNewsName">

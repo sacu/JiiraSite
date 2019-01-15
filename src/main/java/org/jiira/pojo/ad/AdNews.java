@@ -9,6 +9,7 @@ public class AdNews {
 	private int name_id;// '书名ID',
 
 	private String thumb_media_id;//'图文消息的封面图片素材id',
+	private String thumb_id;//'图文消息的封面本地图片名称',
 	private String author;//'图文作者',
 	private String digest;//'图文消息的摘要，不填写会自动抓取',
 	private int show_cover_pic;// '是否显示封面，1显示 0不显示',
@@ -58,6 +59,13 @@ public class AdNews {
 	}
 	public void setThumb_media_id(String thumb_media_id) {
 		this.thumb_media_id = thumb_media_id;
+	}
+	
+	public String getThumb_id() {
+		return thumb_id;
+	}
+	public void setThumb_id(String thumb_id) {
+		this.thumb_id = thumb_id;
 	}
 	public String getAuthor() {
 		return author;

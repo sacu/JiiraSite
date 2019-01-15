@@ -53,7 +53,7 @@
 						} else {
 							vo_list_html += "<div class='n_voice_media'>[<a id='cni' v='" + idx + "' href=''>清除Media</a>]</div>";
 						}
-						vo_list_html += "<div class='n_voice_delete'>[<a id='cni' v='" + idx + "' href=''>删除</a>]</div>";
+						vo_list_html += "<div class='n_voice_delete'>[<a id='dni' v='" + idx + "' href=''>删除</a>]</div>";
 						vo_list_html += "</div>";
 					});
 					$('#vo_list').empty();
@@ -176,8 +176,8 @@
 	</div>
 	<div id="ulvo_msg"></div>
 	<div class="div_content_block">
-		<a id="batch_gvo" href="">批量获取URL</a>
-		<a id="batch_cvo" href="">批量清除URL</a>
+		<a id="batch_gvo" href="">批量获取Media</a>
+		<a id="batch_cvo" href="">批量清除Media</a>
 		<a id="batch_dvo" href="">批量删除</a>
 	</div>
 	<!-- 开始列表 -->

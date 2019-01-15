@@ -44,4 +44,10 @@ public class AdNewsNameServiceImpl implements AdNewsNameService {
 		return adNewsNameDao.deleteNewsName(id);
 	}
 
+	@Override
+	public List<AdNewsName> selectNewsNameByLike(String search_text) {
+		// TODO Auto-generated method stub
+		return adNewsNameDao.selectNewsNameByLike(search_text);
+	}
+
 }

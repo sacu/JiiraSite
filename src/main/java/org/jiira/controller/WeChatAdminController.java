@@ -213,6 +213,15 @@ public class WeChatAdminController {
 		mv.setView(new MappingJackson2JsonView());
 		return mv;
 	}
+
+	@RequestMapping(value = "/testNews")
+	public ModelAndView testNews(int news_id) {
+		AdNews adNews = adNewsService.selectById(news_id);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("adNews", adNews);
+		mv.setViewName("ad/news");
+		return mv;
+	}
 	@RequestMapping(value = "/getNewsToWe")
 	public ModelAndView getNewsToWe(@RequestBody AdNews[] adNews) {
 		// 提交图片到公众号
@@ -536,6 +545,14 @@ public class WeChatAdminController {
 			List<AdIV> adIVs = adIVService.selectByType(type);
 			mv.addObject(adIVs);
 		}
+		mv.setView(new MappingJackson2JsonView());
+		return mv;
+	}
+	@RequestMapping(value = "/getIVAll")
+	public ModelAndView getIVAll() {
+		ModelAndView mv = new ModelAndView();
+		List<AdIV> adIVs = adIVService.select();
+		mv.addObject(adIVs);
 		mv.setView(new MappingJackson2JsonView());
 		return mv;
 	}

@@ -13,11 +13,26 @@ public class WeBookCaseServiceImpl implements WeBookCaseService {
 	private WeBookCaseDao weBookCaseDao = null;
 
 	@Override
-	public WeBookCase selectWeBookCase(String openid) {
-		return weBookCaseDao.selectWeBookCase(openid);
+	public WeBookCase selectWeBookCase(String openid, int newsid) {
+		return weBookCaseDao.selectWeBookCase(openid, newsid);
 	}
 	@Override
 	public int insertWeBookCase(WeBookCase weBookCase) {
 		return weBookCaseDao.insertWeBookCase(weBookCase);
+	}
+	@Override
+	public int ignoreWeBookCase(WeBookCase weBookCase) {
+		// TODO Auto-generated method stub
+		return weBookCaseDao.ignoreWeBookCase(weBookCase);
+	}
+	@Override
+	public int updateBookCaseForRead(String openid, int name_id, int news_id) {
+		// TODO Auto-generated method stub
+		return weBookCaseDao.updateBookCaseForRead(openid, name_id, news_id);
+	}
+	@Override
+	public WeBookCase selectBookCaseForRead(String openid, int nameid) {
+		// TODO Auto-generated method stub
+		return weBookCaseDao.selectBookCaseForRead(openid, nameid);
 	}
 }

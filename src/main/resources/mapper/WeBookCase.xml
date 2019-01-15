@@ -4,13 +4,33 @@
 <mapper namespace="org.jiira.dao.WeBookCaseDao">
 	<resultMap id="weBookCase" type="org.jiira.pojo.ad.WeBookCase">
 		<id column="openid" property="openid" />
-		<id column="newsid" property="newsid" />
+		<id column="news_id" property="news_id" />
+		<id column="name_id" property="name_id" />
+		<id column="read" property="read" />
 	</resultMap>
 	<select id="selectWeBookCase" resultMap="weBookCase">
-		select * from sa_dt_bookcase where openid=#{openid};
+		select * from sa_dt_bookcase where openid=#{openid} and news_id=#{news_id};
 	</select>
+	<!-- 插入值 -->
 	<insert id="insertWeBookCase">
-		insert into sa_dt_bookcase(openid, newsid)
-			values(#{openid}, #{newsid})
+		insert into sa_dt_bookcase(openid, news_id, name_id)
+			values(#{openid}, #{news_id}, #{name_id})
 	</insert>
+	<!-- 插入不重复值 -->
+	<insert id="ignoreWeBookCase">
+		{call sa_jiira_db.insert_book_case(#{openid}, #{news_id}, #{name_id})}
+	</insert>
+	<!-- 获取阅读页 -->
+	<select id="selectBookCaseForRead" resultMap="weBookCase">
+		select * from sa_dt_bookcase where openid=#{openid} and `read`=1 and name_id=#{name_id}
+	</select>
+	<!-- 更新阅读页数
+	openid
+	name_id
+	news_id
+	 -->
+	<update id="updateBookCaseForRead">
+		update sa_dt_bookcase set `read`=0 where `read`=1 and name_id=#{name_id} and openid=#{openid};
+		update sa_dt_bookcase set `read`=1 where `news_id`=#{news_id} and openid=#{openid};
+	</update>
 </mapper>

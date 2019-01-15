@@ -1,3 +1,4 @@
+<%@page import="org.jiira.utils.CommandCollection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!doctype html>
@@ -37,16 +38,19 @@
 				success : function(result) {
 					adVLD = result['adIVList'];
 					var t_list_html = "";
+					var aurl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_THUMB%>' + "/";
 					$.each(adVLD, function(idx, i) {
-						t_list_html += "<div class='div_list'><div class='div_list_check'>";
-						t_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/></div>";
-						t_list_html += "<div class='div_list_key'>" + i['iv'] + "</div>";
-						t_list_html += "<div class='div_list_media_id'>" + i['media_id'] + "</div>";
-						t_list_html += "<div class='div_list_value'>" + i['url'] + "</div>";
-						t_list_html += "<div class='div_list_type'>" + i['type'] + "</div>";
-						t_list_html += "<div class='div_list_submit'><a id='gni' v='" + idx + "' href=''>获取URL</a></div>";
-						t_list_html += "<div class='div_list_clear'><a id='cni' v='" + idx + "' href=''>清除URL</a></div>";
-						t_list_html += "<div class='div_list_delete'><a id='dni' v='" + idx + "' href=''>删除</a></div>";
+						t_list_html += "<div class='n_image_element'>";
+						t_list_html += "<div class='n_image_name'>";
+						t_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/>" + i['iv'];
+						t_list_html += "</div>";
+						t_list_html += "<div class='n_image_context'><img class='n_image_img' src='" + aurl + i['iv'] + "'></div>";
+						if(i['media_id'] == null || i['media_id'].length == 0){
+							t_list_html += "<div class='n_image_media'>[<a id='gni' v='" + idx + "' href=''>获取Media</a>]</div>";
+						} else {
+							t_list_html += "<div class='n_image_media'>[<a id='cni' v='" + idx + "' href=''>清除Media</a>]</div>";
+						}
+						t_list_html += "<div class='n_image_delete'>[<a id='dni' v='" + idx + "' href=''>删除</a>]</div>";
 						t_list_html += "</div>";
 					});
 					$('#t_list').empty();
@@ -134,32 +138,18 @@
 <body>
 	<h1>缩略图</h1>
 	<form id="uli_form">
-	JPG
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
-		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
 		<input type="file" name="files" value="请选择上传的文件" accept="image/gif, image/jpeg"/><br>
 		<input type="hidden" name="type" value="thumb"/>
 		<input type="button" id="ult_btn" value="提交" />
 	</form>
 
 	<div id="ult_msg"></div>
-	<!-- 开始列表 -->
-	<div class="div_list"><!-- 每一行 -->
-		<!-- 行里的列 -->
-		<div class="div_list_check">批量</div>
-		<div class="div_list_key">名称</div>
-		<div class="div_list_media_id">media_id</div>
-		<div class="div_list_value">URL</div>
-		<div class="div_list_type">类型</div>
-		<div class="div_list_submit">获取URL</div>
-		<div class="div_list_clear">清除URL</div>
-		<div class="div_list_delete">删除</div>
+	<div class="div_content_block">
+		<a id="batch_gt" href="">批量获取Media</a>
+		<a id="batch_ct" href="">批量清除Media</a>
+		<a id="batch_dt" href="">批量删除</a>
 	</div>
-	<div id="t_list"><!-- 列表 -->
+	<div class="n_context_list" id="t_list"><!-- 列表 -->
 	</div>
-	<a id="batch_gt" href="">批量获取URL</a>
-	<a id="batch_ct" href="">批量清除URL</a>
-	<a id="batch_dt" href="">批量删除</a>
 </body>
 </html>

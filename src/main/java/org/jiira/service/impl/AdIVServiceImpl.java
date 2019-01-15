@@ -65,7 +65,7 @@ public class AdIVServiceImpl implements AdIVService {
 	@Override
 	public List<AdIV> select() {
 		// TODO Auto-generated method stub
-		return null;
+		return adIVDao.select();
 	}
 
 	@Override

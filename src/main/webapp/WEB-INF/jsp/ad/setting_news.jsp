@@ -18,7 +18,7 @@
 		$("#ulvi_btn").click(function() {
 			//提交表单
 			$.post({
-				url : ad + "addNews",
+				url : "addNews",
 				data : $("#uln_form").serialize(),
 				//成功后的方法
 				success : function(result) {
@@ -29,108 +29,76 @@
 			});
 		})
 		function getNIList() {
-							//提交表单
-							$
-									.post({
-										url : ad + "getNewsList",
-										data : {
-											type : "news"
-										},
-										//成功后的方法
-										success : function(result) {
-											var _adVLD = result['adNewsList'];
-											adVLD = {};
-											var n_list_html = "";
-											$
-													.each(
-															_adVLD,
-															function(idx, i) {
-																var _d = i['id'];
-																adVLD[_d] = i;
-																n_list_html += "<div class='div_list'><div class='div_list_check'>";
-																n_list_html += "<input type='checkbox' name='ni_check' value='" + _d + "'/></div>";
-																n_list_html += "<div class='div_list_title'>" + i['title'] + "</div>";
-																n_list_html += "<div class='div_list_type'>" + i['type'] + "</div>";
-																n_list_html += "<div class='div_list_type'>" + i['consume'] + "</div>";
-																n_list_html += "<div class='div_list_type'>" + i['name_id'] + "</div>";
-																n_list_html += "<div class='div_list_digest'>"
-																		+ i['digest']
-																		+ "</div>";
-																n_list_html += "<div class='div_list_media_id'>"
-																		+ i['media_id']
-																		+ "</div>";
-																n_list_html += "<div class='div_list_check'>"
-																		+ (i['need_open_comment'] == 0 ? "关闭"
-																				: "开启")
-																		+ "</div>";
-																n_list_html += "<div class='div_list_check'>"
-																		+ (i['only_fans_can_comment'] == 0 ? "粉丝"
-																				: "全部")
-																		+ "</div>";
-																n_list_html += "<div class='div_list_submit'><a id='gni' v='" + _d + "' href=''>获取Media</a></div>";
-																n_list_html += "<div class='div_list_clear'><a id='cni' v='" + _d + "' href=''>清除Media</a></div>";
-																n_list_html += "<div class='div_list_delete'><a id='dni' v='" + _d + "' href=''>删除</a></div>";
-																n_list_html += "<div class='div_list_delete'><a id='dnpush' v='" + _d + "' href=''>推送</a></div>";
-																n_list_html += "</div>";
-															});
-											$('#n_list').empty();
-											$('#n_list').html(n_list_html);
-										}
-									});
+			//提交表单
+			$.post({
+				url : "getNewsList",
+				//成功后的方法
+				success : function(result) {
+					adVLD = result['adNewsList'];
+					var n_list_html = "";
+					$.each(adVLD,function(idx, i) {
+						n_list_html += "<div class='n_news_element'>";
+						n_list_html += "<div class='n_news_name'>";
+						n_list_html += "<input type='checkbox' name='ni_check' value='" + idx + "'/>" + i['title'];
+						n_list_html += "</div>";
+						n_list_html += "<div class='n_news_context'><a href='testNews?news_id="+ i['id'] +"' target='_blank'>";
+						n_list_html += "<img class='n_news_img' src='" + i['thumb_id'] + "'></a></div>";
+						//图文类型
+						n_list_html += "<div class='n_news_type'>类型:" + adType[i['type']]['name'] + "</div>";
+						//图书ID
+						n_list_html += "<div class='n_news_type'>图书ID:" + i['name_id'] + "</div>";
+						if(i['media_id'] == null || i['media_id'].length == 0){
+							if(i['thumb_media_id'] == null || i['thumb_media_id'].length == 0){
+								n_list_html += "<div class='n_news_media'>无Media</div>";
+							} else {
+								n_list_html += "<div class='n_news_media'>[<a id='gni' v='" + idx + "' href=''>获取Media</a>]</div>";
+							}
+						} else {
+							n_list_html += "<div class='n_news_media'>[<a id='cni' v='" + idx + "' href=''>清除Media</a>]</div>";
+							n_list_html += "<div class='n_news_push'>[<a id='dnpush' v='" + idx + "' href=''>推送</a>]</div>";
 						}
-						$("#n_list")
-								.click(
-										function(event) {
-											var target = $(event.target);
-											var id = target.attr("id");
-											var url = "";
-											var data;
-											if (undefined != id) {
-												switch (id) {
-												case "gni":
-													url = ad + "getNewsToWe";
-													var adV = adVLD[target
-															.attr("v")];
-													nis_command(
-															url,
-															JSON
-																	.stringify([ serializeObject(adV) ]))
-													break;
-												case "cni":
-													url = ad + "clearNewsToWe";
-													var adV = adVLD[target
-															.attr("v")];
-													nis_command(
-															url,
-															JSON
-																	.stringify([ serializeObject(adV) ]))
-													break;
-												case "dni":
-													url = ad + "deleteNewsToWe";
-													var adV = adVLD[target
-															.attr("v")];
-													nis_command(
-															url,
-															JSON
-																	.stringify([ serializeObject(adV) ]))
-													break;
-												case "dnpush":
-													url = ad + "pushNewsToWe";
-													$.post({
-														url : url,
-														data : adVLD[target.attr("v")]['media_id'],
-														contentType : "application/json",
-														success : function(result) {
-															alert(JSON.stringify(result))
-														}
-													});
-													
-													break;
-												}
-													
-												event.preventDefault(); // 阻止链接跳转
-											}
-										})
+						n_list_html += "<div class='n_news_delete'>[<a id='dni' v='" + idx + "' href=''>删除</a>]</div>";
+						n_list_html += "</div>";
+					});
+					$('#n_list').empty();
+					$('#n_list').html(n_list_html);
+				}
+			});
+		}
+		$("#n_list").click(function(event) {
+			var target = $(event.target);
+			var id = target.attr("id");
+			var url = "";
+			var data;
+			if (undefined != id) {
+				switch (id) {
+				case "gni":
+					var adV = adVLD[target.attr("v")];
+					nis_command("getNewsToWe",JSON.stringify([serializeObject(adV) ]))
+					break;
+				case "cni":
+					var adV = adVLD[target.attr("v")];
+					nis_command("clearNewsToWe",JSON.stringify([serializeObject(adV) ]))
+					break;
+				case "dni":
+					var adV = adVLD[target.attr("v")];
+					nis_command("deleteNewsToWe",JSON.stringify([serializeObject(adV) ]))
+					break;
+				case "dnpush":
+					$.post({
+						url : "pushNewsToWe",
+						data : adVLD[target.attr("v")]['media_id'],
+						contentType : "application/json",
+						success : function(result) {
+							alert(JSON.stringify(result))
+						}
+					});
+					break;
+				}
+					
+				event.preventDefault(); // 阻止链接跳转
+			}
+		})
 						function nis_command(url, data) {
 							if (url.length > 0) {//} && data['adNews'].length > 0){
 								$.post({
@@ -190,7 +158,6 @@
 									.stringify(data));
 							event.preventDefault(); // 阻止链接跳转
 						})
-						getNIList();
 
 						//获取图文类型
 						function getNTList(_adNTL) {
@@ -336,172 +303,242 @@
 						$("#etype").change(function(){
 							$("#type_name").val(adType[$("#etype").val()]['name']);
 						})
+						getNIList();
 					});
+	$("#edbook").click(function(event) {
+		$("#edbooklayer").css('display','block'); 
+		event.preventDefault();  // 阻止链接跳转
+	});
+	$("#cls_book_btn").click(function(event) {
+		$("#edbooklayer").css('display','none'); 
+		event.preventDefault();  // 阻止链接跳转
+	})
+	$("#edtype").click(function(event) {
+		$("#edtypelayer").css('display','block'); 
+		event.preventDefault();  // 阻止链接跳转
+	});
+	$("#cls_type_btn").click(function(event) {
+		$("#edtypelayer").css('display','none'); 
+		event.preventDefault();  // 阻止链接跳转
+	})
+	$("#upnews").click(function(event) {
+		$("#upnewslayer").css('display','block'); 
+		event.preventDefault();  // 阻止链接跳转
+	});
+	$("#cls_news_btn").click(function(event) {
+		$("#upnewslayer").css('display','none'); 
+		event.preventDefault();  // 阻止链接跳转
+	})
+	var total;
+	$("#select_image").click(function(event) {//显示选择图片
+		$("#upnewsimagelayer").css('display','block'); 
+		total = {};
+		$.post({
+			url : "getIVAll",
+			//成功后的方法
+			success : function(result) {
+				total = result['adIVList'];
+				var i_list_html = "";
+				var iurl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_IMAGE%>' + "/";
+				var turl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_THUMB%>' + "/";
+				$.each(total, function(idx, i) {
+					i_list_html += "<div class='n_image_element'>";
+					i_list_html += "<div class='n_image_name'>";
+					i_list_html += i['iv'];
+					i_list_html += "</div>";
+					var u = i['type']=="image"?iurl + i['iv']:turl + i['iv'];
+					i_list_html += "<div class='n_image_context'><img v='" + idx + "' class='n_image_img' src='" + u + "'></div>";
+					i_list_html += "</div>";
+				});
+				$('#cnimagelayer').empty();
+				$('#cnimagelayer').html(i_list_html);
+			}
+		});
+		event.preventDefault();  // 阻止链接跳转
+	})
+	$("#cnimagelayer").click(function(event) {//选择图片
+		var target = $(event.target);
+		if(target.prop("tagName").toLowerCase() == "img"){
+			var iurl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_IMAGE%>' + "/";
+			var turl = '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_THUMB%>' + "/";
+			var current = total[target.attr("v")];
+			var u = current['type']=="image"?iurl:turl;
+			$("#thumb_id").val(u + current['iv']);
+			$("#thumb_media_id").val(current['media_id']);
+			$("#upnewsimagelayer").css('display','none'); 
+		}
+		event.preventDefault();  // 阻止链接跳转
+	})
+	
 </script>
 </head>
 <body>
 	<h1>图文</h1>
-	<div class="div_content_block">
-		<div class="div_content_block"><h2>编辑图书</h2></div>
-		<div class="div_content_block">
-			<div class="div_content_key">选择</div>
-			<div class="div_content_value">
-				<select name="ename_id" id="ename_id"></select>
-			</div>
-		</div>
-		<div class="div_content_block">
-			<div class="div_content_key">书名</div>
-			<div class="div_content_value">
-				<input type="text" id="book_name">
-			</div>
-		</div>
-		<div class="div_content_block">
-			<div class="div_content_key">作者</div>
-			<div class="div_content_value">
-				<input type="text" id="book_author">
-			</div>
-		</div>
-		<div class="div_content_block">
-			<div class="div_content_key">简介(100字)</div>
-			<div class="div_content_value">
-				<textarea id="book_digest" maxlength="100"></textarea>
-			</div>
-		</div>
-		<div class="div_content_block">
-			<a id="add_name_btn" href="">添加</a>
-			<a id="del_name_btn" href="">删除</a>
-			<a id="re_name_btn" href="">修改</a>
-		</div>
-	</div>
-	<hr>
-	<div class="div_content_block">
-		<div class="div_content_block"><h2>类型编辑</h2></div>
-		<div class="div_content_block">
-			<div class="div_content_key">选择</div>
-			<div class="div_content_value">
-				<select name="etype" id="etype"></select>
-			</div>
-		</div>
-		<div class="div_content_block">
-			<div class="div_content_key">类型名称</div>
-			<div class="div_content_value">
-				<input type="text" name="type_name" id="type_name">
-			</div>
-		</div>
-		<div class="div_content_block">
-			<a id="add_type_btn" href="">添加</a>
-			<a id="del_type_btn" href="">删除</a>
-			<a id="re_type_btn" href="">修改</a>
-		</div>
-	</div>
-	<hr>
-	<div class="div_content_block">
-		<div class="div_content_block"><h2>发布图文</h2></div>
-		<form id="uln_form" method="post">
-			<div class="div_content_block">
-				<div class="div_content_key">文章类型:</div>
-				<div class="div_content_value">
-					<select name="type" id="type"></select>
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">图书ID:</div>
-				<div class="div_content_value">
-					<select name="name_id" id="name_id"></select>
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">阅读花费:</div>
-				<div class="div_content_value">
-					<input type="text" name="consume" id="consume" value="0">
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">标题:</div>
-				<div class="div_content_value">
-					<input type="text" name="title" id="title" value="我是标题" />
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">封面素材ID:</div>
-				<div class="div_content_value">
-					<input type="text" name="thumb_media_id"
-					value="xz7FUpQVD_jqdjkY2vb6IFhDAxwOsOe6S_rigdKb4WQ" />
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">作者:</div>
-				<div class="div_content_value">
-					<input type="text" name="author" value="sa" />
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">摘要(100字):</div>
-				<div class="div_content_value">
-					<textarea name="digest" maxlength="100">你好</textarea>
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">是否显示封面:</div>
-				<div class="div_content_value">
-					是<input type='radio' name='show_cover_pic' value="1" checked/>
-					 否<input type='radio' name='show_cover_pic' value="0" />
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">内容(2000字):</div>
-				<div class="div_content_value">
-					<textarea name="content" maxlength="2000"></textarea>
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">是否打开评论(腾讯有BUG):</div>
-				<div class="div_content_value">
-					是<input type='radio' name='need_open_comment' value="1" />
-					 否<input type='radio' name='need_open_comment' value="0" checked/>
-				</div>
-			</div>
-			<div class="div_content_block">
-				<div class="div_content_key">是否限制评论(腾讯有BUG):</div>
-				<div class="div_content_value">
-					是<input type='radio' name='only_fans_can_comment' value="1" />
-					 否<input type='radio' name='only_fans_can_comment' value="0" checked/>
-				</div>
-			</div>
-			<div class="div_content_block">
-				 <input id="ulvi_btn" type="button" value="提交" />
-			</div>
-		</form>
-	</div>
+	<a href="" id="edbook">编辑图书</a>
+	<a href="" id="edtype">编辑类型</a>
+	<a href="" id="upnews">上传图文</a>
 	<div id="uln_msg"></div>
-	<hr>
-	<div class="div_content_block">
-		<div class="div_content_block"><h2>已提交的图文列表</h2></div>
-		<div class="div_list">
-			<!-- 每一行 -->
-			<!-- 行里的列 -->
-			<div class="div_list_check">批量</div>
-			<div class="div_list_title">标题</div>
-			<div class="div_list_type">图文类型</div>
-			<div class="div_list_type">阅读花费</div>
-			<div class="div_list_type">书名ID</div>
-			<div class="div_list_digest">简介</div>
-			<div class="div_list_media_id">media_id</div>
-			<div class="div_list_check">评论</div>
-			<div class="div_list_check">评论权限</div>
-			<div class="div_list_submit">获取Media</div>
-			<div class="div_list_clear">清除Media</div>
-			<div class="div_list_delete">删除</div>
-			<div class="div_list_delete">推送</div>
-		</div>
-		<div id="n_list">
-			<!-- 列表 -->
-		</div>
-	</div>
 	<div class="div_content_block">
 		<a id="batch_gn" href="">批量获取Media</a>
 		<a id="batch_cn" href="">批量清除Media</a>
 		<a id="batch_dn" href="">批量删除</a>
+	</div>
+	<hr>
+	<div class="div_content_block">
+		<div class="div_content_block"><h2>已提交的图文列表</h2></div>
+		<div class="n_context_list" id="n_list">
+			<!-- 列表 -->
+		</div>
+	</div>
+	<div class="n_float_layer" id="edbooklayer">
+		<div class="n_float_news_book">
+			<div class="div_content_block">
+				<div class="div_content_block"><h2>编辑图书</h2></div>
+				<div class="div_content_block">
+					<div class="div_content_key">选择</div>
+					<div class="div_content_value">
+						<select name="ename_id" id="ename_id"></select>
+					</div>
+				</div>
+				<div class="div_content_block">
+					<div class="div_content_key">书名</div>
+					<div class="div_content_value">
+						<input type="text" id="book_name">
+					</div>
+				</div>
+				<div class="div_content_block">
+					<div class="div_content_key">作者</div>
+					<div class="div_content_value">
+						<input type="text" id="book_author">
+					</div>
+				</div>
+				<div class="div_content_block">
+					<div class="div_content_key">简介(100字)</div>
+					<div class="div_content_value">
+						<textarea id="book_digest" maxlength="100"></textarea>
+					</div>
+				</div>
+				<div class="div_content_block">
+					<a id="add_name_btn" href="">添加</a>
+					<a id="del_name_btn" href="">删除</a>
+					<a id="re_name_btn" href="">修改</a>
+					<a id="cls_book_btn" href="">关闭</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="n_float_layer" id="edtypelayer">
+		<div class="n_float_news_type">
+			<div class="div_content_block">
+				<div class="div_content_block"><h2>类型编辑</h2></div>
+				<div class="div_content_block">
+					<div class="div_content_key">选择</div>
+					<div class="div_content_value">
+						<select name="etype" id="etype"></select>
+					</div>
+				</div>
+				<div class="div_content_block">
+					<div class="div_content_key">类型名称</div>
+					<div class="div_content_value">
+						<input type="text" name="type_name" id="type_name">
+					</div>
+				</div>
+				<div class="div_content_block">
+					<a id="add_type_btn" href="">添加</a>
+					<a id="del_type_btn" href="">删除</a>
+					<a id="re_type_btn" href="">修改</a>
+					<a id="cls_type_btn" href="">关闭</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="n_float_news_layer" id="upnewsimagelayer">
+		<div class="n_float_news_image" id="cnimagelayer">
+		</div>
+	</div>
+	<div class="n_float_layer" id="upnewslayer">
+		<div class="n_float_news">
+			<div class="div_content_block">
+				<div class="div_content_block"><h2>发布图文</h2></div>
+				<form id="uln_form" method="post">
+					<div class="div_content_block">
+						<div class="div_content_key">文章类型:</div>
+						<div class="div_content_value">
+							<select name="type" id="type"></select>
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">图书ID:</div>
+						<div class="div_content_value">
+							<select name="name_id" id="name_id"></select>
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">阅读花费:</div>
+						<div class="div_content_value">
+							<input type="text" name="consume" id="consume" value="0">
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">标题:</div>
+						<div class="div_content_value">
+							<input type="text" name="title" id="title"/>
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">封面素材ID:</div>
+						<div class="div_content_value">
+							<input type="text" name="thumb_id" id="thumb_id" placeholder="右侧选择图片后自动填充"/><br>
+							<input type="text" name="thumb_media_id" id="thumb_media_id" placeholder="右侧选择图片后自动填充"/>
+							<a href="" id="select_image">选择图片</a>
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">作者:</div>
+						<div class="div_content_value">
+							<input type="text" name="author" />
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">摘要(100字):</div>
+						<div class="div_content_value">
+							<textarea name="digest" maxlength="100"></textarea>
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">是否显示封面:</div>
+						<div class="div_content_value">
+							是<input type='radio' name='show_cover_pic' value="1" checked/>
+							 否<input type='radio' name='show_cover_pic' value="0" />
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">内容(2000字):</div>
+						<div class="div_content_value">
+							<textarea name="content" maxlength="2000"></textarea>
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">是否打开评论(腾讯有BUG):</div>
+						<div class="div_content_value">
+							是<input type='radio' name='need_open_comment' value="1" />
+							 否<input type='radio' name='need_open_comment' value="0" checked/>
+						</div>
+					</div>
+					<div class="div_content_block">
+						<div class="div_content_key">是否限制评论(腾讯有BUG):</div>
+						<div class="div_content_value">
+							是<input type='radio' name='only_fans_can_comment' value="1" />
+							 否<input type='radio' name='only_fans_can_comment' value="0" checked/>
+						</div>
+					</div>
+					<div class="div_content_block">
+						 <input id="ulvi_btn" type="button" value="提交" />
+						 <input id="cls_news_btn" type="button" value="关闭" />
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

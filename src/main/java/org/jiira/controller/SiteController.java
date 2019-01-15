@@ -91,7 +91,7 @@ public class SiteController {
 	public ModelAndView ict(HttpServletRequest request, String redirect, String openid) {
 		ModelAndView mv = new ModelAndView();
 		WeUser weUser = weUserService.selectWeUser(openid);
-		request.setAttribute("weUser", weUser);
+		request.getSession().setAttribute("weUser", weUser);
 		jump(request, redirect);
 		mv.setViewName("we/" + request.getAttribute("page"));//返回页面代码信息
 		return mv;
