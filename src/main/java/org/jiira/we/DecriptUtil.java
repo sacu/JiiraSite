@@ -32,10 +32,20 @@ public class DecriptUtil {
 	private static Encoder encode = Base64.getEncoder();
 	private static Decoder decode = Base64.getDecoder();
 
+	
+	public static String ReqSignPay(ArrayList<SAHttpKVO> params, boolean isencode) {
+		return ReqSign(params, "key=" + CommandCollection.WePayKey, isencode, true);
+	}
+	public static String ReqSignAI(ArrayList<SAHttpKVO> params) {
+		return ReqSign(params, "app_key=" + CommandCollection.AI_AppKey, true, true);
+	}
+	public static String ReqSignPayConfig(ArrayList<SAHttpKVO> params) {
+		return ReqSign(params, "", false, false);
+	}
 	/**
 	 * 获取
 	 */
-	public static String ReqSign(ArrayList<SAHttpKVO> params) {
+	public static String ReqSign(ArrayList<SAHttpKVO> params, String subj, boolean isencode, boolean isMD5) {
 		// 1. 字典升序排序(小数在前,因为参数不变,直接口算了)
 		Collections.sort(params, new KVOComparator());
 		// 2. 拼按URL键值对
@@ -44,16 +54,30 @@ public class DecriptUtil {
 		try {
 			for (int i = 0; i < params.size(); ++i) {
 				kvo = params.get(i);
-				str += kvo.getKey() + "=" + URLEncoder.encode(kvo.getValue(), "utf-8") + "&";
+				if(isencode) {
+					str += kvo.getKey() + "=" + URLEncoder.encode(kvo.getValue(), "utf-8") + "&";
+				} else {
+					str += kvo.getKey() + "=" + kvo.getValue() + "&";
+				}
 			}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// 3. 拼接app_key
-		str += "app_key=" + CommandCollection.AI_AppKey;
+		if(subj.length() > 0) {
+			str += subj;
+		} else {
+			str = str.substring(0, str.length() - 1);
+		}
+		System.out.println(str);
 		// 4. MD5运算+转换大写，得到请求签名
-		return DecriptUtil.MD5(str).toUpperCase();
+		if(isMD5) {
+			return DecriptUtil.MD5(str).toUpperCase();
+		} else {
+			return DecriptUtil.SHA1(str).toUpperCase();
+		}
+		
 	}
 
 	public static Map<String, String> Sign(String jsapi_ticket, String url) {

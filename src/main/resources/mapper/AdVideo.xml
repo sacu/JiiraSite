@@ -15,8 +15,7 @@
 	</select>
 	<!-- 获取全部 -->
 	<select id="selectVideos" resultMap="adVideo">
-		select * from
-		sa_dt_video
+		select * from sa_dt_video
 	</select>
 	<!-- 获取单一 -->
 	<select id="selectVideo" resultMap="adVideo">

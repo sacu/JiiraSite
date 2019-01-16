@@ -30,9 +30,7 @@
 					var adNews = result['adNews'];
 					$('#news_title').html(adNews['title']);
 					$('#news_author').html(adNews['author']);
-					if(result.thumb){
-						$("#news_thumb").attr('src', '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_THUMB%>' + "/" + result['thumb']);
-					}
+					$("#news_thumb").attr('src', adNews['thumb_id']);
 					var check = result['check'];
 					if(check == 0){
 						$('#news_content').html(adNews['content']);

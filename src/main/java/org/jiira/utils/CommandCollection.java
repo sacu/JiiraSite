@@ -38,7 +38,10 @@ public class CommandCollection {
 	public static final String AI_AppID = "2110982891";
 	public static final String AI_AppKey = "cWIPxtEqyc8mMQSW";
 
+	public static boolean JSSDK_INIT = false;
+	public static final String WePayKey = "tengxunshabilajiwangzhancaonima2";
 	public static String AccessToken;
+	public static String JSSDKTicket;
 
 	public static int ALL_TYPE = 1;
 	public static int BOOK_TYPE = 2;
@@ -98,6 +101,7 @@ public class CommandCollection {
 	/// ############################################
 	// 测试路径
 //	 public static final String ACCESS_TOKEN_PATH = "d:\\accesstoken.sa";// ACCESS
+//	 public static final String JSSDK_TICKET_PATH = "d:\\jsapiticket.sa";// ACCESS
 	/// TOKEN路径
 	// public static final String NEWS_PATH = "F:\\\\upload\\\\";//图文路径，可能用不到
 	// public static final String NEWS_IMAGE_PATH = "F:\\upload\\";//图文内图形路径
@@ -108,6 +112,7 @@ public class CommandCollection {
 	// 服务器路径
 	public static final String BASE_PATH = "/usr/share/tomcat/webapps/manager/resource/";
 	public static final String ACCESS_TOKEN_PATH = BASE_PATH + "accesstoken.sa";// ACCESS TOKEN路径
+	public static final String JSSDK_TICKET_PATH = BASE_PATH + "jsapiticket.sa";// jsapi ticket路径
 	public static final String NEWS_PATH = BASE_PATH + MESSAGE_NEWS + "/";// 图文路径，可能用不到
 	public static final String NEWS_IMAGE_PATH = BASE_PATH + MESSAGE_NEWS_IMAGE + "/";// 图文内图形路径
 	public static final String IMAGE_PATH = BASE_PATH + MESSAGE_IMAGE + "/";// 图形路径
@@ -125,6 +130,7 @@ public class CommandCollection {
 	public static final String CLEAR_QUOTA = "https://api.weixin.qq.com/cgi-bin/clear_quota?access_token=";// 清除访问次数限制，一个月只能用10次
 	public static final String CREATE_MENU = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";// 创建菜单
 	public static final String ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token";// 生成 ACCESS TOKEN
+	public static final String JSSDK_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=";
 
 	public static final String AUTH_CODE = "https://open.weixin.qq.com/connect/oauth2/authorize";// 获取授权码 code
 	public static final String HTML_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token";// 获取HTML ACCESS

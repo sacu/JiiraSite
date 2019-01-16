@@ -1,0 +1,48 @@
+2019/01/11 16:45:49.024 ERROR (WeGlobal.java:84) - {
+  "ret": 16397,
+  "msg": "image size too big",
+  "data": {
+	  "text": ""
+  }
+}
+
+2019/01/11 16:46:54.740 ERROR (WeGlobal.java:84) - {
+  "ret": 16397,
+  "msg": "image size too big",
+  "data": {
+	  "text": ""
+  }
+}
+
+2019/01/11 16:47:55.447 ERROR (WeGlobal.java:84) - {
+  "ret": 16397,
+  "msg": "image size too big",
+  "data": {
+	  "text": ""
+  }
+}
+
+2019/01/11 16:52:03.882 ERROR (WeGlobal.java:84) - {
+  "ret": 0,
+  "msg": "ok",
+  "data": {
+	  "text": "蓝色的天空上有一个蓝色的电视"
+  }
+}
+
+2019/01/11 16:52:26.884 ERROR (WeGlobal.java:84) - {
+  "ret": 37,
+  "msg": "system busy, please try again later",
+  "data": {
+	  "text": ""
+  }
+}
+
+2019/01/11 16:52:47.548 ERROR (WeGlobal.java:84) - {
+  "ret": 0,
+  "msg": "ok",
+  "data": {
+	  "text": "夕阳下的雪山"
+  }
+}
+

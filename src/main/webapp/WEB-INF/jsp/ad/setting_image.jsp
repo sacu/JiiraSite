@@ -15,7 +15,7 @@
 		$("#uli_btn").click(function(event) {
 			var formData = new FormData($("#uli_form")[0]);//[0]必须的
 			$.ajax({//必须使用ajax
-				url : ad + "addIVV",//地址是 ad/addNewsImage
+				url : "addIVV",//地址是 ad/addNewsImage
 				type: "POST",
 				data : formData,
 				processData: false,
@@ -32,7 +32,7 @@
 		function getNIList() {
 			//提交表单
 			$.post({
-				url : ad + "getIVVList",
+				url : "getIVVList",
 				data:{type:"image"},
 				//成功后的方法
 				success : function(result) {
@@ -61,27 +61,23 @@
 		$("#i_list").click(function(event) {
 			var target = $(event.target);
 			var id = target.attr("id");
-			var url = "";
 			var data;
 			if(undefined != id){
 				switch(id){
 				case "gni":
-					url = ad + "getIVVToWe";
 					var adV = adVLD[target.attr("v")];
 					data={ivvs:[adV['iv']], type:"image"}
-					nis_command(url, data)
+					nis_command("getIVVToWe", data)
 					break;
 				case "cni":
-					url = ad + "clearIVVToWe";
 					var adV = adVLD[target.attr("v")];
 					data={ivvs:[adV['iv']], type:"image", media_ids:[adV['media_id']]}
-					nis_command(url, data)
+					nis_command("clearIVVToWe", data)
 					break;
 				case "dni":
-					url = ad + "deleteIVVToWe";
 					var adV = adVLD[target.attr("v")];
 					data={ivvs:[adV['iv']], type:"image", media_ids:[adV['media_id']]}
-					nis_command(url, data)
+					nis_command("deleteIVVToWe", data)
 					break;
 				}
 				event.preventDefault();  // 阻止链接跳转
@@ -100,7 +96,7 @@
 			}
 		}
 		$("#batch_gi").click(function(event) {
-			var url = ad + "getIVVToWe";
+			var url = "getIVVToWe";
 			var data = {ivvs:[], type:"image"};
 			$.each($('input:checkbox:checked'),function(){
 				var adV = adVLD[$(this).val()];
@@ -110,7 +106,7 @@
 			event.preventDefault();  // 阻止链接跳转
 		})
 		$("#batch_ci").click(function(event) {
-			var url = ad + "clearIVVToWe";
+			var url = "clearIVVToWe";
 			var data = {ivvs:[], type:"image", media_ids:[]};
 			$.each($('input:checkbox:checked'),function(){
 				var adV = adVLD[$(this).val()];
@@ -121,7 +117,7 @@
 			event.preventDefault();  // 阻止链接跳转
 		})
 		$("#batch_di").click(function(event) {
-			var url = ad + "deleteIVVToWe";
+			var url = "deleteIVVToWe";
 			var data = {ivvs:[], type:"image", media_ids:[]};
 			$.each($('input:checkbox:checked'),function(){
 				var adV = adVLD[$(this).val()];

@@ -3,6 +3,7 @@ package org.jiira.pojo.we.pay;
 public class WePayXML {
 	private String appid;
 	private String mch_id;
+	private String openid;
 	private String nonce_str;
 	private String body;
 	private String out_trade_no;
@@ -22,6 +23,12 @@ public class WePayXML {
 	}
 	public void setMch_id(String mch_id) {
 		this.mch_id = mch_id;
+	}
+	public String getOpenid() {
+		return openid;
+	}
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 	public String getNonce_str() {
 		return nonce_str;

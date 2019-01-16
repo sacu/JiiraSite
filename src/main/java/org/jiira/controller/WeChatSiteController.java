@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -180,12 +181,12 @@ public class WeChatSiteController {
 			weBookCaseService.ignoreWeBookCase(weBookCase);
 			//这里要改
 			weBookCaseService.updateBookCaseForRead(openid, adNews.getName_id(), adNews.getId());//设置阅读页
-			//获取图文封面
-			AdIV adIV = ((AdIVService) adIVService).selectIVByMediaId(adNews.getThumb_media_id());
 			mv.addObject("check", 0);
-			if(null != adIV) {
-				mv.addObject("thumb", adIV.getIV());
-			}
+			//获取图文封面
+//			AdIV adIV = ((AdIVService) adIVService).selectIVByMediaId(adNews.getThumb_media_id());
+//			if(null != adIV) {
+//				mv.addObject("thumb", adIV.getIV());
+//			}
 		} else {//如果各种原因不能查看，则移除内容
 			adNews.setContent("");
 		}
@@ -242,14 +243,6 @@ public class WeChatSiteController {
 			news_id = weBookCase.getNewsid();
 		}
 		mv.addObject("news_id", news_id);
-		mv.setView(new MappingJackson2JsonView());
-	    return mv;
-	}
-	
-	@RequestMapping(value="/callpay")
-	public ModelAndView callpay() {
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("支付回调");
 		mv.setView(new MappingJackson2JsonView());
 	    return mv;
 	}

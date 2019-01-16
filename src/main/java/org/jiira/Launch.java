@@ -3,43 +3,24 @@ package org.jiira;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jiira.pojo.we.ai.voice.WeYTVoiceSay;
+import org.jiira.pojo.we.pay.WePayRequest;
+import org.jiira.utils.CommandCollection;
 import org.jiira.we.DecriptUtil;
 import org.jiira.we.WeGlobal;
+import org.jiira.we.url.SAHttpKVO;
 
 public class Launch {
 	public static void main(String[] args) {
-		String message = "有一天，老师正在讲桌上讲课，我觉得无聊，于是拿出MP3想听歌，又怕被老师逮住，于是我碰了一下同桌，指了指老师，又指了指我耳朵上的耳机。没想到二货同桌突然站起来说，老师你小点声音，我同桌听歌都听不见了。";
-		System.out.println(message.length());
-		message = message.replaceAll("“", "");
-		message = message.replaceAll("”", "");
-		message = message.replaceAll(":", "");
-		message = message.replaceAll("。", "");
-		message = message.replaceAll("？", "");
-		message = message.replaceAll("！", "");
-		message = message.replaceAll("，", "");
-		message = message.replaceAll(" ", "");
-		message = message.replaceAll("\\r", "");
-		message = message.replaceAll("\\n", "");
-		System.out.println(message.length());
-		WeYTVoiceSay voice = WeGlobal.getInstance().getYTVoiceSay(message);
-		if(voice.getRet() == 0) {
-			byte[] a = DecriptUtil.decodeBASE64(voice.getVoice());
-			
-			try {
-				FileOutputStream os = new FileOutputStream("d://a.mp3");
-				os.write(a);
-				System.out.println("成功");
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println(voice.getRet() + ":" + voice.getMsg());
-		}
+		ArrayList<SAHttpKVO> params = new ArrayList<>();
+		params.add(new SAHttpKVO("appId", "wxbe33419389062baf"));
+		String timeStamp = "1547627557";
+		params.add(new SAHttpKVO("timeStamp", timeStamp));
+		params.add(new SAHttpKVO("nonceStr", "65b36bb90f8b4dddae6cb41a2aabece3"));
+		params.add(new SAHttpKVO("package", "prepay_id=wx16163235698182987a9554190336872441"));
+		params.add(new SAHttpKVO("signType", "MD5"));
+		System.out.println(DecriptUtil.ReqSignPay(params, false));
 	}
 }

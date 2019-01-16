@@ -1,48 +1,243 @@
-2019/01/11 16:45:49.024 ERROR (WeGlobal.java:84) - {
-  "ret": 16397,
-  "msg": "image size too big",
-  "data": {
-	  "text": ""
-  }
-}
+2019/01/16 11:08:51.328 ERROR (WeGlobal.java:200) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:12:39.372 ERROR (WeGlobal.java:200) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:22:39.709 ERROR (WeGlobal.java:88) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <nonce_str>ac8c8e78668a4bc4a40e2e2da335fd09</nonce_str>
+  <body>recharge</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>FA7FE4B550255DFA0E47B6EB2B8B3DB1</sign>
+</xml>
+2019/01/16 11:22:40.261 ERROR (WeGlobal.java:92) - <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
 
-2019/01/11 16:46:54.740 ERROR (WeGlobal.java:84) - {
-  "ret": 16397,
-  "msg": "image size too big",
-  "data": {
-	  "text": ""
-  }
-}
+2019/01/16 11:22:40.270 ERROR (WeGlobal.java:202) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:26:09.930 ERROR (WeGlobal.java:88) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <nonce_str>4592a7ce450d495483842eadfff63d03</nonce_str>
+  <body>代金券充值</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>8140CC878A5D2B03852D39A5CCF7347E</sign>
+</xml>
+2019/01/16 11:26:10.414 ERROR (WeGlobal.java:92) - <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
 
-2019/01/11 16:47:55.447 ERROR (WeGlobal.java:84) - {
-  "ret": 16397,
-  "msg": "image size too big",
-  "data": {
-	  "text": ""
-  }
-}
+2019/01/16 11:26:10.448 ERROR (WeGlobal.java:202) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:31:23.672 ERROR (WeGlobal.java:88) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <nonce_str>882716c172604d5e927500c833b0c0dc</nonce_str>
+  <body>代金券充值</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>8DAF226BEBE829DE3EE59407BA9C84C8</sign>
+</xml>
+2019/01/16 11:31:29.069 ERROR (WeGlobal.java:92) - <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
 
-2019/01/11 16:52:03.882 ERROR (WeGlobal.java:84) - {
-  "ret": 0,
-  "msg": "ok",
-  "data": {
-	  "text": "蓝色的天空上有一个蓝色的电视"
-  }
-}
+2019/01/16 11:31:29.082 ERROR (WeGlobal.java:202) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:35:45.623 ERROR (WeGlobal.java:88) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <nonce_str>676f4cf361f849dda59d099f24cb0b9f</nonce_str>
+  <body>代金券充值</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>7EF7AD1B39DD6FADC5009DAB501A0704</sign>
+</xml>
+2019/01/16 11:35:59.421 ERROR (WeGlobal.java:92) - <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
 
-2019/01/11 16:52:26.884 ERROR (WeGlobal.java:84) - {
-  "ret": 37,
-  "msg": "system busy, please try again later",
-  "data": {
-	  "text": ""
-  }
-}
+2019/01/16 11:35:59.450 ERROR (WeGlobal.java:202) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:38:31.073 ERROR (WeGlobal.java:88) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <nonce_str>2be32041d73e42c29d0d759dfcb756b4</nonce_str>
+  <body>代金券充值</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>F10CF436690FE9CEF012A09BC4A3E3A3</sign>
+</xml>
+2019/01/16 11:38:33.422 ERROR (WeGlobal.java:92) - <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
 
-2019/01/11 16:52:47.548 ERROR (WeGlobal.java:84) - {
-  "ret": 0,
-  "msg": "ok",
-  "data": {
-	  "text": "夕阳下的雪山"
-  }
-}
+2019/01/16 11:38:33.457 ERROR (WeGlobal.java:202) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:47:17.866 ERROR (WeGlobal.java:88) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <nonce_str>2be32041d73e42c29d0d759dfcb756b4</nonce_str>
+  <body>en</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>96069D4AEBCC59CA19B3995013F1DFDE</sign>
+</xml>
+2019/01/16 11:47:20.013 ERROR (WeGlobal.java:92) - <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+
+2019/01/16 11:47:20.049 ERROR (WeGlobal.java:202) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[签名错误]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 11:58:55.340 ERROR (WeGlobal.java:88) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <nonce_str>2be32041d73e42c29d0d759dfcb756b4</nonce_str>
+  <body>en</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>6743E49F3C21D47EBCE36C65504B7BC7</sign>
+</xml>
+2019/01/16 11:58:59.797 ERROR (WeGlobal.java:92) - <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[JSAPI支付必须传openid]]></return_msg>
+</xml>
+
+2019/01/16 11:58:59.830 ERROR (WeGlobal.java:202) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[JSAPI支付必须传openid]]></return_msg>
+</xml>
+; line: 1, column: 2]
+2019/01/16 12:03:12.194 ERROR (WeGlobal.java:90) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <openid>o3JwK6I-dL64v6LRb_RSLR_xsEiI</openid>
+  <nonce_str>28846f77200a4ec4b0d9dd4fa55b98cf</nonce_str>
+  <body>en</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>F314B6FB34F13DD11C2BF74CA94575AA</sign>
+</xml>
+2019/01/16 12:03:12.778 ERROR (WeGlobal.java:94) - <xml><return_code><![CDATA[SUCCESS]]></return_code>
+<return_msg><![CDATA[OK]]></return_msg>
+<appid><![CDATA[wxbe33419389062baf]]></appid>
+<mch_id><![CDATA[1523670331]]></mch_id>
+<nonce_str><![CDATA[nMJfGhxJyR9XSGCD]]></nonce_str>
+<sign><![CDATA[AEFD9633ACD2DD2F71DBB02D6B6B4EC1]]></sign>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<prepay_id><![CDATA[wx16120315333498987a9554190479300698]]></prepay_id>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+</xml>
+
+2019/01/16 12:03:12.813 ERROR (WeGlobal.java:204) - Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
+ at [Source: <xml><return_code><![CDATA[SUCCESS]]></return_code>
+<return_msg><![CDATA[OK]]></return_msg>
+<appid><![CDATA[wxbe33419389062baf]]></appid>
+<mch_id><![CDATA[1523670331]]></mch_id>
+<nonce_str><![CDATA[nMJfGhxJyR9XSGCD]]></nonce_str>
+<sign><![CDATA[AEFD9633ACD2DD2F71DBB02D6B6B4EC1]]></sign>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<prepay_id><![CDATA[wx16120315333498987a9554190479300698]]></prepay_id>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+</xml>
+; line: 1, column: 2]
+2019/01/16 12:03:36.074 ERROR (WeGlobal.java:90) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <openid>o3JwK6I-dL64v6LRb_RSLR_xsEiI</openid>
+  <nonce_str>c0af2acdf6314d339ab86d90f1f0d585</nonce_str>
+  <body>en</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>16A53A276B2812C252699801C9A50E19</sign>
+</xml>
+2019/01/16 12:06:43.399 ERROR (WeGlobal.java:90) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <openid>o3JwK6I-dL64v6LRb_RSLR_xsEiI</openid>
+  <nonce_str>e8516f7ce58b482e80590b601c70f1f7</nonce_str>
+  <body>en</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>228DD3EC72730EE07194787ADA945411</sign>
+</xml>
+2019/01/16 12:08:08.550 ERROR (WeGlobal.java:90) - <xml>
+  <appid>wxbe33419389062baf</appid>
+  <mch_id>1523670331</mch_id>
+  <openid>o3JwK6I-dL64v6LRb_RSLR_xsEiI</openid>
+  <nonce_str>7f43b254d4434217bab689c2952c8418</nonce_str>
+  <body>en</body>
+  <out_trade_no>20110101</out_trade_no>
+  <total_fee>1</total_fee>
+  <spbill_create_ip>127.0.0.1</spbill_create_ip>
+  <notify_url>http://wx.jiira.com/we/callpay</notify_url>
+  <trade_type>JSAPI</trade_type>
+  <sign>B098356E5C5549E228C88DD505D39474</sign>
+</xml>
+2019/01/16 12:08:11.286 ERROR (WeGlobal.java:94) - <xml><return_code><![CDATA[SUCCESS]]></return_code>
+<return_msg><![CDATA[OK]]></return_msg>
+<appid><![CDATA[wxbe33419389062baf]]></appid>
+<mch_id><![CDATA[1523670331]]></mch_id>
+<nonce_str><![CDATA[joniaGFNeDRbOqMn]]></nonce_str>
+<sign><![CDATA[235EC28E11609AEB071641CE9EE07004]]></sign>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<prepay_id><![CDATA[wx16120811716009987a9554192994003505]]></prepay_id>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+</xml>
 

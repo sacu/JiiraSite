@@ -18,7 +18,9 @@ import org.jiira.pojo.we.ai.voice.WeYTVoiceSay;
 import org.jiira.pojo.we.authorization.WeHAT;
 import org.jiira.pojo.we.cmenu.CMenu;
 import org.jiira.pojo.we.mate.news.MateNews;
+import org.jiira.pojo.we.pay.WeJSSDKConfig;
 import org.jiira.pojo.we.pay.WePay;
+import org.jiira.pojo.we.pay.WePayRequest;
 import org.jiira.pojo.we.pay.WePayXML;
 import org.jiira.pojo.we.push.MessageByID;
 import org.jiira.utils.CommandCollection;
@@ -53,11 +55,50 @@ public class WeGlobal {
 	private WeGlobal() {
 		mapper = new ObjectMapper();
 	}
-
+	
+	public WeJSSDKConfig getWeJSSDKConfig() {
+		//获取jsapi_ticket
+		checkJSAPITicket();
+		WeJSSDKConfig jssdkConfig = new WeJSSDKConfig();
+		ArrayList<SAHttpKVO> params = new ArrayList<>();
+		jssdkConfig.setDebug(false);
+		jssdkConfig.setAppId(CommandCollection.AppID);
+		jssdkConfig.setTimestamp(DecriptUtil.create_timestamp());
+		jssdkConfig.setNonceStr(DecriptUtil.create_nonce_str());//签名
+		jssdkConfig.setJsApiList(new String[] {"chooseWXPay"});//参与
+		
+		params.add(new SAHttpKVO("noncestr", jssdkConfig.getNonceStr()));
+		params.add(new SAHttpKVO("jsapi_ticket", CommandCollection.JSSDKTicket));
+		params.add(new SAHttpKVO("url", CommandCollection.WE_REDIRECT + CommandCollection.WE_RECHARGE));//不包含#后边.split('#')[0]
+//		params.add(new SAHttpKVO("url", "http://127.0.0.1:8080/JiiraSite/we/ict?redirect=recharge&openid=o3JwK6I-dL64v6LRb_RSLR_xsEiI"));//不包含#后边.split('#')[0]
+		jssdkConfig.setSignature(DecriptUtil.ReqSignPayConfig(params));
+		return jssdkConfig;
+	}
+	/**
+	 * 微信支付信息
+	 * @return
+	 */
+	public WePayRequest getWePayRequest(String prepay_id) {
+		ArrayList<SAHttpKVO> params = new ArrayList<>();
+		WePayRequest wepayr = new WePayRequest();
+		wepayr.setAppId(CommandCollection.AppID);
+		params.add(new SAHttpKVO("appId", wepayr.getAppId()));
+		String timeStamp = DecriptUtil.create_timestamp();
+		wepayr.setTimeStamp(Integer.valueOf(timeStamp));
+		params.add(new SAHttpKVO("timeStamp", timeStamp));
+		wepayr.setNonceStr(DecriptUtil.create_nonce_str());
+		params.add(new SAHttpKVO("nonceStr", wepayr.getNonceStr()));
+		wepayr.setWe_package("prepay_id=" + prepay_id);//prepay_id=test",
+		params.add(new SAHttpKVO("package", wepayr.getWe_package()));
+		wepayr.setSignType("MD5");
+		params.add(new SAHttpKVO("signType", wepayr.getSignType()));
+		wepayr.setPaySign(DecriptUtil.ReqSignPay(params, false));
+		return wepayr;
+	}
 	/**
 	 * 微信支付
 	 */
-	public WePay getWePay(String ip, int money) {
+	public WePay getWePay(String ip, int money, String openid) {
 		SAHttpTable table = CommandCollection.GetHttpTable("GET");
 		table.setURL(CommandCollection.WE_PAY);
 		ArrayList<SAHttpKVO> params = new ArrayList<>();
@@ -67,10 +108,12 @@ public class WeGlobal {
 		wepayxml.setMch_id(CommandCollection.MCHID);
 		params.add(new SAHttpKVO("mch_id", wepayxml.getMch_id()));
 		wepayxml.setNonce_str(DecriptUtil.create_nonce_str());
+		wepayxml.setOpenid(openid);
+		params.add(new SAHttpKVO("openid", wepayxml.getOpenid()));
 		params.add(new SAHttpKVO("nonce_str", wepayxml.getNonce_str()));
-		wepayxml.setBody("代金券充值");
+		wepayxml.setBody("en");
 		params.add(new SAHttpKVO("body", wepayxml.getBody()));//描述
-		wepayxml.setOut_trade_no("20110101");
+		wepayxml.setOut_trade_no(DecriptUtil.create_timestamp());
 		params.add(new SAHttpKVO("out_trade_no", wepayxml.getOut_trade_no()));//订单号
 		wepayxml.setTotal_fee(money);
 		params.add(new SAHttpKVO("total_fee", String.valueOf(wepayxml.getTotal_fee())));//金额
@@ -80,15 +123,16 @@ public class WeGlobal {
 		params.add(new SAHttpKVO("notify_url", wepayxml.getNotify_url()));
 		wepayxml.setTrade_type("JSAPI");
 		params.add(new SAHttpKVO("trade_type", wepayxml.getTrade_type()));
-		wepayxml.setSign(DecriptUtil.ReqSign(params));//最后计算
+		wepayxml.setSign(DecriptUtil.ReqSignPay(params, false));//最后计算
 		
 		XStream xstream = new XStream();
 		xstream.alias("xml", wepayxml.getClass());
-		String xml = xstream.toXML(wepayxml).replace("__", "_");
+		String xml = xstream.toXML(wepayxml).replaceAll("__", "_");
 		table.setJson(xml);
 		table.setUseJson(true);
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
-		WePay wePay = getClass(html.getBody(), WePay.class);
+		xstream.alias("xml", WePay.class);
+		WePay wePay = (WePay)xstream.fromXML(html.getBody());
 		return wePay;
 	}
 	/**
@@ -106,7 +150,7 @@ public class WeGlobal {
 		table.addParams("session", "123456");
 		table.addParams("time_stamp", DecriptUtil.create_timestamp());
 		ArrayList<SAHttpKVO> params = table.getParams();
-		table.addParams("sign", DecriptUtil.ReqSign(params));
+		table.addParams("sign", DecriptUtil.ReqSignAI(params));
 		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
 		return getClass(html.getBody(), WeTextSay.class);
 	}
@@ -123,7 +167,7 @@ public class WeGlobal {
 		table.addParams("time_stamp", DecriptUtil.create_timestamp());
 		table.addParams("nonce_str", DecriptUtil.create_nonce_str());
 		ArrayList<SAHttpKVO> params = table.getParams();
-		table.addParams("sign", DecriptUtil.ReqSign(params));
+		table.addParams("sign", DecriptUtil.ReqSignAI(params));
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		return getClass(html.getBody(), WeImageSay.class);
 	}
@@ -145,7 +189,7 @@ public class WeGlobal {
 		table.addParams("aht", "0");//高音设定,默认0 -24,24
 		table.addParams("apc", "58");//改变语调,默认58 0,100
 		ArrayList<SAHttpKVO> params = table.getParams();
-		table.addParams("sign", DecriptUtil.ReqSign(params));
+		table.addParams("sign", DecriptUtil.ReqSignAI(params));
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		return getClass(html.getBody(), WeVoiceSay.class);
 	}
@@ -160,7 +204,7 @@ public class WeGlobal {
 		table.addParams("text", text);//要合成的文本
 		table.addParams("model_type", "0");//高音设定,默认0 0,2
 		ArrayList<SAHttpKVO> params = table.getParams();
-		table.addParams("sign", DecriptUtil.ReqSign(params));
+		table.addParams("sign", DecriptUtil.ReqSignAI(params));
 		SAHTML html = SAURLConnection.getInstance().PostRequest(table);
 		return getClass(html.getBody(), WeYTVoiceSay.class);
 	}
@@ -309,6 +353,96 @@ public class WeGlobal {
 			}
 		}
 	}
+	/**
+	 * jsapi_ticket
+	 * @param openid
+	 * @return
+	 */
+	public SAHTML createJSAPITicket() {
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("GET");
+		table.setURL(CommandCollection.JSSDK_TICKET + CommandCollection.AccessToken + "&type=jsapi");
+		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			CommandCollection.JSSDKTicket = json.getString("ticket");
+			logger.error("JSSDKTicket : " + CommandCollection.JSSDKTicket);
+			// 写入本地
+			File file = null;
+			FileOutputStream out = null;
+			try {
+				file = new File(CommandCollection.JSSDK_TICKET_PATH);
+				if (file.exists()) {
+					file.delete();
+					file.createNewFile();
+				}
+				out = new FileOutputStream(file, true);
+				if (!file.getParentFile().exists()) {
+					file.getParentFile().mkdirs();
+				}
+				out.write(CommandCollection.JSSDKTicket.getBytes("utf-8"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error("创建JSSDKTicket 文件错误 :" + e.getMessage());
+			} finally {
+				try {
+					if (null != out) {
+						out.flush();
+						out.close();
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.error("关闭粗偶？ :" + e.getMessage());
+				}
+			}
+			logger.error(CommandCollection.JSSDKTicket);
+		} else {
+			if (code == 42001 || code == 40001) {
+				logger.error("JSSDKTicket access 过期 = " + code);
+				createAccessToken();
+				return createJSAPITicket();//重新获取
+			} else {
+				logger.error("create JSSDKTicket errcode ：" + json.getString("errcode"));
+				logger.error("create JSSDKTicket errmsg ：" + json.getString("errmsg"));
+			}
+		}
+		return html;
+	}
+	private void checkJSAPITicket() {
+		if (null != CommandCollection.JSSDKTicket) {// 如果有~则直接返回
+			return;
+		}
+		File file = null;
+		try {
+			file = new File(CommandCollection.JSSDK_TICKET_PATH);
+			if (!file.exists() || file.isDirectory()) {// 如果不存在，则创建并返回（从创建中获取）
+				createJSAPITicket();// 创建
+			}
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		}
+		// 如果第一次访问JSAPITicket且服务器已经生成过AccessToken，则获取
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			CommandCollection.JSSDKTicket = br.readLine();
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+			//createJSAPITicket();// 读取JSAPITicket
+		} finally {
+			if (null != br) {
+				try {
+					br.close();
+					br = null;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	//需要openid
 	public JSONObject getUserInfoByOpenID(String openid) {
 		checkAccessToken();
