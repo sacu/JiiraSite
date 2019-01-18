@@ -5,11 +5,7 @@
 <html>
 <head>
 	<title></title>
-<link rel="stylesheet" href="../style/test1.css" />
-<link rel="stylesheet" href="../style/we.css" />
-<script type="text/javascript" src="../javascript/jquery-3.2.0.js"></script>
-<script type="text/javascript" src="../javascript/ad.js"></script>
-	<script>
+<script type="text/javascript">
 	$(document).ready(function() {
 		$("#search").click(function(event) {//搜索
 			var type = $("#search_type").val();

@@ -137,10 +137,9 @@ DROP TABLE IF EXISTS `sa_dt_consume`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_consume` (
 	`openid` varchar(32) not null COMMENT 'openid',
-	`vouchers` int(4) not null COMMENT '消费的积分(负数为花费正为充值)',
-	`time` timestamp default CURRENT_TIMESTAMP COMMENT '消费时间',
-	`describe` varchar(50) COMMENT '描述'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='消费记录表';
+	`vouchers` int(4) not null COMMENT '充值数量',
+	`out_trade_no` varchar(32) COMMENT '订单号'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='充值记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 DROP TABLE IF EXISTS `sa_dt_bookcase`;

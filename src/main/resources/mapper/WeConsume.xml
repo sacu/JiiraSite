@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jiira.dao.WeConsumeDao">
+	<resultMap id="weConsume" type="org.jiira.pojo.ad.WeConsume">
+		<id column="openid" property="openid" />
+		<id column="vouchers" property="vouchers" />
+		<id column="out_trade_no" property="out_trade_no" />
+	</resultMap>
+	<!-- 插入不重复值 -->
+	<select id="ignoreWeConsume" resultType="java.lang.Integer">
+		{call sa_jiira_db.insert_consume(#{openid}, #{vouchers}, #{transaction_id})}
+	</select>
+</mapper>

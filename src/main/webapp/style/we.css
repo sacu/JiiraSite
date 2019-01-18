@@ -3,33 +3,40 @@
 
 .div_news_title {
 	width: 100%;
+	font-weight:bold;
 	height: 45px;
-	font-size: 36px;
+	font-size: 40px;
 	text-align: center;
-	padding-top: 5px;
+	padding-top: 30px;
 }
 .div_news_author {
 	width: 100%;
 	height: 20px;
 	font-size: 24px;
-	padding-left: 30px;
+	padding:30px 30px 30px 30px;
 }
 .div_news_autopay {
 	width: 100%;
 	height: 20px;
 	font-size: 24px;
-	padding-left: 30px;
+	padding:30px 30px 30px 30px;
+}
+.div_image_img{
+	width: auto;
+	height: auto;
+	max-width: 95%;
+	max-height: 100%;	
 }
 .div_news_content {
-	width: 95%;
+	width: 90%;
 	font-size: 30px;
 	padding:30px 30px 30px 30px;
 }
 .div_content_block {
 	float: left;
-	min-width: 800px;
-	width: 95%;
+	width: 100%;
 	height: auto;
+	overflow-x: hidden;
 }
 .div_content_value {
 	min-width: 580px;
@@ -48,7 +55,7 @@
 }
 /*翻页*/
 .div_flip {
-	width: 95%;
+	width: 100%;
 	height: 20px;
 }
 .div_flip_prev{

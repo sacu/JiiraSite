@@ -34,7 +34,7 @@
 		update sa_dt_user set birthday=#{birthday} where openid=#{openid}
 	</update>
 	<update id="updateWeUserVouchers">
-		update sa_dt_user set vouchers=#{vouchers} where openid=#{openid}
+		update sa_dt_user set vouchers=vouchers+#{vouchers} where openid=#{openid}
 	</update>
 	<update id="updateWeUserAutoPay">
 		update sa_dt_user set autopay=#{autopay} where openid=#{openid}

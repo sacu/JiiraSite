@@ -8,17 +8,13 @@
 <html>
 <head>
 <title></title>
-<link rel="stylesheet" href="../style/test1.css" />
-<link rel="stylesheet" href="../style/ad.css" />
-<script type="text/javascript" src="../javascript/jquery-3.2.0.js"></script>
-<script type="text/javascript" src="../javascript/ad.js"></script>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
-<script>
+<script type="text/javascript">
 		$(document).ready(function() {
 			var wepayr;
 			<%
-			if(!CommandCollection.JSSDK_INIT){//注册jssdk
-				CommandCollection.JSSDK_INIT = true;
+			//if(!CommandCollection.JSSDK_INIT){//注册jssdk
+			//	CommandCollection.JSSDK_INIT = true;
 			%>
 				$.post({//获取配置
 					url : "jssdk_config",
@@ -35,21 +31,22 @@
 						});
 					}
 				});
-			<%}%>
+			<%//}%>
 			
 			function onBridgeReady(){
 				//腾讯你妈个比！！！timestamp的s要小写
 				wx.chooseWXPay({
+					"appId":wepayr['appId'],         //到底要不要？？？     
 					"timestamp":wepayr['timeStamp'],         //时间戳，自1970年以来的秒数     
 					"nonceStr":wepayr['nonceStr'], //随机串     
 					"package" : wepayr['we_package'],
 					"signType" : wepayr['signType'], //微信签名方式：     
 					"paySign" : wepayr['paySign'],//微信签名 
 					success: function(res) {
-						if (res.err_msg == "chooseWXPay:ok") {
-							alert("success" + res)
+						if (res.errMsg == "chooseWXPay:ok") {
 							// 使用以上方式判断前端返回,微信团队郑重提示：
 							//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+							window.history.back(-1);//支付成功后 返回
 						} else {
 							alert("error" + res.err_msg)
 						}
@@ -85,7 +82,6 @@
 						} else {
 							alert(wepay['return_msg'])
 						}
-						alert(wepay['prepay_id'])
 					}
 				})
 				event.preventDefault();

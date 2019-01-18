@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,7 +113,7 @@ public class WeGlobal {
 		wepayxml.setOpenid(openid);
 		params.add(new SAHttpKVO("openid", wepayxml.getOpenid()));
 		params.add(new SAHttpKVO("nonce_str", wepayxml.getNonce_str()));
-		wepayxml.setBody("en");
+		wepayxml.setBody("充值代金券:" + money);
 		params.add(new SAHttpKVO("body", wepayxml.getBody()));//描述
 		wepayxml.setOut_trade_no(DecriptUtil.create_timestamp());
 		params.add(new SAHttpKVO("out_trade_no", wepayxml.getOut_trade_no()));//订单号

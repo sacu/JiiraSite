@@ -99,7 +99,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addInterceptor(new AdInterceptor()).addPathPatterns("/ad/*");
-//		registry.addInterceptor(new WeInterceptor()).addPathPatterns("/we/*");
+		registry.addInterceptor(new WeInterceptor()).addPathPatterns("/we/*");
 	}
 
 	@Override

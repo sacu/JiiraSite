@@ -160,7 +160,9 @@ public class WeChatSiteController {
 				//如果autopay==true 表示该条是支付操作
 				if(autopay || weUser.getAutopay() == CommandCollection.AUTO_PAY) {//是否开通自动支付
 					if(weUser.getVouchers() >= adNews.getConsume()) {//是否足够支付
-						consume = weUserService.updateWeUserVouchers(openid, weUser.getVouchers() - adNews.getConsume()) > 0;//支付
+						consume = weUserService.updateWeUserVouchers(openid, -adNews.getConsume()) > 0;//支付
+						weUser.setVouchers(weUser.getVouchers() - adNews.getConsume());
+						request.getSession().setAttribute("weUser", weUser);
 					} else {//显示充值页面
 						mv.addObject("check", 1);
 						consume = false;
@@ -236,6 +238,7 @@ public class WeChatSiteController {
 		mv.addObject("adNewsName", adNewsName);
 		WeBookCase weBookCase = weBookCaseService.selectBookCaseForRead(openid, name_id);//获取阅读的页数
 		int news_id;
+		String thumb_id = null;
 		if(null == weBookCase) {
 			List<AdNews> dir = adNewsService.selectNewsByNameID(name_id);//获取阅读的页数
 			news_id = dir.get(0).getId();

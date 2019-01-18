@@ -7,25 +7,34 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.jiira.pojo.ad.WeConsume;
 import org.jiira.pojo.ad.WeUser;
 import org.jiira.pojo.we.pay.WeJSSDKConfig;
 import org.jiira.pojo.we.pay.WePay;
 import org.jiira.pojo.we.pay.WePayRequest;
+import org.jiira.service.WeConsumeService;
 import org.jiira.service.WeUserService;
 import org.jiira.utils.CommandCollection;
 import org.jiira.utils.XMLUtil;
 import org.jiira.we.DecriptUtil;
 import org.jiira.we.WeGlobal;
+import org.jiira.we.url.SAHttpKVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +58,13 @@ public class SiteController {
 	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
 	@Autowired
 	private WeUserService weUserService = null;
+	@Autowired
+	private WeConsumeService weConsumeService = null;
 	/**
 	 * 获取到微信用户信息
 	 */
 	@RequestMapping("/c")
-	public ModelAndView c(HttpServletRequest request, @RequestParam(required = false, name="redirect") String redirect, 
+	public ModelAndView c(HttpServletRequest request, HttpSession session, @RequestParam(required = false, name="redirect") String redirect, 
 			@RequestParam(name="code")String code, @RequestParam(name="state")String state) {
 		ModelAndView mv = new ModelAndView();
 		//获取用户信息
@@ -63,8 +74,8 @@ public class SiteController {
 			return mv;
 		}
 		json.remove("privilege");//老报错 不要了
+		session.setAttribute("code", code);//测试用
 		logger.error("调试code：" + code);
-		logger.error("json：" + json.toString());
 		//从前TX又有个BUG，就是URL只能传一个参数，所以只能把所有参数压缩到第一个里边
 		WeUser weUser = WeGlobal.getInstance().getClass(json.toString(), WeUser.class);
 		WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
@@ -78,15 +89,17 @@ public class SiteController {
 		} else {
 			weUser = _weUser;
 		}
-		request.getSession().setAttribute("weUser", weUser);
-		request.getSession().setAttribute("code", code);//测试用
+		session.setAttribute("weUser", weUser);
 		jump(request, redirect);
 		mv.setViewName("we/c");//去微信页
 		return mv;
 	}
 	@RequestMapping("/ic")
-	public ModelAndView ic(HttpServletRequest request, String redirect) {
+	public ModelAndView ic(HttpServletRequest request, HttpSession session, String redirect) {
 		ModelAndView mv = new ModelAndView();
+		WeUser weUser = (WeUser)session.getAttribute("weUser");
+		WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
+		weUser.setVouchers(_weUser.getVouchers());
 		jump(request, redirect);
 		mv.setViewName("we/" + request.getAttribute("page"));//返回页面代码信息
 		return mv;
@@ -148,11 +161,9 @@ public class SiteController {
 		WePay wepay = WeGlobal.getInstance().getWePay(ip, money, openid);
 		mv.setView(new MappingJackson2JsonView());
 		mv.addObject("wepay", wepay);
-		logger.error("WePay : " + wepay.getSign());
 		if(wepay.getReturn_code().equals(CommandCollection.SUCCESS) && wepay.getResult_code().equals(CommandCollection.SUCCESS)) {
 			WePayRequest wepayr = WeGlobal.getInstance().getWePayRequest(wepay.getPrepay_id());
 			mv.addObject("wepayr", wepayr);
-			logger.error("WePayRequest : " + wepayr.getPaySign());
 		}
 		return mv;
 	}
@@ -170,7 +181,7 @@ public class SiteController {
 	}
 
 	@RequestMapping(value="/callpay")
-	public ModelAndView callpay(HttpServletRequest request) {
+	public void callpay(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		InputStream inputStream;
     	StringBuffer sb = new StringBuffer();
 	    try {
@@ -197,7 +208,7 @@ public class SiteController {
 		}
         Map<String, Object> m = XMLUtil.Dom2Map(document);
 	    // 过滤空 设置 TreeMap
-	    SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
+	    SortedMap<String, Object> map = new TreeMap<String, Object>();
 	    Iterator<String> it = m.keySet().iterator();
 	    while (it.hasNext()) {
 	        String parameter = (String) it.next();
@@ -206,19 +217,53 @@ public class SiteController {
 	        if (null != parameterValue) {
 	            v = ((String) parameterValue).trim();
 	        }
-	        packageParams.put(parameter, v);
+	        map.put(parameter, v);
 	    }
-		ModelAndView mv = new ModelAndView();
-		logger.error("支付回调");
-		logger.error(packageParams.get("return_code").toString());
-		if(packageParams.get("return_code").equals(CommandCollection.SUCCESS)) {
-			logger.error("sign:" + packageParams.get("sign"));
+	    //开始处理验证和数据库写入
+		if(map.get("return_code").equals(CommandCollection.SUCCESS)) {
+			//验证有效性
+			Set<Entry<String, Object>> set = map.entrySet();
+			Iterator<Entry<String, Object>> ite = set.iterator();
+			ArrayList<SAHttpKVO> params = new ArrayList<>();
+			while(ite.hasNext())
+			{
+				Entry<String, Object> entry = ite.next();
+				if(!entry.getKey().equals("sign")) {
+					params.add(new SAHttpKVO(entry.getKey(), entry.getValue().toString()));
+				}
+			}
+			String sign = DecriptUtil.ReqSignPay(params, false);
+			if(map.get("sign").equals(sign)) {
+				//写入数据库
+				try {
+					String openid = map.get("openid").toString();
+					String transaction_id = map.get("transaction_id").toString();
+					int cash_fee = Integer.valueOf(map.get("cash_fee").toString());
+					int rows = weConsumeService.ignoreWeConsume(openid, cash_fee, transaction_id);
+					if(rows > 0) {
+						weUserService.updateWeUserVouchers(openid, cash_fee);
+					}
+				} catch(Exception e) {
+					logger.error("老子今天就要看看你是什么:" + e.getMessage());
+				}
+			} else {
+				logger.error("发现异常数据");
+			}
 		} else {
-			logger.error(packageParams.get("return_msg").toString());
+			logger.error(map.get("return_msg").toString());
+		}
+		try {
+			response.setContentType("text/plain;charset=utf-8");
+			ServletOutputStream out = response.getOutputStream();
+			out.write("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>".getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 //		详细参数参阅
 //		https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_7&index=8
-		mv.setView(new MappingJackson2JsonView());
-	    return mv;
 	}
 }

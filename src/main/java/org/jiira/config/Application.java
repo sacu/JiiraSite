@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.AdNewsType;
+import org.jiira.pojo.ad.WeConsume;
 import org.jiira.service.AdNewsService;
 import org.jiira.service.AdNewsTypeService;
+import org.jiira.service.WeConsumeService;
 import org.jiira.service.WeUserService;
 import org.jiira.service.impl.AdNewsServiceImpl;
+import org.jiira.service.impl.WeUserServiceImpl;
 import org.jiira.utils.CommandCollection;
 import org.springframework.context.ApplicationContext;
 

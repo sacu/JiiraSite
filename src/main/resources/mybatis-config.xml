@@ -14,5 +14,6 @@
         <mapper resource="mapper/AdNewsName.xml"/>
         <mapper resource="mapper/WeUser.xml"/>
         <mapper resource="mapper/WeBookCase.xml"/>
+        <mapper resource="mapper/WeConsume.xml"/>
     </mappers>
 </configuration>

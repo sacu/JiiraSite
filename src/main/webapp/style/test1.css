@@ -29,10 +29,7 @@ test::first-line{}/*设置元素内第一行的样式*/
 test::before{}/*在每个test元素内容之前插入内容，可以是图形等*/
 test::after{}/*在每个test元素内容之后插入内容，可以是图形等*/
 test::selection{}/*元素内被选中时的样式（比如div中字体被选中后变换颜色）*/
-/*结构伪类选择器*/
-:root{/*文档根元素选择器，HTML标签*/
-	background-color: wheat;
-}
+
 /*UI伪类及其他选择器*/
 a:link{color: turquoise}/*未被访问过的链接，a的数序不能变*/
 a:visited{color: red}/*已被访问过的链接*/
@@ -58,6 +55,7 @@ body {
 article{
 	width: 100%;
 	height: 100%;
+	overflow-x: hidden;
 }
 #header1{
 	z-index: 999;
@@ -66,7 +64,7 @@ article{
 	width: 100%;
 	height: 48px;
 	position: fixed;
-	background: green;
+	background-color: aliceblue;
 }
 #header2{
 	z-index: 999;
@@ -76,7 +74,7 @@ article{
 	width: 100%;
 	height: 48px;
 	position: fixed;
-	background: #000;
+	background-color: aliceblue;
 }
 #nav1{
 	width: 100%;

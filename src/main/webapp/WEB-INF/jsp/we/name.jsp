@@ -5,10 +5,10 @@
 <html>
 <head>
 	<title></title>
-<link rel="stylesheet" href="../style/test1.css" />
-<link rel="stylesheet" href="../style/we.css" />
-<script type="text/javascript" src="../javascript/jquery-3.2.0.js"></script>
-<script type="text/javascript" src="../javascript/ad.js"></script>
+<link rel="stylesheet" href="../style/test1.css?v=1.3" />
+<link rel="stylesheet" href="../style/we.css?v=1.5" />
+<script type="text/javascript" src="../javascript/jquery-3.2.0.js?v=1.1"></script>
+<script type="text/javascript" src="../javascript/ad.js?v=1.1"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var dir_data;
@@ -26,9 +26,6 @@
 					var adNewsName = result['adNewsName'];
 					$('#news_name').html(adNewsName['name']);
 					$('#news_author').html(adNewsName['author']);
-					if(result.thumb){
-						$("#news_thumb").attr('src', '<%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_THUMB%>' + "/" + result['thumb']);
-					}
 					$('#news_digest').html(adNewsName['digest']);
 					$('#name_news').attr('href','ic?redirect=news*news_id='+ result['news_id']);
 				}
@@ -43,8 +40,10 @@
 	<div class='div_news_title' id="news_title"></div>
 	<div class='div_news_author' id="news_author"></div>
 	<div class='div_news_content' id="news_digest"></div>
-	<img id="news_thumb"/>
+</div>
+<div class="div_content_block">
 	<a id="name_news" href="ic?redirect=news*news_id=">开始阅读</a>
+	<div style="height: 48px; width: 90%; float: left;"></div>
 </div>
 </body>
 </html>

@@ -10,10 +10,10 @@
 <meta name="viewport"
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>极光互娱</title>
-<link rel="stylesheet" href="../style/test1.css" />
-<link rel="stylesheet" href="../style/we.css" />
-<script type="text/javascript" src="../javascript/jquery-3.2.0.js"></script>
-<script type="text/javascript" src="../javascript/ad.js"></script>
+<link rel="stylesheet" href="../style/test1.css?v=1.3" />
+<link rel="stylesheet" href="../style/we.css?v=1.5" />
+<script type="text/javascript" src="../javascript/jquery-3.2.0.js?v=1.1"></script>
+<script type="text/javascript" src="../javascript/ad.js?v=1.1"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var onPage2 = $("#index");
@@ -51,11 +51,11 @@
 	<header id="header1">极光互娱</header>
 	<!--用来定义主体中的头-->
 	<article>
-		<div style="height: 48px; width: 100%; float: left;"></div>
+		<div style="height: 48px; width: 90%; float: left;"></div>
 		<div id="content">
 			<jsp:include page="${page}.jsp"></jsp:include>
 		</div>
-		<div style="height: 150px; width: 100%; float: left;"></div>
+		<div style="height: 150px; width: 90%; float: left;"></div>
 	</article>
 	<!--一般被放置在页面或者页面中某个区块的底部，包含版权信息、联系方式等信息。-->
 	<footer>

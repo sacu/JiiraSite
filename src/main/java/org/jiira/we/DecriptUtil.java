@@ -174,7 +174,12 @@ public class DecriptUtil {
 			// 获得MD5摘要算法的 MessageDigest 对象
 			MessageDigest mdInst = MessageDigest.getInstance("MD5");
 			// 使用指定的字节更新摘要
-			mdInst.update(input.getBytes());
+			try {
+				mdInst.update(input.getBytes("utf-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// 获得密文
 			byte[] md = mdInst.digest();
 			// 把密文转换成十六进制的字符串形式
