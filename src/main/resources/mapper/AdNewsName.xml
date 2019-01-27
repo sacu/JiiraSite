@@ -7,6 +7,7 @@
 		<id column="name" property="name" />
 		<id column="author" property="author" />
 		<id column="digest" property="digest" />
+		<id column="type_id" property="type_id" />
 	</resultMap>
 	
 	<select id="selectNewsName" resultMap="adNewsName">
@@ -20,12 +21,12 @@
 		select id, name from sa_dt_news_name where id!=1 and (name like "%"#{search_text}"%" or digest like "%"#{search_text}"%")
 	</select>
 	<insert id="insertNewsName">
-		insert into sa_dt_news_name(name, digest, author) 
-			values(#{name}, #{digest}, #{author})
+		insert into sa_dt_news_name(name, digest, author, type_id) 
+			values(#{name}, #{digest}, #{author}, #{type_id})
 	</insert>
 	<!-- 更新 -->
 	<update id="updateNewsName">
-		update sa_dt_news_name set name=#{name}, author=#{author}, digest=#{digest} where id=#{id}
+		update sa_dt_news_name set name=#{name}, author=#{author}, digest=#{digest}, type_id=#{type_id} where id=#{id}
 	</update>
 	<!-- 删除图片 -->
 	<delete id="deleteNewsName">

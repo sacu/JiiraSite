@@ -193,10 +193,10 @@ public class WeChatSiteController {
 			adNews.setContent("");
 		}
 		//获取图书列表
-		if(isdir && adNews.getType() == CommandCollection.BOOK_TYPE) {//如果是图书，则获取列表
+		if(isdir && (adNews.getType() == CommandCollection.BOOK_TYPE || adNews.getType() == CommandCollection.STRATEGY_TYPE)) {//如果是图书，则获取列表
 			List<AdNews> dir = adNewsService.selectNewsByNameID(adNews.getName_id());//获取目录
 			mv.addObject("dir", dir);
-		} else {
+		}  else {
 			mv.addObject("dir", null);
 		}
 		mv.addObject("adNews", adNews);

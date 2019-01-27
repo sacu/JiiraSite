@@ -45,6 +45,7 @@ public class CommandCollection {
 
 	public static int ALL_TYPE = 1;
 	public static int BOOK_TYPE = 2;
+	public static int STRATEGY_TYPE = 3;//攻略
 	
 	public static int ENABLE = 1;// 可用
 	public static int DISABLE = 0;// 禁用

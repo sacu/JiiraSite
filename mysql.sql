@@ -95,7 +95,8 @@ CREATE TABLE `sa_dt_news_name` (
 	`id` int(4) primary key not null auto_increment COMMENT '书名ID',
 	`name` varchar(100) COMMENT '书名',
 	`digest` varchar(50) not null COMMENT '简介',
-	`author` varchar(50) not null COMMENT '作者'
+	`author` varchar(50) not null COMMENT '作者',
+	`type_id` int(4) COMMENT '类型id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='书名表';
 insert into sa_dt_news_name(name, digest, author) values('none', '不是图书', 'sa')-- 占用
 
@@ -109,7 +110,7 @@ CREATE TABLE `sa_dt_news_type` (
 	`level` int default 0 COMMENT '拉取权限，0为最低都可拉取，3为最高都不可拉取'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图文类型表';
 INSERT INTO `sa_dt_news_type` (`name`, `protect`, `level`) VALUES
-('全部', 1, 0),('图书', 1, 2),('休闲', 1, 0),('社会', 1, 0),('美食', 1, 0),('养生', 1, 0);
+('全部', 1, 0),('图书', 1, 2),('攻略', 1, 0),('社会', 1, 0),('美食', 1, 0),('养生', 1, 0),('休闲', 1, 0),('攻略(散)', 1, 0);
 
 -- 以下为网站表
 DROP TABLE IF EXISTS `sa_dt_user`;

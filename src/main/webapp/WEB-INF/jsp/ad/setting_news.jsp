@@ -164,13 +164,16 @@
 							adType = {};
 							var type = $('#type');
 							var etype = $('#etype');
+							var etype_id = $('etype_id');
 							type.empty();
 							etype.empty();
+							etype_id.empty();
 							$.each(_adNTL, function(idx, i) {
 								adType[i['id']] = i;
 								option = "<option value='" + i['id'] + "'>" + i['name'] + "</option>";
 								type.append(option);
 								etype.append(option);
+								etype_id.append(option);
 							});
 						}
 						getNTList(<%=CommandCollection.GetNewsTypeJson()%>);
@@ -258,6 +261,7 @@
 									name : $("#book_name").val(),
 									author : $("#book_author").val(),
 									digest : $("#book_digest").val(),
+									type_id : $('etype_id').val()
 								},
 								success : function(result) {
 									getBookList();
@@ -287,6 +291,7 @@
 									name : $("#book_name").val(),
 									author : $("#book_author").val(),
 									digest : $("#book_digest").val(),
+									type_id : $('etype_id').val()
 								},
 								success : function(result) {
 									getBookList();
@@ -374,7 +379,7 @@
 </head>
 <body>
 	<h1>图文</h1>
-	<a href="" id="edbook">编辑图书</a>
+	<a href="" id="edbook">编辑目录</a>
 	<a href="" id="edtype">编辑类型</a>
 	<a href="" id="upnews">上传图文</a>
 	<div id="uln_msg"></div>
@@ -393,11 +398,17 @@
 	<div class="n_float_layer" id="edbooklayer">
 		<div class="n_float_news_book">
 			<div class="div_content_block">
-				<div class="div_content_block"><h2>编辑图书</h2></div>
+				<div class="div_content_block"><h2>编辑目录</h2></div>
 				<div class="div_content_block">
 					<div class="div_content_key">选择</div>
 					<div class="div_content_value">
 						<select name="ename_id" id="ename_id"></select>
+					</div>
+				</div>
+				<div class="div_content_block">
+					<div class="div_content_key">类型</div>
+					<div class="div_content_value">
+						<select name="etype_id" id="etype_id"></select>
 					</div>
 				</div>
 				<div class="div_content_block">
