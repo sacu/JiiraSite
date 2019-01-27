@@ -47,19 +47,26 @@
 [完成]9.充值时跳转到recharge.jsp，成功后返回浏览页
 [完成]10.充值会充多次的问题，他后台给的订单号 竟然会变……
 [完成]11.访问用户界面需要每次都从数据库获取吗？
-12.网站美化（等有了美术好好装饰一下）
+[完成]12.网站美化（等有了美术好好装饰一下）
+[完成]13.www和wx的ssl配置
 
 又一个血坑！操你妈TX！微信支付页面显示让我等待验证！原来是他妈的让我自己去公众号那边点确认绑定！！
 
 521_haiqi
 
 
+[13]
+tomcat进行ssl配置需要转成jks，然后在server.xml中配置
+keytool -importkeystore -srckeystore wx.pfx -destkeystore wx.jks -srcstoretype PKCS12 -deststoretype JKS
 
-获取返回xml，利用Xstream解析成Map
+[10]
+获取返回xml，解析成Map
 通过Map判断支付是否成立
 写入数据库
 把前端页面的所有数据打印出来
 
+[关于端口]
+远程服务器web容器大多数禁止直接访问80和443，需要通过防火墙（例如iptables反射到端口8080或8443），或者通过sudo su启动web容器
 
 #########################################
 操作指南

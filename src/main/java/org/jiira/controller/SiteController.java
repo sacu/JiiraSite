@@ -95,14 +95,22 @@ public class SiteController {
 		return mv;
 	}
 	@RequestMapping("/ic")
-	public ModelAndView ic(HttpServletRequest request, HttpSession session, String redirect) {
-		ModelAndView mv = new ModelAndView();
+	public String ic(HttpServletRequest request, HttpSession session, String redirect) {
 		WeUser weUser = (WeUser)session.getAttribute("weUser");
-		WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
-		weUser.setVouchers(_weUser.getVouchers());
-		jump(request, redirect);
-		mv.setViewName("we/" + request.getAttribute("page"));//返回页面代码信息
-		return mv;
+		String url;
+		if(weUser == null) {//重定向到登陆
+			logger.error("ic redirect : " + redirect);
+			url = redirect(redirect);
+			logger.error("ic url : " + url);
+			return url;
+		} else {
+			WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
+			weUser.setVouchers(_weUser.getVouchers());
+			jump(request, redirect);
+			url = "/we/c";//返回页面代码信息
+//			url = "/we/" + request.getAttribute("page");//返回页面代码信息
+		}
+		return url;
 	}
 	private void jump(HttpServletRequest request, String redirect) {
 		String[] args = redirect.split("\\*");
@@ -148,6 +156,7 @@ public class SiteController {
 		String url = CommandCollection.AUTH_CODE + "?" + "appid=" + CommandCollection.AppID
 				+"&redirect_uri=" + redirect_uri + "&response_type=code"
 				+"&scope=snsapi_userinfo" + "&state=test#wechat_redirect";
+		logger.error("redirect url : " + url);
 		return "redirect:" + url;//使用重定向到用户验证
 	}
 	

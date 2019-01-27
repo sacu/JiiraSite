@@ -118,7 +118,8 @@
 		<div class="div_flip_prev"><a id="prev_news" href=''>上一篇</a></div>
 		<div class="div_flip_dir"><select name="dir_news" id="dir_news"></select></div>
 		<div class="div_flip_next"><a id="next_news" href=''>下一篇</a></div>
-	</div>
+	</div><br>
+	<a href="ic?redirect=index">返回首页</a><br>
 	<div style="height: 100px; width: 90%; float: left;"></div>
 </div>
 </body>

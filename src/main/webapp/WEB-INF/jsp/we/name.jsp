@@ -42,7 +42,8 @@
 	<div class='div_news_content' id="news_digest"></div>
 </div>
 <div class="div_content_block">
-	<a id="name_news" href="ic?redirect=news*news_id=">开始阅读</a>
+	<a id="name_news" href="ic?redirect=news*news_id=">开始阅读</a><br>
+	<a href="ic?redirect=index">返回首页</a><br>
 	<div style="height: 48px; width: 90%; float: left;"></div>
 </div>
 </body>

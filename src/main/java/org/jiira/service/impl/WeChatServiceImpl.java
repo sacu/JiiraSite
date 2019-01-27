@@ -86,7 +86,7 @@ public class WeChatServiceImpl implements WeChatService {
 				if(msg.getUseTextSay()) {
 					WeTextSay r = WeGlobal.getInstance().getTextSay(msg.getContent());
 					if(null == r) {
-						msg.setContent("出错了……");
+						msg.setContent("什么？");
 					} else if(r.getRet() == 0) {//成功
 						msg.setContent(r.getAnswer());
 					} else if(r.getRet() == 16394){

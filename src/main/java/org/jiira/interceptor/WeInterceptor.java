@@ -21,7 +21,9 @@ public class WeInterceptor extends Interceptor{
 	public void postHandle(
 			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
 					throws Exception {
-		if(check(request) && null == request.getSession().getAttribute("weUser")) {
+		String ua = request.getHeader("User-Agent").toLowerCase();
+//		 && null == request.getSession().getAttribute("weUser")
+		if(ua.indexOf("micromessenger") == -1 && check(request)) {
 			modelAndView.setViewName("redirect:/we/error");
 //			logger.error("拦截 : " + request.getRequestURI());
 		} else {
