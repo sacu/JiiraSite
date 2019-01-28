@@ -11,4 +11,5 @@ public interface AdNewsService extends AdMateService<AdNews> {
 	public List<AdNews> selectOderByLevelAndDesc(int level, int limit);//级别+limit条数排序
 	public List<AdNews> selectNewsByTypeAndLike(int type, String search_text);//类型限制+模糊查询
 	public int updateNewSourceURL(int id, String content_source_url);
+	public int updateNewAll(AdNews adNews);
 }

@@ -5,6 +5,7 @@
 	<resultMap id="adVoice" type="org.jiira.pojo.ad.AdVoice">
 		<id column="voice" property="voice" />
 		<id column="media_id" property="media_id" />
+		<id column="addtime" property="addtime" />
 	</resultMap>
 	<!-- 检测是否重复 -->
 	<select id="checkVoice" resultMap="adVoice">
@@ -17,7 +18,7 @@
 	<!-- 获取全部 -->
 	<select id="selectVoices" resultMap="adVoice">
 		select * from
-		sa_dt_voice
+		sa_dt_voice order by addtime desc
 	</select>
 	<!-- 获取全部 -->
 	<select id="selectVoice" resultMap="adVoice">

@@ -7,6 +7,7 @@
 		<id column="media_id" property="media_id" />
 		<id column="title" property="title" />
 		<id column="introduction" property="introduction" />
+		<id column="addtime" property="addtime" />
 	</resultMap>
 	<!-- 检测是否重复 -->
 	<select id="checkVideo" resultMap="adVideo">
@@ -15,7 +16,7 @@
 	</select>
 	<!-- 获取全部 -->
 	<select id="selectVideos" resultMap="adVideo">
-		select * from sa_dt_video
+		select * from sa_dt_video order by addtime desc
 	</select>
 	<!-- 获取单一 -->
 	<select id="selectVideo" resultMap="adVideo">

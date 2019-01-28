@@ -65,6 +65,10 @@
 	<update id="updateNewSourceURL">
 		update sa_dt_news set content_source_url=#{content_source_url} where id=#{id}
 	</update>
+	<!-- 更新原文全部 -->
+	<update id="updateNewsAll">
+		update sa_dt_news set title=#{title}, type=#{type}, consume=#{consume}, name_id=#{name_id}, thumb_media_id=#{thumb_media_id}, thumb_id=#{thumb_id}, author=#{author}, digest=#{digest}, show_cover_pic=#{show_cover_pic}, content=#{content}, content_source_url=#{content_source_url}, need_open_comment=#{need_open_comment}, only_fans_can_comment=#{only_fans_can_comment} where id=#{id}
+	</update>
 	<!-- 删除图片 -->
 	<delete id="deleteNews">
 		delete from sa_dt_news where id=#{id}

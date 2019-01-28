@@ -9,7 +9,7 @@
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>极光互娱</title>
 <link rel="stylesheet" href="../style/test1.css" />
-<link rel="stylesheet" href="../style/ad.css" />
+<link rel="stylesheet" href="../style/ad.css?v=1.1" />
 <script type="text/javascript" src="../javascript/jquery-3.2.0.js"></script>
 <script type="text/javascript" src="../javascript/ad.js"></script>
 <script type="text/javascript">

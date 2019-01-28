@@ -197,15 +197,24 @@ public class WeChatAdminController {
 	@RequestMapping(value = "/addNews")
 	public ModelAndView addNews(AdNews adNews) {
 		ModelAndView mv = new ModelAndView();
-		String url = adNews.getContent_source_url().trim();
-		int rows = adNewsService.insert(adNews);
-		if(rows > 0) {
-			if(url.length() == 0) {//如果没有，则设置当前页
-				((AdNewsService)adNewsService).updateNewSourceURL(adNews.getId(), CommandCollection.GetNewsURL(adNews.getId()));
+		if(adNews.getId() == CommandCollection.FAULT_INT) {
+			String url = adNews.getContent_source_url().trim();
+			int rows = adNewsService.insert(adNews);
+			if(rows > 0) {
+				if(url.length() == 0) {//如果没有，则设置当前页
+					((AdNewsService)adNewsService).updateNewSourceURL(adNews.getId(), CommandCollection.GetNewsURL(adNews.getId()));
+				}
+				mv.addObject("插入成功");
+			} else {
+				mv.addObject("插入失败");
 			}
-			mv.addObject("插入成功");
-		} else {
-			mv.addObject("插入失败");
+		} else {//修改
+			int rows = ((AdNewsService)adNewsService).updateNewAll(adNews);
+			if(rows > 0) {
+				mv.addObject("更新成功");
+			} else {
+				mv.addObject("更新失败");
+			}
 		}
 		mv.setView(new MappingJackson2JsonView());
 		return mv;

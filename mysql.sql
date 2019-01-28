@@ -43,7 +43,8 @@ CREATE TABLE `sa_dt_iv` (
 	`iv` varchar(100) not null COMMENT 'iv名称',
 	`media_id` varchar(100) COMMENT '公众号ID',
 	`url` varchar(255) COMMENT 'url',
-	`type` varchar(30) not null COMMENT '类型image'
+	`type` varchar(30) not null COMMENT '类型image',
+	`addtime` timestamp default CURRENT_TIMESTAMP COMMENT '添加时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图片&缩略图表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sa_dt_voice`;
@@ -51,7 +52,8 @@ DROP TABLE IF EXISTS `sa_dt_voice`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sa_dt_voice` (
 	`voice` varchar(100) not null COMMENT 'iv名称',
-	`media_id` varchar(100) COMMENT '公众号ID'
+	`media_id` varchar(100) COMMENT '公众号ID',
+	`addtime` timestamp default CURRENT_TIMESTAMP COMMENT '添加时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='语音表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sa_dt_video`;
@@ -61,7 +63,8 @@ CREATE TABLE `sa_dt_video` (
 	`video` varchar(100) not null COMMENT '视频名称',
 	`media_id` varchar(100) COMMENT '公众号ID',
 	`title` varchar(100) not null COMMENT '视频标题',
-	`introduction` varchar(255) not null COMMENT '视频介绍200字'
+	`introduction` varchar(255) not null COMMENT '视频介绍200字',
+	`addtime` timestamp default CURRENT_TIMESTAMP COMMENT '添加时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='视频表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -75,7 +78,7 @@ CREATE TABLE `sa_dt_news` (
 	`thumb_media_id` varchar(100) COMMENT '图文消息的封面图片素材id',
 	`thumb_id` varchar(100) COMMENT '图文消息的封面本地图片名称',
 	`author` varchar(50) not null COMMENT '图文作者',
-	`digest` varchar(50) not null COMMENT '图文消息的摘要，不填写会自动抓取',
+	`digest` varchar(150) not null COMMENT '图文消息的摘要，不填写会自动抓取',
 	`show_cover_pic` TINYINT(1) not null COMMENT '是否显示封面，1显示 0不显示',
 	`content` text not null COMMENT '文章内容，支持HTML',
 	`content_source_url` varchar(300) not null COMMENT '图文消息的原文地址',--(弃用！直接用服务器地址+各种路径补足，详情 CommandCollection.GetMateNews)
@@ -94,7 +97,7 @@ DROP TABLE IF EXISTS `sa_dt_news_name`;
 CREATE TABLE `sa_dt_news_name` (
 	`id` int(4) primary key not null auto_increment COMMENT '书名ID',
 	`name` varchar(100) COMMENT '书名',
-	`digest` varchar(50) not null COMMENT '简介',
+	`digest` varchar(150) not null COMMENT '简介',
 	`author` varchar(50) not null COMMENT '作者',
 	`type_id` int(4) COMMENT '类型id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='书名表';

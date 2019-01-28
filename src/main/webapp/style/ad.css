@@ -115,9 +115,11 @@ hr{
 	z-index: 1000;
 	position: fixed;
 	top: 0px;
+	button: 0px;
 	left: 0px;
 	background-color: hsla(0,0%,0%,0.5);
 	display: none;
+	overflow-y:scroll;
 }
 /*图文*/
 .n_float_news_layer{
@@ -127,6 +129,8 @@ hr{
 	position: fixed;
 	top: 0px;
 	left: 0px;
+	button: 0px;
+	overflow-y:scroll;
 	background-color: hsla(0,0%,0%,0.5);
 	display: none;
 }
@@ -134,14 +138,23 @@ hr{
 	text-align:center;
 	margin:0 auto;
 	width: 850px;
-	height: 700px;
+	bottom:0 px;
+	top: 0px;
+	height: 100%;
+	min-height: 700px;
 	background-color:#fff;
+	overflow-y:auto;
 }
 .n_float_news_image{
+	text-align:center;
 	margin:0 auto;
+	bottom:0 px;
+	left: 0px;
+	top: 0px;
 	width: 850px;
-	height: 700px;
 	background-color:#fff;
+	height: auto;
+	min-height: 700px;
 	overflow-y:auto;
 }
 .n_float_news_type{
@@ -176,21 +189,28 @@ hr{
 .n_news_media{
 	text-align:center;
 	margin:0 auto;
-	width: 140px;
+	width: 120px;
 	height: 20px;
 	float: right;
 }
 .n_news_delete{
 	text-align:center;
 	margin:0 auto;
-	width: 70px;
+	width: 50px;
 	height: 20px;
 	float: right;
 }
 .n_news_push{
 	text-align:center;
 	margin:0 auto;
-	width: 70px;
+	width: 50px;
+	height: 20px;
+	float: right;
+}
+.n_news_edit{
+	text-align:center;
+	margin:0 auto;
+	width: 50px;
 	height: 20px;
 	float: right;
 }

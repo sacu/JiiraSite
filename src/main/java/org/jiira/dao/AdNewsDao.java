@@ -19,6 +19,7 @@ public interface AdNewsDao {
 	public AdNews selectNewsById(int id);
 	public int insertNews(AdNews adNews);
 	public int updateNews(@Param("id")int id, @Param("media_id")String media_id);
+	public int updateNewsAll(AdNews adNews);
 	public int deleteNews(int id);
 	public int updateNewSourceURL(@Param("id")int id, @Param("content_source_url")String content_source_url);
 }

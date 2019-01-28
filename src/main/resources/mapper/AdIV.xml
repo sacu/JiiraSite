@@ -7,6 +7,7 @@
 		<id column="media_id" property="media_id" />
 		<id column="url" property="url" />
 		<id column="type" property="type" />
+		<id column="addtime" property="addtime" />
 	</resultMap>
 	<!-- 检测是否重复 -->
 	<select id="checkIV" resultMap="adIV">
@@ -17,15 +18,15 @@
 		</foreach>
 	</select>
 	<select id="select" resultMap="adIV">
-		select * from sa_dt_iv where type="image" or type="thumb"
+		select * from sa_dt_iv where type="image" or type="thumb" order by addtime desc
 	</select>
 	<select id="selectIVs" resultMap="adIV">
 		select * from
-		sa_dt_iv where type=#{type}
+		sa_dt_iv where type=#{type} order by addtime desc
 	</select>
 	<select id="selectIV" resultMap="adIV">
 		select * from
-		sa_dt_iv where iv=#{iv}
+		sa_dt_iv where iv=#{iv} order by addtime desc
 	</select>
 	<select id="selectIVByMediaId" resultMap="adIV">
 		select * from

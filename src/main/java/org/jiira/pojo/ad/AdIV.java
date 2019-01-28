@@ -5,6 +5,7 @@ public class AdIV {
 	private String url;
 	private String media_id;
 	private String type;
+	private String addtime;
 	public String getIV() {
 		return iv;
 	}
@@ -28,6 +29,12 @@ public class AdIV {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getAddtime() {
+		return addtime;
+	}
+	public void setAddtime(String addtime) {
+		this.addtime = addtime;
 	}
 	
 }

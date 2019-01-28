@@ -5,6 +5,7 @@ public class AdVideo {
 	private String media_id;
 	private String title;
 	private String introduction;
+	private String addtime;
 	public String getVideo() {
 		return video;
 	}
@@ -28,6 +29,12 @@ public class AdVideo {
 	}
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+	public String getAddtime() {
+		return addtime;
+	}
+	public void setAddtime(String addtime) {
+		this.addtime = addtime;
 	}
 	
 }

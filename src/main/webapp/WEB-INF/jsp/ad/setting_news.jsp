@@ -24,6 +24,8 @@
 				success : function(result) {
 					$('#uln_msg').empty();
 					$('#uln_msg').html(JSON.stringify(result));
+					//关闭
+					$("#upnewslayer").css('display','none'); 
 					getNIList();//更新列表
 				}
 			});
@@ -47,6 +49,8 @@
 						n_list_html += "<div class='n_news_type'>类型:" + adType[i['type']]['name'] + "</div>";
 						//图书ID
 						n_list_html += "<div class='n_news_type'>图书ID:" + i['name_id'] + "</div>";
+						//编辑
+						n_list_html += "<div class='n_news_edit'>[<a id='eni' v='" + idx + "' href=''>编辑</a>]</div>";
 						if(i['media_id'] == null || i['media_id'].length == 0){
 							if(i['thumb_media_id'] == null || i['thumb_media_id'].length == 0){
 								n_list_html += "<div class='n_news_media'>无Media</div>";
@@ -83,6 +87,25 @@
 				case "dni":
 					var adV = adVLD[target.attr("v")];
 					nis_command("deleteNewsToWe",JSON.stringify([serializeObject(adV) ]))
+					break;
+				case "eni":
+					$("#upnewslayer").css('display','block');//打开界面
+					//开始赋值
+					var adV = adVLD[target.attr("v")];
+					$('#type').find("option:selected").attr("selected",false);
+					$('#type').find("option[value='"+adV['type']+"']").attr("selected",true);
+					$('#name_id').find("option:selected").attr("selected",false);
+					$('#name_id').find("option[value='"+adV['name_id']+"']").attr("selected",true);
+					$('#consume').val(adV['consume']);
+					$('#id').val(adV['id']);
+					$('#title').val(adV['title']);
+					$('#thumb_id').val(adV['thumb_id']);
+					$('#thumb_media_id').val(adV['thumb_media_id']);
+					$('#author').val(adV['author']);
+					$('#digest').val(adV['digest']);
+					$('#content_t').val(adV['content']);
+					$('#content_source_url').val(adV['content_source_url']);
+					$(':radio[name=show_cover_pic][value=' + adV['show_cover_pic'] + ']').prop("checked", "checked");
 					break;
 				case "dnpush":
 					$.post({
@@ -151,7 +174,6 @@
 							var url = ad + "deleteNewsToWe";
 							var data = [];
 							$.each($('input:checkbox:checked'),function() {
-								console.info($(this).val())
 								data.push(serializeObject(adVLD[$(this).val()]))
 							});
 							nis_command(url, JSON
@@ -164,7 +186,7 @@
 							adType = {};
 							var type = $('#type');
 							var etype = $('#etype');
-							var etype_id = $('etype_id');
+							var etype_id = $('#etype_id');
 							type.empty();
 							etype.empty();
 							etype_id.empty();
@@ -261,7 +283,7 @@
 									name : $("#book_name").val(),
 									author : $("#book_author").val(),
 									digest : $("#book_digest").val(),
-									type_id : $('etype_id').val()
+									type_id : $('#etype_id').val()
 								},
 								success : function(result) {
 									getBookList();
@@ -291,7 +313,7 @@
 									name : $("#book_name").val(),
 									author : $("#book_author").val(),
 									digest : $("#book_digest").val(),
-									type_id : $('etype_id').val()
+									type_id : $('#etype_id').val()
 								},
 								success : function(result) {
 									getBookList();
@@ -304,6 +326,9 @@
 							$("#book_name").val(adBook[id]['name']);
 							$("#book_author").attr("value", adBook[id]['author']);
 							$("#book_digest").val(adBook[id]['digest']);
+							var etype_id = $('#etype_id');
+							etype_id.find("option:selected").attr("selected",false);
+							etype_id.find("option[value='"+adBook[id]['type_id']+"']").attr("selected",true);
 						})
 						$("#etype").change(function(){
 							$("#type_name").val(adType[$("#etype").val()]['name']);
@@ -328,6 +353,20 @@
 	})
 	$("#upnews").click(function(event) {
 		$("#upnewslayer").css('display','block'); 
+		$('#type').find("option:selected").attr("selected",false);
+		$('#type').find("option[value='1']").attr("selected",true);
+		$('#name_id').find("option:selected").attr("selected",false);
+		$('#name_id').find("option[value='1']").attr("selected",true);
+		$('#consume').val("0");
+		$('#id').val("-1");
+		$('#title').val("");
+		$('#thumb_id').val("");
+		$('#thumb_media_id').val("");
+		$('#author').val("");
+		$('#digest').val("");
+		$('#content_t').val("");
+		$('#content_source_url').val("");
+		$(':radio[name=show_cover_pic][value=1]').prop("checked", "checked");
 		event.preventDefault();  // 阻止链接跳转
 	});
 	$("#cls_news_btn").click(function(event) {
@@ -491,6 +530,12 @@
 						</div>
 					</div>
 					<div class="div_content_block">
+						<div class="div_content_key">ID:</div>
+						<div class="div_content_value">
+							<input type="text" name="id" id="id"/>
+						</div>
+					</div>
+					<div class="div_content_block">
 						<div class="div_content_key">标题:</div>
 						<div class="div_content_value">
 							<input type="text" name="title" id="title"/>
@@ -507,13 +552,13 @@
 					<div class="div_content_block">
 						<div class="div_content_key">作者:</div>
 						<div class="div_content_value">
-							<input type="text" name="author" />
+							<input type="text" name="author" id="author" />
 						</div>
 					</div>
 					<div class="div_content_block">
 						<div class="div_content_key">摘要(100字):</div>
 						<div class="div_content_value">
-							<textarea name="digest" maxlength="100"></textarea>
+							<textarea name="digest" id="digest" maxlength="100"></textarea>
 						</div>
 					</div>
 					<div class="div_content_block">
@@ -526,13 +571,13 @@
 					<div class="div_content_block">
 						<div class="div_content_key">内容(2000字):</div>
 						<div class="div_content_value">
-							<textarea name="content" maxlength="2000"></textarea>
+							<textarea name="content" id="content_t" maxlength="2000"></textarea>
 						</div>
 					</div>
 					<div class="div_content_block">
 						<div class="div_content_key">原文链接:</div>
 						<div class="div_content_value">
-							<input type="text" name="content_source_url" placeholder="留空则为当前页"/>
+							<input type="text" id="content_source_url" name="content_source_url" placeholder="留空则为当前页"/>
 						</div>
 					</div>
 					<div class="div_content_block">

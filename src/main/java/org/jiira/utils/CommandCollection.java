@@ -47,6 +47,7 @@ public class CommandCollection {
 	public static int BOOK_TYPE = 2;
 	public static int STRATEGY_TYPE = 3;//攻略
 	
+	public static int FAULT_INT = -1;//失效的
 	public static int ENABLE = 1;// 可用
 	public static int DISABLE = 0;// 禁用
 	public static int LEVEL_NONE = 0;// 无限制
