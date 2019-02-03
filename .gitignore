@@ -1,2 +1,4 @@
 /target/
 .properties
+*.properties
+/src/main/resources/
