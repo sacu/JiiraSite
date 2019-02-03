@@ -33,7 +33,7 @@
 	 -->
 	<select id="selectNewsByLevel" resultMap="adNews">
 		select id, title from sa_dt_news where
-			 (select level from sa_dt_news_type where id=sa_dt_news.type) &lt;= #{level};
+			 (select level from sa_dt_news_type where id=sa_dt_news.type) &lt;= #{level} order by id desc;
 	</select>
 	<!-- 类型限制拉取模式 只是拉取的目录 -->
 	<select id="selectNewsByType" resultMap="adNews">
@@ -45,7 +45,7 @@
 	</select>
 	<!-- 类型限制模糊查询 -->
 	<select id="selectNewsByTypeAndLike" resultMap="adNews">
-		select id, title from sa_dt_news where (type=#{type} or #{type}=1) and type!=2 and (title like "%"#{search_text}"%" or digest like "%"#{search_text}"%")
+		select id, title from sa_dt_news where (type=#{type} or #{type}=1) and type!=2 and (title like "%"#{search_text}"%" or digest like "%"#{search_text}"%") order by id desc
 	</select>
 	
 	<!-- 获取全部 -->

@@ -10,13 +10,13 @@
 <meta name="viewport"
 	content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
 <title>极光互娱</title>
-<link rel="stylesheet" href="../style/test1.css?v=1.3" />
-<link rel="stylesheet" href="../style/we.css?v=1.5" />
+<link rel="stylesheet" href="../style/test1.css?v=<%=CommandCollection.CSS_V %>" />
+<link rel="stylesheet" href="../style/we.css?v=<%=CommandCollection.CSS_V %>" />
 <script type="text/javascript" src="../javascript/jquery-3.2.0.js?v=1.1"></script>
 <script type="text/javascript" src="../javascript/ad.js?v=1.1"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		var onPage2 = $("#index");
+		var onPage2 = $("#${page}");
 		$("#index").click(flip);
 		$("#list").click(flip);
 		$("#search").click(flip);
@@ -33,7 +33,7 @@
 				//成功后的方法
 				success : function(result) {
 					onPage2.addClass("aunselect");
-					onPage2.removeClass("aselect");
+					//onPage2.removeClass("aselect");
 					onPage2 = $("#" + page);
 					onPage2.removeClass("aunselect");
 					onPage2.addClass("aselect");
@@ -42,26 +42,28 @@
 				}
 			});
 		}
+		onPage2.removeClass("aunselect");
+		onPage2.removeClass("aselect");
 	});
 	</script>
 </head>
 
 <body>
 	<!--通常被放置在页面或者页面中某个区块元素的顶部，包含整个页面或者区块的标题、简介等信息，起到引导与导航的作用。-->
-	<header id="header1">极光互娱</header>
+<!-- 	<header id="header1">极光互娱</header> -->
 	<!--用来定义主体中的头-->
 	<article>
-		<div style="height: 48px; width: 90%; float: left;"></div>
+<!-- 		<div style="height: 48px; width: 90%; float: left;"></div> -->
 		<div id="content">
 			<jsp:include page="${page}.jsp"></jsp:include>
 		</div>
-		<div style="height: 150px; width: 90%; float: left;"></div>
+		<div style="height: <%=CommandCollection.CSS_FOOTER %>px; width: 90%; float: left;"></div>
 	</article>
 	<!--一般被放置在页面或者页面中某个区块的底部，包含版权信息、联系方式等信息。-->
 	<footer>
 		<nav id="nav1">
 			<!--表示页面的导航，可以通过导航连接到网站的其他页面，或者当前页面的其它部分。-->
-			<li class="li1"><a class="aselect" id=index href="">首页</a></li>
+			<li class="li1"><a class="aunselect" id=index href="">首页</a></li>
 			<li class="li1"><a class="aunselect" id="list" href="">往期回顾</a></li>
 			<li class="li1"><a class="aunselect" id="search" href="">搜索</a></li>
 			<li class="li1"><a class="aunselect" id="user" href="">我的</a></li>

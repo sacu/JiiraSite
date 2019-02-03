@@ -5,19 +5,15 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jiira.pojo.ad.AdIV;
 import org.jiira.pojo.ad.AdNews;
 import org.jiira.pojo.ad.AdNewsName;
 import org.jiira.pojo.ad.WeBookCase;
 import org.jiira.pojo.ad.WeUser;
 import org.jiira.pojo.we.WeToken;
-import org.jiira.service.AdIVService;
-import org.jiira.service.AdMateService;
 import org.jiira.service.AdNewsNameService;
 import org.jiira.service.AdNewsService;
 import org.jiira.service.WeBookCaseService;
@@ -52,8 +48,6 @@ public class WeChatSiteController {
 	private WeChatService weChatService = null;
 	@Autowired
 	private AdNewsService adNewsService = null;
-	@Autowired
-	private AdMateService<AdIV> adIVService = null;
 	@Autowired
 	private WeUserService weUserService = null;
 	@Autowired
@@ -214,11 +208,11 @@ public class WeChatSiteController {
 	@RequestMapping(value="/getNewsSearch")
 	public ModelAndView getNewsSearch(int type, String search) {
 		ModelAndView mv = new ModelAndView();
-		if(type == CommandCollection.BOOK_TYPE || type == CommandCollection.ALL_TYPE) {
-			List<AdNewsName> adNewsName = adNewsNameService.selectNewsNameByLike(search);
+		if(type == CommandCollection.ALL_TYPE || type == CommandCollection.BOOK_TYPE || type == CommandCollection.BOOK_TYPE) {
+			List<AdNewsName> adNewsName = adNewsNameService.selectNewsNameByLike(search, type);
 			mv.addObject("adNewsName", adNewsName);
 		}
-		if(type == CommandCollection.ALL_TYPE || type != CommandCollection.BOOK_TYPE) {
+		if(type != CommandCollection.BOOK_TYPE && type != CommandCollection.BOOK_TYPE) {
 			List<AdNews> adNews = adNewsService.selectNewsByTypeAndLike(type, search);//类型搜索
 			mv.addObject("adNews", adNews);
 		}

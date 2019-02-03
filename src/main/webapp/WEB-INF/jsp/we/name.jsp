@@ -44,7 +44,7 @@
 <div class="div_content_block">
 	<a id="name_news" href="ic?redirect=news*news_id=">开始阅读</a><br>
 	<a href="ic?redirect=index">返回首页</a><br>
-	<div style="height: 48px; width: 90%; float: left;"></div>
+	<div style="height: <%=CommandCollection.CSS_BOTTOM %>px; width: 90%; float: left;"></div>
 </div>
 </body>
 </html>

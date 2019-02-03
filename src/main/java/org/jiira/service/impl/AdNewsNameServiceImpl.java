@@ -45,9 +45,9 @@ public class AdNewsNameServiceImpl implements AdNewsNameService {
 	}
 
 	@Override
-	public List<AdNewsName> selectNewsNameByLike(String search_text) {
+	public List<AdNewsName> selectNewsNameByLike(String search_text, int type_id) {
 		// TODO Auto-generated method stub
-		return adNewsNameDao.selectNewsNameByLike(search_text);
+		return adNewsNameDao.selectNewsNameByLike(search_text, type_id);
 	}
 
 }

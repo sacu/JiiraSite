@@ -8,6 +8,8 @@
 <html>
 <head>
 <title></title>
+<link rel="stylesheet" href="../style/we.css?v=<%=CommandCollection.CSS_V %>" />
+<script type="text/javascript" src="../javascript/jquery-3.2.0.js?v=1.1"></script>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script type="text/javascript">
 		$(document).ready(function() {
@@ -44,6 +46,7 @@
 					"paySign" : wepayr['paySign'],//微信签名 
 					success: function(res) {
 						if (res.errMsg == "chooseWXPay:ok") {
+							alert("充值成功");
 							// 使用以上方式判断前端返回,微信团队郑重提示：
 							//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
 							window.history.back(-1);//支付成功后 返回
@@ -54,46 +57,57 @@
 				});
 			}
 			$('#recharge').click(function(event) {
-				$.post({
-					url : "pay",
-					data : {
-						money:$('#recharge_txt').val(),
-						openid:'${weUser.openid}'
-					},
-					//成功后的方法
-					success : function(result) {
-						var wepay = result['wepay'];
-						if(wepay['return_code'] == '<%=CommandCollection.SUCCESS%>'){
-							if(wepay['result_code'] == '<%=CommandCollection.SUCCESS%>'){
-								wepayr = result['wepayr'];
-								if (typeof WeixinJSBridge == "undefined") {
-									if (document.addEventListener) {
-										document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-									} else if (document.attachEvent) {
-										document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-										document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+				var target = $(event.target);
+				if(target.prop("tagName").toLowerCase() == "a"){
+					$.post({
+						url : "pay",
+						data : {
+							money : target.attr("v"),
+							openid :'${weUser.openid}'
+						},
+						//成功后的方法
+						success : function(result) {
+							var wepay = result['wepay'];
+							if(wepay['return_code'] == '<%=CommandCollection.SUCCESS%>'){
+								if(wepay['result_code'] == '<%=CommandCollection.SUCCESS%>'){
+									wepayr = result['wepayr'];
+									if (typeof WeixinJSBridge == "undefined") {
+										if (document.addEventListener) {
+											document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+										} else if (document.attachEvent) {
+											document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+											document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+										}
+									} else {//开始支付
+										onBridgeReady();
 									}
-								} else {//开始支付
-									onBridgeReady();
+								} else {
+									alert(wepay['err_code'] + ":" +wepay['err_code_des'])
 								}
 							} else {
-								alert(wepay['err_code'] + ":" +wepay['err_code_des'])
+								alert(wepay['return_msg'])
 							}
-						} else {
-							alert(wepay['return_msg'])
 						}
-					}
-				})
-				event.preventDefault();
+					})
+					event.preventDefault();
+				}
 			})
 		})
 </script>
 </head>
 <body>
-	充值
-	<input type="text" id="recharge_txt" value="1">
-	<a href='' id='recharge'>充值</a>
-	<div id="test"></div>
+	<div class="div_content_block" style="margin-left: 50px;">
+		<h2>每10元奖励10代金券，每50元再奖励50代金券</h2>
+	</div>
+	<div class="div_content_block" id='recharge'>
+		<a href="" v='3' class="wepay-btn">充值3元<br>得300代金券</a>
+		<a href="" v='10' class="wepay-btn">充值10元<br>得1100代金券</a>
+		<a href="" v='50' class="wepay-btn">充值50元<br>得6500代金券</a>
+		<a href="" v='100' class="wepay-btn">充值100元<br>得13000代金券</a>
+		<a href="" v='300' class="wepay-btn">充值300元<br>得39000代金券</a>
+		<a href="" v='500' class="wepay-btn">充值500元<br>得65000代金券</a>
+	</div>
+	
 	<%-- <%=CommandCollection.RES_NAME + CommandCollection.MESSAGE_THUMB + "/"%>' + '${thumb}'; --%>
 	<%-- 	<div class='div_news_title'>" + ${json.title} + "</div>"; --%>
 	<%-- 	<div class='div_news_author'>" + "作者:" + ${json.author} + "</div>"; --%>

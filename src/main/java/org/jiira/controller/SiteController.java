@@ -10,10 +10,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +23,6 @@ import javax.servlet.http.HttpSession;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
-import org.jiira.pojo.ad.WeConsume;
 import org.jiira.pojo.ad.WeUser;
 import org.jiira.pojo.we.pay.WeJSSDKConfig;
 import org.jiira.pojo.we.pay.WePay;
@@ -78,6 +77,17 @@ public class SiteController {
 		logger.error("调试code：" + code);
 		//从前TX又有个BUG，就是URL只能传一个参数，所以只能把所有参数压缩到第一个里边
 		WeUser weUser = WeGlobal.getInstance().getClass(json.toString(), WeUser.class);
+		//获取 UNIONID_INFO,判断是否关注
+		JSONObject union_json = WeGlobal.getInstance().getUnionIDInfo(weUser.getOpenid());
+		if(null != union_json) {//如果为null，则openid是错的，不管他，让他看吧，无所谓的
+			logger.error("调试subscribe：" + union_json.getInt("subscribe"));
+			if(union_json.getInt("subscribe") == CommandCollection.DISABLE) {//如果未关注，则跳转到关注页面
+				session.setAttribute("weUser", weUser);
+				session.setAttribute("subscribe_redirect", redirect);
+				mv.setViewName("we/subscribe");//重定向到关注页面
+				return mv;
+			}
+		}
 		WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
 		if(null == _weUser) {//用户不存在
 			weUser.setNickname(DecriptUtil.removeUnicode(weUser.getNickname()));
@@ -99,13 +109,15 @@ public class SiteController {
 		WeUser weUser = (WeUser)session.getAttribute("weUser");
 		String url;
 		if(weUser == null) {//重定向到登陆
-			logger.error("ic redirect : " + redirect);
 			url = redirect(redirect);
-			logger.error("ic url : " + url);
 			return url;
 		} else {
 			WeUser _weUser = weUserService.selectWeUser(weUser.getOpenid());
-			weUser.setVouchers(_weUser.getVouchers());
+			if(null != _weUser) {//有可能是临时用户
+				weUser.setVouchers(_weUser.getVouchers());
+			} else {
+				weUser.setVouchers(0);
+			}
 			jump(request, redirect);
 			url = "/we/c";//返回页面代码信息
 //			url = "/we/" + request.getAttribute("page");//返回页面代码信息
@@ -113,6 +125,9 @@ public class SiteController {
 		return url;
 	}
 	private void jump(HttpServletRequest request, String redirect) {
+		if(redirect.length() == 0) {
+			redirect = CommandCollection.WE_INDEX;
+		}
 		String[] args = redirect.split("\\*");
 		String[] group;
 		request.setAttribute("page", args[0]);//写入index执行页面规则
@@ -128,7 +143,7 @@ public class SiteController {
 		WeUser weUser = weUserService.selectWeUser(openid);
 		request.getSession().setAttribute("weUser", weUser);
 		jump(request, redirect);
-		mv.setViewName("we/" + request.getAttribute("page"));//返回页面代码信息
+		mv.setViewName("/we/c");//返回页面代码信息
 		return mv;
 	}
 	
@@ -165,6 +180,10 @@ public class SiteController {
 	 */
 	@RequestMapping(value = "/pay")
 	public ModelAndView pay(HttpServletRequest request, int money, String openid) {
+		int extra = (int)(Math.floor(money / 10.0f) * 100);//先获取每多10元的奖励10
+		extra += (int)(Math.floor(money / 50.0f) * 1000);//再获取每多50元的奖励50
+		money = money * 100 + extra;//最后充值
+		logger.error("money:" + money);
 		String ip = CommandCollection.getIPByRequest(request);
 		ModelAndView mv = new ModelAndView();
 		WePay wepay = WeGlobal.getInstance().getWePay(ip, money, openid);
@@ -172,7 +191,14 @@ public class SiteController {
 		mv.addObject("wepay", wepay);
 		if(wepay.getReturn_code().equals(CommandCollection.SUCCESS) && wepay.getResult_code().equals(CommandCollection.SUCCESS)) {
 			WePayRequest wepayr = WeGlobal.getInstance().getWePayRequest(wepay.getPrepay_id());
+//			logger.error("getAppId:" + wepayr.getAppId());
+//			logger.error("getNonceStr:" + wepayr.getNonceStr());
+//			logger.error("getPaySign:" + wepayr.getPaySign());
+//			logger.error("getSignType:" + wepayr.getSignType());
+//			logger.error("getTimeStamp:" + wepayr.getTimeStamp());
+//			logger.error("getWe_package:" + wepayr.getWe_package());
 			mv.addObject("wepayr", wepayr);
+//			logger.error("开始充值");
 		}
 		return mv;
 	}
@@ -185,6 +211,11 @@ public class SiteController {
 		ModelAndView mv = new ModelAndView();
 		WeJSSDKConfig jssdk = WeGlobal.getInstance().getWeJSSDKConfig();
 		mv.setView(new MappingJackson2JsonView());
+//		logger.error("getAppId:" + jssdk.getAppId());
+//		logger.error("getNonceStr:" + jssdk.getNonceStr());
+//		logger.error("getSignature:" + jssdk.getSignature());
+//		logger.error("getTimestamp:" + jssdk.getTimestamp());
+//		logger.error("getJsApiList:" + jssdk.getJsApiList().toString());
 		mv.addObject("jssdk", jssdk);
 		return mv;
 	}

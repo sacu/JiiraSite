@@ -15,7 +15,7 @@
 				var list_html = "";
 				var u = "ic?redirect=news*news_id=";
 				$.each(adNews, function(idx, i) {
-					list_html += "<div class='div_we_list_content'><a href='"+u+i['id']+"'>"+i['title']+"</a></div><br>";
+					list_html += "<div class='div_we_list_content'><a class='aunselect' href='"+u+i['id']+"'><font class='div_we_list_a'>"+i['title']+"</font></a></div><br>";
 				});
 				$('#we_list_content').html(list_html);
 			}
@@ -25,8 +25,8 @@
 	</script>
 </head>
 <body>
-往期回顾
-<div class="div_content_block" id="we_list_content">
+<div class="div_title_block"><h2>往期回顾</h2></div>
+<div class="div_title_block" id="we_list_content">
 	
 </div>
 </body>

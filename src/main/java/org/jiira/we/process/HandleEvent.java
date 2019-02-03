@@ -67,12 +67,12 @@ public class HandleEvent {
 		case CommandCollection.MESSAGE_EVENT_UNSUBSCRIBE: {//取消订阅
 			msg.setMsgType(CommandCollection.MESSAGE_TEXT);
 			msg.setContent("期待您的下次关注！");
-			String openid = msg.getToUserName();
-			if(CommandCollection.ContainsOpenID(openid)) {//判断缓存是否存在
-				CommandCollection.RemoveOpenID(openid);
-				WeUserService weUserService = Application.getInstance().getBean(WeUserService.class);
-				weUserService.deleteWeUser(openid);
-			}
+//			String openid = msg.getToUserName();
+//			if(CommandCollection.ContainsOpenID(openid)) {//判断缓存是否存在
+//				CommandCollection.RemoveOpenID(openid);
+//				WeUserService weUserService = Application.getInstance().getBean(WeUserService.class);
+//				weUserService.deleteWeUser(openid);
+//			}
 			break;
 		}
 		/**

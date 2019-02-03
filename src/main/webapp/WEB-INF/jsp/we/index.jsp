@@ -9,7 +9,7 @@
 	</script>
 </head>
 <body>
-首页
+<div class="div_title_block"><h2>首页</h2></div>
 <br>
 随后根据类别显示最新的几条数据
 <br>

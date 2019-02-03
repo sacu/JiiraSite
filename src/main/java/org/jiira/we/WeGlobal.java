@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +69,8 @@ public class WeGlobal {
 		
 		params.add(new SAHttpKVO("noncestr", jssdkConfig.getNonceStr()));
 		params.add(new SAHttpKVO("jsapi_ticket", CommandCollection.JSSDKTicket));
+//		String t = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbe33419389062baf&redirect_uri=http%3A%2F%2Fwx.jiira.com%2Fwe%2Fc%3Fredirect%3Drecharge&response_type=code&scope=snsapi_userinfo&state=test#wechat_redirect";
+//		params.add(new SAHttpKVO("url", t.split("#")[0]));
 		params.add(new SAHttpKVO("url", CommandCollection.WE_REDIRECT + CommandCollection.WE_RECHARGE));//不包含#后边.split('#')[0]
 //		params.add(new SAHttpKVO("url", "http://127.0.0.1:8080/JiiraSite/we/ict?redirect=recharge&openid=o3JwK6I-dL64v6LRb_RSLR_xsEiI"));//不包含#后边.split('#')[0]
 		jssdkConfig.setSignature(DecriptUtil.ReqSignPayConfig(params));
@@ -464,6 +464,26 @@ public class WeGlobal {
 			}
 		}
 		return json;
+	}
+	//获取 UNIONID_INFO
+	public JSONObject getUnionIDInfo(String openid) {
+		checkAccessToken();
+		SAHttpTable table = CommandCollection.GetHttpTable("GET");
+		//ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+		table.setURL(CommandCollection.UNIONID_INFO + CommandCollection.AccessToken + "&openid=" + openid + "&lang=zh_CN");
+		SAHTML html = SAURLConnection.getInstance().GetRequest(table);
+		JSONObject json = JSONObject.fromObject(html.getBody());
+		int code = WeCode.getInstance().check(json);
+		if(code == 0) {
+			return json;
+		} else {
+			if (code == 42001 || code == 40001) {
+				createAccessToken();
+				return getUnionIDInfo(openid);
+			} else {
+				return null;
+			}
+		}
 	}
 	//需要 code
 	public JSONObject getUserInfo(String authCode, HttpSession session) {

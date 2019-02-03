@@ -17,8 +17,13 @@
 		select * from
 		sa_dt_news_name where id=#{id}
 	</select>
+	<!-- 
+	id!=1	不是默认空项
+	(#{type_id}=1 or type_id=#{type_id})	搜索类型是全部，或者搜索类型匹配
+	(name like "%"#{search_text}"%" or digest like "%"#{search_text}"%")	模糊查询
+	 -->
 	<select id="selectNewsNameByLike" resultMap="adNewsName">
-		select id, name from sa_dt_news_name where id!=1 and (name like "%"#{search_text}"%" or digest like "%"#{search_text}"%")
+		select id, name from sa_dt_news_name where id!=1 and (#{type_id}=1 or type_id=#{type_id}) and (name like "%"#{search_text}"%" or digest like "%"#{search_text}"%") order by id desc
 	</select>
 	<insert id="insertNewsName">
 		insert into sa_dt_news_name(name, digest, author, type_id) 

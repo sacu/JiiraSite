@@ -65,6 +65,10 @@ keytool -importkeystore -srckeystore wx.pfx -destkeystore wx.jks -srcstoretype P
 写入数据库
 把前端页面的所有数据打印出来
 
+[关于有时候tomcat和iptables启动后无法访问的问题]
+最好从腾讯云控制台把主机重启一下，然后在终端使用su重新启动iptables和tomcat
+如果新换服务器，注意数据库备份和tomcat宕机自检文件（需要crontab，QQ浏览器书签java里有）
+
 [关于端口]
 远程服务器web容器大多数禁止直接访问80和443，需要通过防火墙（例如iptables反射到端口8080或8443），或者通过sudo su启动web容器
 

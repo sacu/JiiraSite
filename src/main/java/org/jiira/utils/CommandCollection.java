@@ -25,6 +25,11 @@ import org.jiira.we.url.SAHttpTable;
 import net.sf.json.JSONArray;
 
 public class CommandCollection {
+	//css版本
+	public static final float CSS_V = 2.6f;
+	public static final int CSS_FOOTER = 80;
+	public static final int CSS_BOTTOM = 30;
+	
 	public static final String Token = "sacu";
 	//商户号
 	public static final String MCHID = "1523670331";
@@ -148,7 +153,9 @@ public class CommandCollection {
 	public static final String USER_INFO = "https://api.weixin.qq.com/sns/userinfo";// 获取用户信息
 	public static final String USER_INFO_OID = "https://api.weixin.qq.com/cgi-bin/user/info";// open id 获取用户信息
 	public static final String SEND_ALL_OID = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=";// openid群发
-
+	public static final String UNIONID_INFO = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=";//获取用户基本信息(UnionID机制)ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+	public static final String SUBSCRIBE_PAGE = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg5MzAwOTYyOA==&scene=126&bizpsid=0#wechat_redirect";//关注页面
+//	public static final String SUBSCRIBE_PAGE = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg5MzAwOTYyOA==&scene=122&from=timeline&isappinstalled=0#wechat_redirect";//关注页面
 	//ai
 	public static final String AI_Text_Say = "https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat";//文字回答文字
 	public static final String AI_Image_Say = "https://api.ai.qq.com/fcgi-bin/vision/vision_imgtotext";//图片回答文字

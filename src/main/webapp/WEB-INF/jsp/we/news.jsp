@@ -5,8 +5,8 @@
 <html>
 <head>
 	<title></title>
-<link rel="stylesheet" href="../style/test1.css?v=1.3" />
-<link rel="stylesheet" href="../style/we.css?v=1.5" />
+<link rel="stylesheet" href="../style/test1.css?v=<%=CommandCollection.CSS_V %>" />
+<link rel="stylesheet" href="../style/we.css?v=<%=CommandCollection.CSS_V %>" />
 <script type="text/javascript" src="../javascript/jquery-3.2.0.js?v=1.1"></script>
 <script type="text/javascript" src="../javascript/ad.js?v=1.1"></script>
 <script type="text/javascript">
@@ -119,8 +119,10 @@
 		<div class="div_flip_dir"><select name="dir_news" id="dir_news"></select></div>
 		<div class="div_flip_next"><a id="next_news" href=''>下一篇</a></div>
 	</div><br>
-	<a href="ic?redirect=index">返回首页</a><br>
-	<div style="height: 100px; width: 90%; float: left;"></div>
+	<div class="div_single_content">
+		<a href="ic?redirect=index" class="weui-btn weui-btn_plain-primary">返回首页</a>
+	</div>
+	<div style="height: <%=CommandCollection.CSS_FOOTER %>px; width: 90%; float: left;"></div>
 </div>
 </body>
 </html>

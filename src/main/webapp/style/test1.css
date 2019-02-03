@@ -32,8 +32,8 @@ test::selection{}/*元素内被选中时的样式（比如div中字体被选中�
 
 /*UI伪类及其他选择器*/
 a:link{color: turquoise}/*未被访问过的链接，a的数序不能变*/
-a:visited{color: red}/*已被访问过的链接*/
-a:hover{background-color: green}/*鼠标悬浮时*/
+a:visited{color: turquoise}/*已被访问过的链接*/
+a:hover{text-decoration:underline}/*鼠标悬浮时*/
 a:active{background-color: blue}/*选择被激活的元素*/
 input:focus{}/*元素获取焦点时选择*/
 body:lang(en){}/*选择带有lang(en)属性的body元素*/
@@ -78,11 +78,11 @@ article{
 }
 #nav1{
 	width: 100%;
-	height: 50px;
+	height: 30px;
 	text-align: center;
 	position: fixed;
 	bottom: 0px;
-	padding-bottom: 50px;
+	padding-bottom: 30px;
 }
 #nav2{
 	width: 100%;
@@ -95,7 +95,7 @@ footer{
 	z-index: 999;
 	position: fixed;
 	width: 100%;
-	height: 150px;
+	height: 80px;
 	background-color: beige;
 }
 
@@ -129,7 +129,8 @@ footer{
 	}
 }
 .li1{
-	font-size: 35px;
+	font-weight:bold;
+	font-size: 150%;
 	display: inline;
 	padding-left: 10px;
 	padding-right: 10px;
