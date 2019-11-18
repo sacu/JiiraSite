@@ -1,4 +1,7 @@
-﻿开始做后台管理和功能
+﻿腾讯服务器密码 JiRa1888
+
+
+开始做后台管理和功能
 
 
 [完成]创建服务器本地 AccessToken目录
@@ -72,6 +75,9 @@ keytool -importkeystore -srckeystore wx.pfx -destkeystore wx.jks -srcstoretype P
 [关于端口]
 远程服务器web容器大多数禁止直接访问80和443，需要通过防火墙（例如iptables反射到端口8080或8443），或者通过sudo su启动web容器
 
+重启需要启动防火墙
+systemctl start iptables
+
 #########################################
 操作指南
 后台只负责上传图文，不负责推送（推送要从公众号后台推送），因为接口只提供一条新闻推送，从后台可以一次推送8条
@@ -85,9 +91,17 @@ keytool -importkeystore -srckeystore wx.pfx -destkeystore wx.jks -srcstoretype P
 图文内图片
 
 
+####################################################
+重新安装 tomcat 重启，需要安装crontab，配合 tomcat目录的retomcat.sh
+如果新换服务器，注意数据库备份和tomcat宕机自检文件（需要crontab，QQ浏览器书签java里有）
 
 
+关闭进程
+ps aux|grep retomcat.sh
+kill -9 进程号
 
+
+目录	/usr/share/tomcat
 
 
 
